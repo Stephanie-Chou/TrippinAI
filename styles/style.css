@@ -13,3 +13,7 @@ h1 {
   text-align: center;
   margin-top: 200px;
 }
+
+h1 {
+  font-family: 'Lato', sans-serif;
+}
