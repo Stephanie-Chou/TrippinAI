@@ -1,0 +1,15 @@
+body {
+  top: 0px;
+  background-color: #FAFAFA;
+}
+
+/*fonts*/
+
+h1 {
+  font-family: 'Lato', sans-serif;
+}
+
+.centerpiece {
+  text-align: center;
+  margin-top: 200px;
+}
