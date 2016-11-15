@@ -1,3 +1,8 @@
+//https://www.codementor.io/tamizhvendan/tutorials/beginner-guide-setup-reactjs-environment-npm-babel-6-webpack-du107r9zr
+// npm i webpack -S
+// npm i babel-loader babel-preset-es2015 babel-preset-react -S
+// npm i react react-dom -S
+// to build ./node_modules/.bin/webpack -d
 var webpack = require('webpack');
 var path = require('path');
 

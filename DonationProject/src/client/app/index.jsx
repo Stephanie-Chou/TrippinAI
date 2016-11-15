@@ -21,7 +21,7 @@ class Form extends React.Component {
     }
 
     handleIncomeChange(event) {
-        this.setState({annualIncome: {value: event.target.value}});
+        this.setState({annualIncome: {value: event.target.value.replace(/,/g, '')}});
     }
 
     handlePercentageChange(event) {

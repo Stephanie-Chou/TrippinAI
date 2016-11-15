@@ -92,7 +92,7 @@
 	    _createClass(Form, [{
 	        key: 'handleIncomeChange',
 	        value: function handleIncomeChange(event) {
-	            this.setState({ annualIncome: { value: event.target.value } });
+	            this.setState({ annualIncome: { value: event.target.value.replace(/,/g, '') } });
 	        }
 	    }, {
 	        key: 'handlePercentageChange',
