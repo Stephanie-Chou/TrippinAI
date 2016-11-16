@@ -126,7 +126,7 @@
 	                            'span',
 	                            { className: 'number' },
 	                            '$',
-	                            _react2.default.createElement(NumberInput, { value: this.state.annualIncome.value, onChange: this.handleIncomeChange }),
+	                            _react2.default.createElement(NumberInput, { value: this.state.annualIncome.value, onChange: this.handleIncomeChange, width: '160' }),
 	                            ' '
 	                        ),
 	                        ' annually '
@@ -138,7 +138,7 @@
 	                        _react2.default.createElement(
 	                            'span',
 	                            { className: 'number' },
-	                            _react2.default.createElement(NumberInput, { value: this.state.percentage.value, onChange: this.handlePercentageChange }),
+	                            _react2.default.createElement(NumberInput, { value: this.state.percentage.value, onChange: this.handlePercentageChange, width: '60' }),
 	                            '% '
 	                        ),
 	                        'annually '
@@ -159,10 +159,24 @@
 	    function Result(props) {
 	        _classCallCheck(this, Result);
 	
-	        return _possibleConstructorReturn(this, (Result.__proto__ || Object.getPrototypeOf(Result)).call(this, props));
+	        var _this2 = _possibleConstructorReturn(this, (Result.__proto__ || Object.getPrototypeOf(Result)).call(this, props));
+	
+	        _this2.TITLE = "I Will Donate";
+	        _this2.URL = "http://stephaniechou.com/DonationProject/src/client/index.html";
+	        return _this2;
 	    }
 	
 	    _createClass(Result, [{
+	        key: 'getTwitterShareUrl',
+	        value: function getTwitterShareUrl() {
+	            return "http://twitter.com/intent/tweet?status=" + this.TITLE + "+" + this.URL;
+	        }
+	    }, {
+	        key: 'getFacebookShareUrl',
+	        value: function getFacebookShareUrl() {
+	            return "http://www.facebook.com/sharer/sharer.php?u=" + this.URL + "&title=" + this.TITLE;
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
@@ -195,9 +209,18 @@
 	                    ' every month'
 	                ),
 	                _react2.default.createElement(
-	                    'button',
+	                    'div',
 	                    null,
-	                    ' I Donated '
+	                    _react2.default.createElement(
+	                        'a',
+	                        { className: 'button', target: '_blank', href: this.getTwitterShareUrl() },
+	                        _react2.default.createElement('img', { src: '../../../images/twitter-4-64.png' })
+	                    ),
+	                    _react2.default.createElement(
+	                        'a',
+	                        { className: 'button', target: '_blank', href: this.getFacebookShareUrl() },
+	                        _react2.default.createElement('img', { src: '../../../images/facebook-4-64.png' })
+	                    )
 	                )
 	            );
 	        }
@@ -217,6 +240,10 @@
 	        _this3.state = {
 	            value: props.value
 	        };
+	
+	        _this3.style = {
+	            width: props.width + "px"
+	        };
 	        _this3.handleChange = _this3.handleChange.bind(_this3);
 	
 	        return _this3;
@@ -235,7 +262,7 @@
 	        key: 'isValidInput',
 	        value: function isValidInput(e) {
 	            // is it a number? ignore commas because we'll fix that in the render
-	            var regex = new RegExp('^\\d*.?\\d*$');
+	            var regex = new RegExp('^\\d*\\.?\\d*$');
 	            return e.target.value.replace(/,/g, '').match(regex);
 	        }
 	    }, {
@@ -244,8 +271,6 @@
 	            // put in commas if left of decimal is greater than 4 digits
 	            var regex = new RegExp('^\\d*');
 	            var integers = this.state.value.toString().replace(/,/g, '').match(regex)[0];
-	
-	            console.log(integers);
 	
 	            if (integers.length > 4) {
 	                return integers.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -256,7 +281,7 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            return _react2.default.createElement('input', { className: 'number', type: 'text', value: this.renderValue(), placeholder: this.state.value, onChange: this.handleChange });
+	            return _react2.default.createElement('input', { className: 'number', style: this.style, type: 'text', value: this.renderValue(), placeholder: this.state.value, onChange: this.handleChange });
 	        }
 	    }]);
 	

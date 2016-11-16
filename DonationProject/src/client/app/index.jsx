@@ -40,8 +40,8 @@ class Form extends React.Component {
         return (
             <div>
                 <form>
-                    <p> I earn <span className="number">$<NumberInput value={this.state.annualIncome.value} onChange={this.handleIncomeChange}/> </span> annually </p>
-                    <p> I can donate <span className="number"><NumberInput value={this.state.percentage.value} onChange={this.handlePercentageChange}/>% </span>annually </p>
+                    <p> I earn <span className="number">$<NumberInput value={this.state.annualIncome.value} onChange={this.handleIncomeChange} width="160"/> </span> annually </p>
+                    <p> I can donate <span className="number"><NumberInput value={this.state.percentage.value} onChange={this.handlePercentageChange} width="60"/>% </span>annually </p>
                 </form>
 
                 <Result annualDonation={this.calculateAnnualDonation()}
@@ -55,6 +55,16 @@ class Form extends React.Component {
 class Result extends React.Component {
     constructor(props) {
         super(props);
+        this.TITLE = "I Will Donate";
+        this.URL = "http://stephaniechou.com/DonationProject/src/client/index.html";
+    }
+
+    getTwitterShareUrl() {
+        return "http://twitter.com/intent/tweet?status=" + this.TITLE + "+" + this.URL;
+    }
+
+    getFacebookShareUrl() {
+        return "http://www.facebook.com/sharer/sharer.php?u=" + this.URL + "&title=" + this.TITLE;
     }
 
     render() {
@@ -63,7 +73,10 @@ class Result extends React.Component {
                 <p>I will donate <span className="number">${this.props.annualDonation} </span> per year</p>
                 <p>That's just <span className="number">${this.props.monthlyDonation} </span> every month</p>
 
-                <button> I Donated </button>
+                <div>
+                    <a className="button" target="_blank" href={this.getTwitterShareUrl()}><img src="../../../images/twitter-4-64.png"/></a>
+                    <a className="button" target="_blank" href={this.getFacebookShareUrl()}><img src="../../../images/facebook-4-64.png"/></a>
+                </div>
             </div>
         )
     }
@@ -73,9 +86,14 @@ class Result extends React.Component {
 class NumberInput extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
-            value: props.value
+            value: props.value,
         };
+
+        this.style = {
+            width: props.width + "px"
+        }
         this.handleChange = this.handleChange.bind(this);
 
     }
@@ -91,7 +109,7 @@ class NumberInput extends React.Component {
 
     isValidInput(e) {
         // is it a number? ignore commas because we'll fix that in the render
-        var regex = new RegExp('^\\d*.?\\d*$');
+        var regex = new RegExp('^\\d*\\.?\\d*$');
         return e.target.value.replace(/,/g, '').match(regex);
     }
 
@@ -99,8 +117,6 @@ class NumberInput extends React.Component {
         // put in commas if left of decimal is greater than 4 digits
         var regex = new RegExp('^\\d*');
         var integers = this.state.value.toString().replace(/,/g, '').match(regex)[0];
-
-        console.log(integers)
 
         if (integers.length > 4) {
             return integers.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -112,7 +128,7 @@ class NumberInput extends React.Component {
 
     render() {
         return (
-            <input className="number" type="text" value={this.renderValue()} placeholder={this.state.value} onChange={this.handleChange}/>
+            <input className="number" style={this.style} type="text" value={this.renderValue()} placeholder={this.state.value} onChange={this.handleChange}/>
         )
     }
 }
