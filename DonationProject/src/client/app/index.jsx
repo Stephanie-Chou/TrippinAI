@@ -1,10 +1,17 @@
 import React from 'react';
 import {render} from 'react-dom';
-var cx = require('classnames');
 
+var NavBar = require('./NavBar/navBar.jsx');
+var Checklist = require ('./Checklist/checklist.jsx');
+var DonationCalculator = require ('./DonationCalculator.jsx');
+var ChecklistUtil = require ('./Checklist/checklistUtil.js');
 // run  ./node_modules/.bin/webpack -d
 
 var TOILETRIES_IMAGE_PATH = "../../../images/welcomeKit/toiletries/";
+var CLEANING_IMAGE_PATH = "../../../images/welcomeKit/cleaning/";
+var KITCHEN_IMAGE_PATH = "../../../images/welcomeKit/kitchen/";
+var HOUSE_IMAGE_PATH = "../../../images/welcomeKit/house/";
+
 var toiletriesList = [
     {
         description: "",
@@ -69,308 +76,318 @@ var toiletriesList = [
 
 ];
 
+var cleaningList = [
+    {
+        description: "",
+        title: "dish soap",
+        image: CLEANING_IMAGE_PATH + "dishSoap.svg",
+        newOnly: true
+    },
+    {
+        description: "Bathroom and Kitchen",
+        title: "Cleansers",
+        image: CLEANING_IMAGE_PATH + "LaundryDetergent.svg",
+        newOnly: true
+    },
+    {
+        description: "",
+        title: "Sponges and Cleaning rags",
+        image: CLEANING_IMAGE_PATH + "sponge.svg",
+        newOnly: true
+    },
+    {
+        description: "8 pack or more",
+        title: "Paper Towels",
+        image: CLEANING_IMAGE_PATH + "paperTowels.svg",
+        newOnly: true
+    },
+    {
+        description: "",
+        title: "Laundry Detergent",
+        image: CLEANING_IMAGE_PATH + "laundryDetergent.svg",
+        newOnly: true
+    },
+    {
+        description: "Two would be best",
+        title: "Waste Baskets",
+        image: CLEANING_IMAGE_PATH + "wastebasket.svg",
+        newOnly: false
+    },
+    {
+        description: "",
+        title: "Mop",
+        image: CLEANING_IMAGE_PATH + "sweep.svg",
+        newOnly: true
+    },
+    {
+        description: "",
+        title: "Broom and Dustpan",
+        image: CLEANING_IMAGE_PATH + "sweep.svg",
+        newOnly: true
+    },
+    {
+        description: "",
+        title: "Trash bags",
+        image: CLEANING_IMAGE_PATH + "wastebasket.svg",
+        newOnly: true
+    },
+    {
+        description: "",
+        title: "Toilet Brush and Plunger",
+        image: CLEANING_IMAGE_PATH + "laundryDetergent.svg",
+        newOnly: true
+    },
 
-// ---------------------------
-//     Nav Bar
-// ---------------------------
+];
 
-class MenuItem extends React.Component {
+var houseList = [
+    {
+        description: "At least 4, 30\" x54\" ",
+        title: "Bath Towels",
+        image: HOUSE_IMAGE_PATH + "towels_.svg",
+        newOnly: true
+    },
+    {
+        description: "",
+        title: "Queen Sheets and Comforter",
+        image: HOUSE_IMAGE_PATH + "bed_anbileruAdaleru.svg",
+        newOnly: true
+    },
+    {
+        description: "2",
+        title: "Plush Blankets",
+        image: HOUSE_IMAGE_PATH + ".svg",
+        newOnly: true
+    },
+    {
+        description: "4",
+        title: "Pillows",
+        image: HOUSE_IMAGE_PATH + "pillow.svg",
+        newOnly: true
+    },
+    {
+        description: "",
+        title: "Alarm Clock",
+        image: HOUSE_IMAGE_PATH + "alarmclock.svg",
+        newOnly: false
+    },
+    {
+        description: "Paper, pens, pencils",
+        title: "Writing Utensils",
+        image: HOUSE_IMAGE_PATH + "writing.svg",
+        newOnly: false
+    },
+    {
+        description: "",
+        title: "Lightbulbs",
+        image: HOUSE_IMAGE_PATH + "lightbulb.svg",
+        newOnly: false
+    },
+    {
+        description: "",
+        title: "3-Drawered Storage Bins",
+        image: HOUSE_IMAGE_PATH + "drawers_proSymbols.svg",
+        newOnly: false
+    }
+];
+
+var kitchenList = [
+    {
+        description: "4 of each fork, knife, spoon",
+        title: "Tableware",
+        image: KITCHEN_IMAGE_PATH + "eating_doubco.svg",
+        newOnly: false
+    },
+    {
+        description: "4 of each plate, bowl, cup",
+        title: "Dishes",
+        image: KITCHEN_IMAGE_PATH + "eating_doubco.svg",
+        newOnly: false
+    },
+    {
+        description: "sauce, frying, large cooking (stainless steel)",
+        title: "Pots and Pans",
+        image: KITCHEN_IMAGE_PATH + "cookingPot.svg",
+        newOnly: false
+    },
+    {
+        description: "",
+        title: "Baking tray",
+        image: KITCHEN_IMAGE_PATH + "eating_doubco.svg",
+        newOnly: false
+    },
+    {
+        description: "like a lasagna dish",
+        title: "Glass Dishes",
+        image: KITCHEN_IMAGE_PATH + "eating_doubco.svg",
+        newOnly: false
+    },
+    {
+        description: "",
+        title: "Mixing and Serving Bowls",
+        image: KITCHEN_IMAGE_PATH + "bowl_xihnStudio.svg",
+        newOnly: false
+    },
+    {
+        description: "Ladles, large spoons and forks, spatulas etc",
+        title: "Kitchen Utensils",
+        image: KITCHEN_IMAGE_PATH + "eating_doubco.svg",
+        newOnly: false
+    },
+    {
+        description: "",
+        title: "Can Opener",
+        image: KITCHEN_IMAGE_PATH + "canOpener.svg",
+        newOnly: false
+    },
+    {
+        description: "",
+        title: "Knife and Scissors",
+        image: KITCHEN_IMAGE_PATH + "knife_myly.svg",
+        newOnly: false
+    },
+    {
+        description: "",
+        title: "Cutting Board",
+        image: KITCHEN_IMAGE_PATH + "cuttingBoard_GregorySujkowski.svg",
+        newOnly: false
+    }
+];
+
+// -------------------------------------
+//     Render all views and components
+// -------------------------------------
+
+
+class Main extends React.Component{
     constructor(props) {
         super(props);
 
         this.state = {
-            isSelected: false,
-            name: props.menuItem.name,
+            currentView: ''
         };
 
-        this.handleClick = this.handleClick.bind(this);
+        this.setView = this.setView.bind(this);
+        this.renderDonation = this.renderDonation.bind(this);
+        this.renderToiletriesList = this.renderToiletriesList.bind(this);
+        this.renderKitchenList = this.renderKitchenList.bind(this);
+        this.renderCleaningList = this.renderCleaningList.bind(this);
+        this.renderHouseList = this.renderHouseList.bind(this);
+
+        this.menuItems = [
+            {
+                id: "kitchen",
+                name: "Kitchen",
+                renderFunction: this.renderKitchenList.bind(this)
+            },
+            {
+                id: "house",
+                name: "House and Linen",
+                renderFunction: this.renderHouseList.bind(this)
+            },
+            {
+                id: "cleaning",
+                name: "Cleaning Supplies",
+                renderFunction: this.renderCleaningList.bind(this)
+            },
+            {
+                id: "toiletries",
+                name: "Toiletries",
+                renderFunction: this.renderToiletriesList.bind(this)
+            },
+            {
+                id: "donation",
+                name: "Donation",
+                renderFunction: this.renderDonation.bind(this)
+            }
+        ];
     }
 
-    handleClick() {
+    setView(view) {
         this.setState({
-            isSelected: true,
+            currentView: view
         });
-
-        this.props.menuItem.renderFunction();
     }
 
+    renderDonation() {
+        var view = (
+            <div id="donation">
+                <h1>When the 99% Gives 1%</h1>
+                <h4>It doesn't take a lot to give a lot. What can you do?</h4>
+                <DonationCalculator/>
+            </div>
+        );
 
-    render() {
-        var classes = cx([
-            'menu-item',
-            this.state.isSelected && 'selected'
-        ]);
-
-        return (
-            <div id={this.props.i} className={cx(classes)} onClick={this.handleClick.bind(this)}><a>{this.state.name}</a></div>
-        )
-    }
-}
-
-class NavBar extends React.Component {
-    constructor(props) {
-        super(props);
+        this.setView(view);
     }
 
-    render() {
-        return (
-            <nav>
-                {this.props.menuItems.map(function(menuItem, i){
-                    return <MenuItem menuItem={menuItem} key={i}/>;
-                })}
-            </nav>
-        )
-    }
-}
-
-function renderNavBar() {
-    var menuItems = [
-        {
-            id: "toiletries",
-            name: "Toiletries",
-            renderFunction: renderToiletriesList.bind(this)
-        },
-        {
-            id: "donation",
-            name: "Donation",
-            renderFunction: renderDonation.bind(this)
-        }
-    ]
-
-    render(<NavBar menuItems={menuItems}/>, document.getElementById('nav'));
-}
-
-function renderDonation() {
-    render(
-        <div id="donation">
-            <h1>When the 99% Gives 1%</h1>
-            <h4>It doesn't take a lot to give a lot. What can you do?</h4>
-            <Form/>
-        </div>,
-        document.getElementById('main')
-    )
-}
-
-function renderToiletriesList() {
-    var list = toiletriesList;
-    render (
-        <div>
-            <h1>Toiletries Checklist</h1>
-            <h4> All of these items must be donated new and unopened.</h4>
-            <Checklist list = {list}/>
-
-        </div>,
-        document.getElementById('main')
-    )
-}
-
-renderNavBar();
-
-// ---------------------------
-//     Donation Checklist
-// ---------------------------
-
-
-// checklists can be shared and sent.
-class Checklist extends React.Component {
-    constructor(props) {
-        super(props)
-    }
-
-    render() {
-        return (
+    renderToiletriesList() {
+        var view = (
             <div>
-                <ul>
-                    {this.props.list.map(function(listItem, i){
-                        return <ChecklistItem listItem={listItem} key={i}/>;
-                    })}
-                </ul>
+                <h1>Toiletries Checklist</h1>
+                <h4> All of these items must be donated new and unopened.</h4>
+                <Checklist id="toiletries" list = {toiletriesList}/>
+
             </div>
-        )
-    }
-}
+        );
 
-// {
-//     description: "",
-//     title: "",
-//     image:"",
-//     newOnly: true
-// },
-
-
-// checklist items can be toggled active/inactive
-class ChecklistItem extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            description : props.listItem.description,
-            title :  props.listItem.title,
-            image :  props.listItem.image,
-            isSelected : false
-        };
-
-        this.handleClick = this.handleClick.bind(this);
-
+        this.setView(view);
     }
 
-    handleClick() {
-        var selected = !this.state.isSelected;
-        this.setState({
-            isSelected: selected
-        })
-    }
-
-    render() {
-        var classes = cx([
-            'checklist-item',
-            this.state.isSelected && 'selected'
-        ]);
-
-        return (
-            <div className={cx(classes)} onClick={this.handleClick.bind(this)}>
-                <img className="checklist-item-img" src={this.state.image}/>
-                <div className="checklist-item-title">{this.state.title}</div>
-                <div className="checklist-item-description">{this.state.description}</div>
-            </div>
-        )
-    }
-}
-
-
-// ---------------------------
-//     Donation Calculator
-// ---------------------------
-
-class Form extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {};
-
-        this.state.annualIncome = {value: 10000};
-        this.state.percentage = {value: 1.0};
-
-        this.handleIncomeChange = this.handleIncomeChange.bind(this);
-        this.handlePercentageChange = this.handlePercentageChange.bind(this);
-
-        this.calculateAnnualDonation = this.calculateAnnualDonation.bind(this);
-        this.calculateMonthlyDonation = this.calculateMonthlyDonation.bind(this);
-
-    }
-
-    handleIncomeChange(event) {
-        this.setState({annualIncome: {value: event.target.value.replace(/,/g, '')}});
-    }
-
-    handlePercentageChange(event) {
-        this.setState({percentage: {value: event.target.value}});
-    }
-
-    calculateAnnualDonation() {
-        return (this.state.annualIncome.value * this.state.percentage.value / 100).toFixed(2);
-    }
-
-    calculateMonthlyDonation() {
-        return (this.calculateAnnualDonation()/12).toFixed(2);
-    }
-
-    render() {
-        return (
+    renderKitchenList() {
+        var view = (
             <div>
-                <form>
-                    <p> I earn <span className="number">$<NumberInput value={this.state.annualIncome.value} onChange={this.handleIncomeChange} width="160"/> </span> annually </p>
-                    <p> I can donate <span className="number"><NumberInput value={this.state.percentage.value} onChange={this.handlePercentageChange} width="60"/>% </span>annually </p>
-                </form>
+                <h1>Kitchen Checklist</h1>
+                <h4> Gently used items are welcome!</h4>
+                <Checklist id="kitchen" list = {kitchenList}/>
 
-                <Result annualDonation={this.calculateAnnualDonation()}
-                        monthlyDonation={this.calculateMonthlyDonation()}/>
             </div>
+        );
 
+        this.setView(view);
+    }
+
+    renderCleaningList() {
+        var view = (
+            <div>
+                <h1>Cleaning Checklist</h1>
+                <h4> All of these items must be donated new and unopened.</h4>
+                <Checklist id="cleaning" list = {cleaningList}/>
+
+            </div>
+        );
+
+        this.setView(view);
+    }
+
+    renderHouseList() {
+        var view = (
+            <div>
+                <h1>Linens and Household Checklist</h1>
+                <h4> All linens must be donated new and unopened.</h4>
+                <Checklist id="house" list = {houseList}/>
+            </div>
+        )
+
+        this.setView(view);
+    }
+
+    render() {
+        return(
+            <div>
+                <NavBar menuItems={this.menuItems}/>
+                <div>{this.state.currentView}</div>
+            </div>
         );
     }
 }
 
-class Result extends React.Component {
-    constructor(props) {
-        super(props);
-        this.TITLE = "I Will Donate";
-        this.URL = "http://stephaniechou.com/DonationProject/src/client/index.html";
-    }
-
-    getTwitterShareUrl() {
-        return "http://twitter.com/intent/tweet?status=" + this.TITLE + "+" + this.URL;
-    }
-
-    getFacebookShareUrl() {
-        return "http://www.facebook.com/sharer/sharer.php?u=" + this.URL + "&title=" + this.TITLE;
-    }
-
-    render() {
-        return (
-            <div className="results">
-                <p>I will donate <span className="number">${this.props.annualDonation} </span> per year</p>
-                <p>That's just <span className="number">${this.props.monthlyDonation} </span> every month</p>
-
-                <div>
-                    <a className="button" target="_blank" href={this.getTwitterShareUrl()}><img src="../../../images/twitter-4-64.png"/></a>
-                    <a className="button" target="_blank" href={this.getFacebookShareUrl()}><img src="../../../images/facebook-4-64.png"/></a>
-                </div>
-            </div>
-        )
-    }
-}
 
 
-class NumberInput extends React.Component {
-    constructor(props) {
-        super(props);
+render(<Main/>, document.getElementById('main'));
 
-        this.state = {
-            value: props.value
-        };
 
-        this.style = {
-            width: props.width + "px"
-        };
 
-        this.handleChange = this.handleChange.bind(this);
 
-    }
-
-    handleChange(e) {
-
-        if (this.isValidInput(e)) {
-            this.setState({value: e.target.value});
-            this.props.onChange(e);
-        }
-
-    }
-
-    isValidInput(e) {
-        // is it a number? ignore commas because we'll fix that in the render
-        var regex = new RegExp('^\\d*\\.?\\d*$');
-        return e.target.value.replace(/,/g, '').match(regex);
-    }
-
-    renderValue() {
-        // put in commas if left of decimal is greater than 4 digits
-        var regex = new RegExp('^\\d*');
-        var integers = this.state.value.toString().replace(/,/g, '').match(regex)[0];
-
-        if (integers.length > 4) {
-            return integers.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        } else {
-            return this.state.value;
-        }
-
-    }
-
-    render() {
-        return (
-            <input className="number" style={this.style} type="text" value={this.renderValue()} placeholder={this.state.value} onChange={this.handleChange}/>
-        )
-    }
-}
 
 

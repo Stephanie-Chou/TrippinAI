@@ -65,11 +65,17 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var cx = __webpack_require__(/*! classnames */ 172);
-	
+	var NavBar = __webpack_require__(/*! ./NavBar/navBar.jsx */ 172);
+	var Checklist = __webpack_require__(/*! ./Checklist/checklist.jsx */ 175);
+	var DonationCalculator = __webpack_require__(/*! ./DonationCalculator.jsx */ 177);
+	var ChecklistUtil = __webpack_require__(/*! ./Checklist/checklistUtil.js */ 178);
 	// run  ./node_modules/.bin/webpack -d
 	
 	var TOILETRIES_IMAGE_PATH = "../../../images/welcomeKit/toiletries/";
+	var CLEANING_IMAGE_PATH = "../../../images/welcomeKit/cleaning/";
+	var KITCHEN_IMAGE_PATH = "../../../images/welcomeKit/kitchen/";
+	var HOUSE_IMAGE_PATH = "../../../images/welcomeKit/house/";
+	
 	var toiletriesList = [{
 	    description: "",
 	    title: "Diapers",
@@ -122,282 +128,311 @@
 	    newOnly: true
 	}];
 	
-	// ---------------------------
-	//     Nav Bar
-	// ---------------------------
+	var cleaningList = [{
+	    description: "",
+	    title: "dish soap",
+	    image: CLEANING_IMAGE_PATH + "dishSoap.svg",
+	    newOnly: true
+	}, {
+	    description: "Bathroom and Kitchen",
+	    title: "Cleansers",
+	    image: CLEANING_IMAGE_PATH + "LaundryDetergent.svg",
+	    newOnly: true
+	}, {
+	    description: "",
+	    title: "Sponges and Cleaning rags",
+	    image: CLEANING_IMAGE_PATH + "sponge.svg",
+	    newOnly: true
+	}, {
+	    description: "8 pack or more",
+	    title: "Paper Towels",
+	    image: CLEANING_IMAGE_PATH + "paperTowels.svg",
+	    newOnly: true
+	}, {
+	    description: "",
+	    title: "Laundry Detergent",
+	    image: CLEANING_IMAGE_PATH + "laundryDetergent.svg",
+	    newOnly: true
+	}, {
+	    description: "Two would be best",
+	    title: "Waste Baskets",
+	    image: CLEANING_IMAGE_PATH + "wastebasket.svg",
+	    newOnly: false
+	}, {
+	    description: "",
+	    title: "Mop",
+	    image: CLEANING_IMAGE_PATH + "sweep.svg",
+	    newOnly: true
+	}, {
+	    description: "",
+	    title: "Broom and Dustpan",
+	    image: CLEANING_IMAGE_PATH + "sweep.svg",
+	    newOnly: true
+	}, {
+	    description: "",
+	    title: "Trash bags",
+	    image: CLEANING_IMAGE_PATH + "wastebasket.svg",
+	    newOnly: true
+	}, {
+	    description: "",
+	    title: "Toilet Brush and Plunger",
+	    image: CLEANING_IMAGE_PATH + "laundryDetergent.svg",
+	    newOnly: true
+	}];
 	
-	var MenuItem = function (_React$Component) {
-	    _inherits(MenuItem, _React$Component);
+	var houseList = [{
+	    description: "At least 4, 30\" x54\" ",
+	    title: "Bath Towels",
+	    image: HOUSE_IMAGE_PATH + "towels_.svg",
+	    newOnly: true
+	}, {
+	    description: "",
+	    title: "Queen Sheets and Comforter",
+	    image: HOUSE_IMAGE_PATH + "bed_anbileruAdaleru.svg",
+	    newOnly: true
+	}, {
+	    description: "2",
+	    title: "Plush Blankets",
+	    image: HOUSE_IMAGE_PATH + ".svg",
+	    newOnly: true
+	}, {
+	    description: "4",
+	    title: "Pillows",
+	    image: HOUSE_IMAGE_PATH + "pillow.svg",
+	    newOnly: true
+	}, {
+	    description: "",
+	    title: "Alarm Clock",
+	    image: HOUSE_IMAGE_PATH + "alarmclock.svg",
+	    newOnly: false
+	}, {
+	    description: "Paper, pens, pencils",
+	    title: "Writing Utensils",
+	    image: HOUSE_IMAGE_PATH + "writing.svg",
+	    newOnly: false
+	}, {
+	    description: "",
+	    title: "Lightbulbs",
+	    image: HOUSE_IMAGE_PATH + "lightbulb.svg",
+	    newOnly: false
+	}, {
+	    description: "",
+	    title: "3-Drawered Storage Bins",
+	    image: HOUSE_IMAGE_PATH + "drawers_proSymbols.svg",
+	    newOnly: false
+	}];
 	
-	    function MenuItem(props) {
-	        _classCallCheck(this, MenuItem);
+	var kitchenList = [{
+	    description: "4 of each fork, knife, spoon",
+	    title: "Tableware",
+	    image: KITCHEN_IMAGE_PATH + "eating_doubco.svg",
+	    newOnly: false
+	}, {
+	    description: "4 of each plate, bowl, cup",
+	    title: "Dishes",
+	    image: KITCHEN_IMAGE_PATH + "eating_doubco.svg",
+	    newOnly: false
+	}, {
+	    description: "sauce, frying, large cooking (stainless steel)",
+	    title: "Pots and Pans",
+	    image: KITCHEN_IMAGE_PATH + "cookingPot.svg",
+	    newOnly: false
+	}, {
+	    description: "",
+	    title: "Baking tray",
+	    image: KITCHEN_IMAGE_PATH + "eating_doubco.svg",
+	    newOnly: false
+	}, {
+	    description: "like a lasagna dish",
+	    title: "Glass Dishes",
+	    image: KITCHEN_IMAGE_PATH + "eating_doubco.svg",
+	    newOnly: false
+	}, {
+	    description: "",
+	    title: "Mixing and Serving Bowls",
+	    image: KITCHEN_IMAGE_PATH + "bowl_xihnStudio.svg",
+	    newOnly: false
+	}, {
+	    description: "Ladles, large spoons and forks, spatulas etc",
+	    title: "Kitchen Utensils",
+	    image: KITCHEN_IMAGE_PATH + "eating_doubco.svg",
+	    newOnly: false
+	}, {
+	    description: "",
+	    title: "Can Opener",
+	    image: KITCHEN_IMAGE_PATH + "canOpener.svg",
+	    newOnly: false
+	}, {
+	    description: "",
+	    title: "Knife and Scissors",
+	    image: KITCHEN_IMAGE_PATH + "knife_myly.svg",
+	    newOnly: false
+	}, {
+	    description: "",
+	    title: "Cutting Board",
+	    image: KITCHEN_IMAGE_PATH + "cuttingBoard_GregorySujkowski.svg",
+	    newOnly: false
+	}];
 	
-	        var _this = _possibleConstructorReturn(this, (MenuItem.__proto__ || Object.getPrototypeOf(MenuItem)).call(this, props));
+	// -------------------------------------
+	//     Render all views and components
+	// -------------------------------------
+	
+	
+	var Main = function (_React$Component) {
+	    _inherits(Main, _React$Component);
+	
+	    function Main(props) {
+	        _classCallCheck(this, Main);
+	
+	        var _this = _possibleConstructorReturn(this, (Main.__proto__ || Object.getPrototypeOf(Main)).call(this, props));
 	
 	        _this.state = {
-	            isSelected: false,
-	            name: props.menuItem.name,
-	            renderFunction: props.menuItem.renderFunction
+	            currentView: ''
 	        };
 	
-	        _this.handleClick = _this.handleClick.bind(_this);
+	        _this.setView = _this.setView.bind(_this);
+	        _this.renderDonation = _this.renderDonation.bind(_this);
+	        _this.renderToiletriesList = _this.renderToiletriesList.bind(_this);
+	        _this.renderKitchenList = _this.renderKitchenList.bind(_this);
+	        _this.renderCleaningList = _this.renderCleaningList.bind(_this);
+	        _this.renderHouseList = _this.renderHouseList.bind(_this);
+	
+	        _this.menuItems = [{
+	            id: "kitchen",
+	            name: "Kitchen",
+	            renderFunction: _this.renderKitchenList.bind(_this)
+	        }, {
+	            id: "house",
+	            name: "House and Linen",
+	            renderFunction: _this.renderHouseList.bind(_this)
+	        }, {
+	            id: "cleaning",
+	            name: "Cleaning Supplies",
+	            renderFunction: _this.renderCleaningList.bind(_this)
+	        }, {
+	            id: "toiletries",
+	            name: "Toiletries",
+	            renderFunction: _this.renderToiletriesList.bind(_this)
+	        }, {
+	            id: "donation",
+	            name: "Donation",
+	            renderFunction: _this.renderDonation.bind(_this)
+	        }];
 	        return _this;
 	    }
 	
-	    _createClass(MenuItem, [{
-	        key: 'handleClick',
-	        value: function handleClick() {
+	    _createClass(Main, [{
+	        key: 'setView',
+	        value: function setView(view) {
 	            this.setState({
-	                isSelected: true
-	            });
-	
-	            this.state.renderFunction();
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	
-	            var classes = cx(['menu-item', this.state.isSelected && 'selected']);
-	
-	            return _react2.default.createElement(
-	                'div',
-	                { id: this.props.i, className: cx(classes), onClick: this.handleClick.bind(this) },
-	                _react2.default.createElement(
-	                    'a',
-	                    null,
-	                    this.state.name
-	                )
-	            );
-	        }
-	    }]);
-	
-	    return MenuItem;
-	}(_react2.default.Component);
-	
-	var NavBar = function (_React$Component2) {
-	    _inherits(NavBar, _React$Component2);
-	
-	    function NavBar(props) {
-	        _classCallCheck(this, NavBar);
-	
-	        return _possibleConstructorReturn(this, (NavBar.__proto__ || Object.getPrototypeOf(NavBar)).call(this, props));
-	    }
-	
-	    _createClass(NavBar, [{
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'nav',
-	                null,
-	                this.props.menuItems.map(function (menuItem, i) {
-	                    return _react2.default.createElement(MenuItem, { menuItem: menuItem, key: i });
-	                })
-	            );
-	        }
-	    }]);
-	
-	    return NavBar;
-	}(_react2.default.Component);
-	
-	function renderNavBar() {
-	    var menuItems = [{
-	        id: "toiletries",
-	        name: "Toiletries",
-	        renderFunction: renderToiletriesList.bind(this)
-	    }, {
-	        id: "donation",
-	        name: "Donation",
-	        renderFunction: renderDonation.bind(this)
-	    }];
-	
-	    (0, _reactDom.render)(_react2.default.createElement(NavBar, { menuItems: menuItems }), document.getElementById('nav'));
-	}
-	
-	function renderDonation() {
-	    (0, _reactDom.render)(_react2.default.createElement(
-	        'div',
-	        { id: 'donation' },
-	        _react2.default.createElement(
-	            'h1',
-	            null,
-	            'When the 99% Gives 1%'
-	        ),
-	        _react2.default.createElement(
-	            'h4',
-	            null,
-	            'It doesn\'t take a lot to give a lot. What can you do?'
-	        ),
-	        _react2.default.createElement(Form, null)
-	    ), document.getElementById('main'));
-	}
-	
-	function renderToiletriesList() {
-	    var list = toiletriesList;
-	    (0, _reactDom.render)(_react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(
-	            'h1',
-	            null,
-	            'Toiletries Checklist'
-	        ),
-	        _react2.default.createElement(
-	            'h4',
-	            null,
-	            ' All of these items must be donated new and unopened.'
-	        ),
-	        _react2.default.createElement(Checklist, { list: list })
-	    ), document.getElementById('main'));
-	}
-	
-	renderNavBar();
-	
-	// ---------------------------
-	//     Donation Checklist
-	// ---------------------------
-	
-	
-	// checklists can be shared and sent.
-	
-	var Checklist = function (_React$Component3) {
-	    _inherits(Checklist, _React$Component3);
-	
-	    function Checklist(props) {
-	        _classCallCheck(this, Checklist);
-	
-	        return _possibleConstructorReturn(this, (Checklist.__proto__ || Object.getPrototypeOf(Checklist)).call(this, props));
-	    }
-	
-	    _createClass(Checklist, [{
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'div',
-	                null,
-	                _react2.default.createElement(
-	                    'ul',
-	                    null,
-	                    this.props.list.map(function (listItem, i) {
-	                        return _react2.default.createElement(ChecklistItem, { listItem: listItem, key: i });
-	                    })
-	                )
-	            );
-	        }
-	    }]);
-	
-	    return Checklist;
-	}(_react2.default.Component);
-	
-	// {
-	//     description: "",
-	//     title: "",
-	//     image:"",
-	//     newOnly: true
-	// },
-	
-	
-	// checklist items can be toggled active/inactive
-	
-	
-	var ChecklistItem = function (_React$Component4) {
-	    _inherits(ChecklistItem, _React$Component4);
-	
-	    function ChecklistItem(props) {
-	        _classCallCheck(this, ChecklistItem);
-	
-	        var _this4 = _possibleConstructorReturn(this, (ChecklistItem.__proto__ || Object.getPrototypeOf(ChecklistItem)).call(this, props));
-	
-	        _this4.state = {
-	            description: props.listItem.description,
-	            title: props.listItem.title,
-	            image: props.listItem.image,
-	            isSelected: false
-	        };
-	
-	        _this4.handleClick = _this4.handleClick.bind(_this4);
-	
-	        return _this4;
-	    }
-	
-	    _createClass(ChecklistItem, [{
-	        key: 'handleClick',
-	        value: function handleClick() {
-	            var selected = !this.state.isSelected;
-	            this.setState({
-	                isSelected: selected
+	                currentView: view
 	            });
 	        }
 	    }, {
-	        key: 'render',
-	        value: function render() {
-	            var classes = cx(['checklist-item', this.state.isSelected && 'selected']);
-	
-	            return _react2.default.createElement(
+	        key: 'renderDonation',
+	        value: function renderDonation() {
+	            var view = _react2.default.createElement(
 	                'div',
-	                { className: cx(classes), onClick: this.handleClick.bind(this) },
-	                _react2.default.createElement('img', { className: 'checklist-item-img', src: this.state.image }),
+	                { id: 'donation' },
 	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'checklist-item-title' },
-	                    this.state.title
+	                    'h1',
+	                    null,
+	                    'When the 99% Gives 1%'
 	                ),
 	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'checklist-item-description' },
-	                    this.state.description
-	                )
+	                    'h4',
+	                    null,
+	                    'It doesn\'t take a lot to give a lot. What can you do?'
+	                ),
+	                _react2.default.createElement(DonationCalculator, null)
 	            );
-	        }
-	    }]);
 	
-	    return ChecklistItem;
-	}(_react2.default.Component);
-	
-	// ---------------------------
-	//     Donation Calculator
-	// ---------------------------
-	
-	var Form = function (_React$Component5) {
-	    _inherits(Form, _React$Component5);
-	
-	    function Form(props) {
-	        _classCallCheck(this, Form);
-	
-	        var _this5 = _possibleConstructorReturn(this, (Form.__proto__ || Object.getPrototypeOf(Form)).call(this, props));
-	
-	        _this5.state = {};
-	
-	        _this5.state.annualIncome = { value: 10000 };
-	        _this5.state.percentage = { value: 1.0 };
-	
-	        _this5.handleIncomeChange = _this5.handleIncomeChange.bind(_this5);
-	        _this5.handlePercentageChange = _this5.handlePercentageChange.bind(_this5);
-	
-	        _this5.calculateAnnualDonation = _this5.calculateAnnualDonation.bind(_this5);
-	        _this5.calculateMonthlyDonation = _this5.calculateMonthlyDonation.bind(_this5);
-	
-	        return _this5;
-	    }
-	
-	    _createClass(Form, [{
-	        key: 'handleIncomeChange',
-	        value: function handleIncomeChange(event) {
-	            this.setState({ annualIncome: { value: event.target.value.replace(/,/g, '') } });
+	            this.setView(view);
 	        }
 	    }, {
-	        key: 'handlePercentageChange',
-	        value: function handlePercentageChange(event) {
-	            this.setState({ percentage: { value: event.target.value } });
+	        key: 'renderToiletriesList',
+	        value: function renderToiletriesList() {
+	            var view = _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'h1',
+	                    null,
+	                    'Toiletries Checklist'
+	                ),
+	                _react2.default.createElement(
+	                    'h4',
+	                    null,
+	                    ' All of these items must be donated new and unopened.'
+	                ),
+	                _react2.default.createElement(Checklist, { id: 'toiletries', list: toiletriesList })
+	            );
+	
+	            this.setView(view);
 	        }
 	    }, {
-	        key: 'calculateAnnualDonation',
-	        value: function calculateAnnualDonation() {
-	            return (this.state.annualIncome.value * this.state.percentage.value / 100).toFixed(2);
+	        key: 'renderKitchenList',
+	        value: function renderKitchenList() {
+	            var view = _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'h1',
+	                    null,
+	                    'Kitchen Checklist'
+	                ),
+	                _react2.default.createElement(
+	                    'h4',
+	                    null,
+	                    ' Gently used items are welcome!'
+	                ),
+	                _react2.default.createElement(Checklist, { id: 'kitchen', list: kitchenList })
+	            );
+	
+	            this.setView(view);
 	        }
 	    }, {
-	        key: 'calculateMonthlyDonation',
-	        value: function calculateMonthlyDonation() {
-	            return (this.calculateAnnualDonation() / 12).toFixed(2);
+	        key: 'renderCleaningList',
+	        value: function renderCleaningList() {
+	            var view = _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'h1',
+	                    null,
+	                    'Cleaning Checklist'
+	                ),
+	                _react2.default.createElement(
+	                    'h4',
+	                    null,
+	                    ' All of these items must be donated new and unopened.'
+	                ),
+	                _react2.default.createElement(Checklist, { id: 'cleaning', list: cleaningList })
+	            );
+	
+	            this.setView(view);
+	        }
+	    }, {
+	        key: 'renderHouseList',
+	        value: function renderHouseList() {
+	            var view = _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'h1',
+	                    null,
+	                    'Linens and Household Checklist'
+	                ),
+	                _react2.default.createElement(
+	                    'h4',
+	                    null,
+	                    ' All linens must be donated new and unopened.'
+	                ),
+	                _react2.default.createElement(Checklist, { id: 'house', list: houseList })
+	            );
+	
+	            this.setView(view);
 	        }
 	    }, {
 	        key: 'render',
@@ -405,179 +440,20 @@
 	            return _react2.default.createElement(
 	                'div',
 	                null,
-	                _react2.default.createElement(
-	                    'form',
-	                    null,
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        ' I earn ',
-	                        _react2.default.createElement(
-	                            'span',
-	                            { className: 'number' },
-	                            '$',
-	                            _react2.default.createElement(NumberInput, { value: this.state.annualIncome.value, onChange: this.handleIncomeChange, width: '160' }),
-	                            ' '
-	                        ),
-	                        ' annually '
-	                    ),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        ' I can donate ',
-	                        _react2.default.createElement(
-	                            'span',
-	                            { className: 'number' },
-	                            _react2.default.createElement(NumberInput, { value: this.state.percentage.value, onChange: this.handlePercentageChange, width: '60' }),
-	                            '% '
-	                        ),
-	                        'annually '
-	                    )
-	                ),
-	                _react2.default.createElement(Result, { annualDonation: this.calculateAnnualDonation(),
-	                    monthlyDonation: this.calculateMonthlyDonation() })
-	            );
-	        }
-	    }]);
-	
-	    return Form;
-	}(_react2.default.Component);
-	
-	var Result = function (_React$Component6) {
-	    _inherits(Result, _React$Component6);
-	
-	    function Result(props) {
-	        _classCallCheck(this, Result);
-	
-	        var _this6 = _possibleConstructorReturn(this, (Result.__proto__ || Object.getPrototypeOf(Result)).call(this, props));
-	
-	        _this6.TITLE = "I Will Donate";
-	        _this6.URL = "http://stephaniechou.com/DonationProject/src/client/index.html";
-	        return _this6;
-	    }
-	
-	    _createClass(Result, [{
-	        key: 'getTwitterShareUrl',
-	        value: function getTwitterShareUrl() {
-	            return "http://twitter.com/intent/tweet?status=" + this.TITLE + "+" + this.URL;
-	        }
-	    }, {
-	        key: 'getFacebookShareUrl',
-	        value: function getFacebookShareUrl() {
-	            return "http://www.facebook.com/sharer/sharer.php?u=" + this.URL + "&title=" + this.TITLE;
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'div',
-	                { className: 'results' },
-	                _react2.default.createElement(
-	                    'p',
-	                    null,
-	                    'I will donate ',
-	                    _react2.default.createElement(
-	                        'span',
-	                        { className: 'number' },
-	                        '$',
-	                        this.props.annualDonation,
-	                        ' '
-	                    ),
-	                    ' per year'
-	                ),
-	                _react2.default.createElement(
-	                    'p',
-	                    null,
-	                    'That\'s just ',
-	                    _react2.default.createElement(
-	                        'span',
-	                        { className: 'number' },
-	                        '$',
-	                        this.props.monthlyDonation,
-	                        ' '
-	                    ),
-	                    ' every month'
-	                ),
+	                _react2.default.createElement(NavBar, { menuItems: this.menuItems }),
 	                _react2.default.createElement(
 	                    'div',
 	                    null,
-	                    _react2.default.createElement(
-	                        'a',
-	                        { className: 'button', target: '_blank', href: this.getTwitterShareUrl() },
-	                        _react2.default.createElement('img', { src: '../../../images/twitter-4-64.png' })
-	                    ),
-	                    _react2.default.createElement(
-	                        'a',
-	                        { className: 'button', target: '_blank', href: this.getFacebookShareUrl() },
-	                        _react2.default.createElement('img', { src: '../../../images/facebook-4-64.png' })
-	                    )
+	                    this.state.currentView
 	                )
 	            );
 	        }
 	    }]);
 	
-	    return Result;
+	    return Main;
 	}(_react2.default.Component);
 	
-	var NumberInput = function (_React$Component7) {
-	    _inherits(NumberInput, _React$Component7);
-	
-	    function NumberInput(props) {
-	        _classCallCheck(this, NumberInput);
-	
-	        var _this7 = _possibleConstructorReturn(this, (NumberInput.__proto__ || Object.getPrototypeOf(NumberInput)).call(this, props));
-	
-	        _this7.state = {
-	            value: props.value
-	        };
-	
-	        _this7.style = {
-	            width: props.width + "px"
-	        };
-	
-	        _this7.handleChange = _this7.handleChange.bind(_this7);
-	
-	        return _this7;
-	    }
-	
-	    _createClass(NumberInput, [{
-	        key: 'handleChange',
-	        value: function handleChange(e) {
-	
-	            if (this.isValidInput(e)) {
-	                this.setState({ value: e.target.value });
-	                this.props.onChange(e);
-	            }
-	        }
-	    }, {
-	        key: 'isValidInput',
-	        value: function isValidInput(e) {
-	            // is it a number? ignore commas because we'll fix that in the render
-	            var regex = new RegExp('^\\d*\\.?\\d*$');
-	            return e.target.value.replace(/,/g, '').match(regex);
-	        }
-	    }, {
-	        key: 'renderValue',
-	        value: function renderValue() {
-	            // put in commas if left of decimal is greater than 4 digits
-	            var regex = new RegExp('^\\d*');
-	            var integers = this.state.value.toString().replace(/,/g, '').match(regex)[0];
-	
-	            if (integers.length > 4) {
-	                return integers.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-	            } else {
-	                return this.state.value;
-	            }
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement('input', { className: 'number', style: this.style, type: 'text', value: this.renderValue(), placeholder: this.state.value, onChange: this.handleChange });
-	        }
-	    }]);
-	
-	    return NumberInput;
-	}(_react2.default.Component);
+	(0, _reactDom.render)(_react2.default.createElement(Main, null), document.getElementById('main'));
 
 /***/ },
 /* 1 */
@@ -22461,6 +22337,85 @@
 
 /***/ },
 /* 172 */
+/*!******************************************!*\
+  !*** ./src/client/app/NavBar/navBar.jsx ***!
+  \******************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(/*! react-dom */ 34);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var cx = __webpack_require__(/*! classnames */ 173);
+	
+	var MenuItem = __webpack_require__(/*! ./../Components/menuItem.jsx */ 174);
+	
+	var NavBar = function (_React$Component) {
+	    _inherits(NavBar, _React$Component);
+	
+	    function NavBar(props) {
+	        _classCallCheck(this, NavBar);
+	
+	        var _this = _possibleConstructorReturn(this, (NavBar.__proto__ || Object.getPrototypeOf(NavBar)).call(this, props));
+	
+	        _this.state = {
+	            isSelected: 0
+	        };
+	        return _this;
+	    }
+	
+	    _createClass(NavBar, [{
+	        key: 'handleClick',
+	        value: function handleClick(index) {
+	            this.setState({
+	                isSelected: index
+	            });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var self = this;
+	
+	            return _react2.default.createElement(
+	                'nav',
+	                null,
+	                this.props.menuItems.map(function (menuItem, i) {
+	
+	                    var classes;
+	
+	                    if (self.state.isSelected == i) {
+	                        classes = cx(['menu-item', 'selected']);
+	                    } else {
+	                        classes = cx(['menu-item']);
+	                    }
+	
+	                    return _react2.default.createElement(MenuItem, { menuItem: menuItem, classes: classes, key: i, onClick: self.handleClick.bind(self, i) });
+	                })
+	            );
+	        }
+	    }]);
+	
+	    return NavBar;
+	}(_react2.default.Component);
+	
+	module.exports = NavBar;
+
+/***/ },
+/* 173 */
 /*!*******************************!*\
   !*** ./~/classnames/index.js ***!
   \*******************************/
@@ -22515,6 +22470,557 @@
 		}
 	}());
 
+
+/***/ },
+/* 174 */
+/*!************************************************!*\
+  !*** ./src/client/app/Components/menuItem.jsx ***!
+  \************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(/*! react-dom */ 34);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var cx = __webpack_require__(/*! classnames */ 173);
+	
+	var MenuItem = function (_React$Component) {
+	    _inherits(MenuItem, _React$Component);
+	
+	    function MenuItem(props) {
+	        _classCallCheck(this, MenuItem);
+	
+	        var _this = _possibleConstructorReturn(this, (MenuItem.__proto__ || Object.getPrototypeOf(MenuItem)).call(this, props));
+	
+	        _this.state = {
+	            name: props.menuItem.name
+	        };
+	
+	        _this.handleClick = _this.handleClick.bind(_this);
+	        return _this;
+	    }
+	
+	    _createClass(MenuItem, [{
+	        key: 'handleClick',
+	        value: function handleClick() {
+	            this.props.onClick();
+	            this.props.menuItem.renderFunction();
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	
+	            return _react2.default.createElement(
+	                'div',
+	                { id: this.props.i, className: cx(this.props.classes), onClick: this.handleClick.bind(this) },
+	                _react2.default.createElement(
+	                    'a',
+	                    null,
+	                    this.state.name
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return MenuItem;
+	}(_react2.default.Component);
+	
+	module.exports = MenuItem;
+
+/***/ },
+/* 175 */
+/*!************************************************!*\
+  !*** ./src/client/app/Checklist/checklist.jsx ***!
+  \************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(/*! react-dom */ 34);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var ChecklistItem = __webpack_require__(/*! ./checklistItem.jsx */ 176);
+	
+	// checklists can be shared and sent.
+	
+	var Checklist = function (_React$Component) {
+	    _inherits(Checklist, _React$Component);
+	
+	    function Checklist(props) {
+	        _classCallCheck(this, Checklist);
+	
+	        return _possibleConstructorReturn(this, (Checklist.__proto__ || Object.getPrototypeOf(Checklist)).call(this, props));
+	    }
+	
+	    _createClass(Checklist, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'ul',
+	                    null,
+	                    this.props.list.map(function (listItem, i) {
+	                        return _react2.default.createElement(ChecklistItem, { listItem: listItem, key: i });
+	                    })
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return Checklist;
+	}(_react2.default.Component);
+	
+	module.exports = Checklist;
+
+/***/ },
+/* 176 */
+/*!****************************************************!*\
+  !*** ./src/client/app/Checklist/checklistItem.jsx ***!
+  \****************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(/*! react-dom */ 34);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var cx = __webpack_require__(/*! classnames */ 173);
+	
+	// checklist items can be toggled active/inactive
+	// TODO build out some buttons for searching items on the checklist? add a more obvious check mark... left or right
+	
+	var ChecklistItem = function (_React$Component) {
+	    _inherits(ChecklistItem, _React$Component);
+	
+	    function ChecklistItem(props) {
+	        _classCallCheck(this, ChecklistItem);
+	
+	        var _this = _possibleConstructorReturn(this, (ChecklistItem.__proto__ || Object.getPrototypeOf(ChecklistItem)).call(this, props));
+	
+	        _this.state = {
+	            isSelected: false
+	        };
+	
+	        _this.handleClick = _this.handleClick.bind(_this);
+	
+	        return _this;
+	    }
+	
+	    _createClass(ChecklistItem, [{
+	        key: 'handleClick',
+	        value: function handleClick() {
+	            var selected = !this.state.isSelected;
+	            this.setState({
+	                isSelected: selected
+	            });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var classes = cx(['checklist-item', this.state.isSelected && 'selected']);
+	
+	            return _react2.default.createElement(
+	                'div',
+	                { key: this.props.i, className: cx(classes), onClick: this.handleClick.bind(this) },
+	                _react2.default.createElement('img', { className: 'checklist-item-img', src: this.props.listItem.image }),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'checklist-item-title' },
+	                    this.props.listItem.title
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'checklist-item-description' },
+	                    this.props.listItem.description
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return ChecklistItem;
+	}(_react2.default.Component);
+	
+	module.exports = ChecklistItem;
+
+/***/ },
+/* 177 */
+/*!***********************************************!*\
+  !*** ./src/client/app/DonationCalculator.jsx ***!
+  \***********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(/*! react-dom */ 34);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var DonationCalculator = function (_React$Component) {
+	    _inherits(DonationCalculator, _React$Component);
+	
+	    function DonationCalculator(props) {
+	        _classCallCheck(this, DonationCalculator);
+	
+	        var _this = _possibleConstructorReturn(this, (DonationCalculator.__proto__ || Object.getPrototypeOf(DonationCalculator)).call(this, props));
+	
+	        _this.state = {};
+	
+	        _this.state.annualIncome = { value: 10000 };
+	        _this.state.percentage = { value: 1.0 };
+	
+	        _this.handleIncomeChange = _this.handleIncomeChange.bind(_this);
+	        _this.handlePercentageChange = _this.handlePercentageChange.bind(_this);
+	
+	        _this.calculateAnnualDonation = _this.calculateAnnualDonation.bind(_this);
+	        _this.calculateMonthlyDonation = _this.calculateMonthlyDonation.bind(_this);
+	
+	        return _this;
+	    }
+	
+	    _createClass(DonationCalculator, [{
+	        key: 'handleIncomeChange',
+	        value: function handleIncomeChange(event) {
+	            this.setState({ annualIncome: { value: event.target.value.replace(/,/g, '') } });
+	        }
+	    }, {
+	        key: 'handlePercentageChange',
+	        value: function handlePercentageChange(event) {
+	            this.setState({ percentage: { value: event.target.value } });
+	        }
+	    }, {
+	        key: 'calculateAnnualDonation',
+	        value: function calculateAnnualDonation() {
+	            return (this.state.annualIncome.value * this.state.percentage.value / 100).toFixed(2);
+	        }
+	    }, {
+	        key: 'calculateMonthlyDonation',
+	        value: function calculateMonthlyDonation() {
+	            return (this.calculateAnnualDonation() / 12).toFixed(2);
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'form',
+	                    null,
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        ' I earn ',
+	                        _react2.default.createElement(
+	                            'span',
+	                            { className: 'number' },
+	                            '$',
+	                            _react2.default.createElement(NumberInput, { value: this.state.annualIncome.value, onChange: this.handleIncomeChange, width: '160' }),
+	                            ' '
+	                        ),
+	                        ' annually '
+	                    ),
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        ' I can donate ',
+	                        _react2.default.createElement(
+	                            'span',
+	                            { className: 'number' },
+	                            _react2.default.createElement(NumberInput, { value: this.state.percentage.value, onChange: this.handlePercentageChange, width: '60' }),
+	                            '% '
+	                        ),
+	                        'annually '
+	                    )
+	                ),
+	                _react2.default.createElement(Result, { annualDonation: this.calculateAnnualDonation(),
+	                    monthlyDonation: this.calculateMonthlyDonation() })
+	            );
+	        }
+	    }]);
+	
+	    return DonationCalculator;
+	}(_react2.default.Component);
+	
+	var Result = function (_React$Component2) {
+	    _inherits(Result, _React$Component2);
+	
+	    function Result(props) {
+	        _classCallCheck(this, Result);
+	
+	        var _this2 = _possibleConstructorReturn(this, (Result.__proto__ || Object.getPrototypeOf(Result)).call(this, props));
+	
+	        _this2.TITLE = "I Will Donate";
+	        _this2.URL = "http://stephaniechou.com/DonationProject/src/client/index.html";
+	        return _this2;
+	    }
+	
+	    _createClass(Result, [{
+	        key: 'getTwitterShareUrl',
+	        value: function getTwitterShareUrl() {
+	            return "http://twitter.com/intent/tweet?status=" + this.TITLE + "+" + this.URL;
+	        }
+	    }, {
+	        key: 'getFacebookShareUrl',
+	        value: function getFacebookShareUrl() {
+	            return "http://www.facebook.com/sharer/sharer.php?u=" + this.URL + "&title=" + this.TITLE;
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'results' },
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    'I will donate ',
+	                    _react2.default.createElement(
+	                        'span',
+	                        { className: 'number' },
+	                        '$',
+	                        this.props.annualDonation,
+	                        ' '
+	                    ),
+	                    ' per year'
+	                ),
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    'That\'s just ',
+	                    _react2.default.createElement(
+	                        'span',
+	                        { className: 'number' },
+	                        '$',
+	                        this.props.monthlyDonation,
+	                        ' '
+	                    ),
+	                    ' every month'
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'a',
+	                        { className: 'button', target: '_blank', href: this.getTwitterShareUrl() },
+	                        _react2.default.createElement('img', { src: '../../../images/twitter-4-64.png' })
+	                    ),
+	                    _react2.default.createElement(
+	                        'a',
+	                        { className: 'button', target: '_blank', href: this.getFacebookShareUrl() },
+	                        _react2.default.createElement('img', { src: '../../../images/facebook-4-64.png' })
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return Result;
+	}(_react2.default.Component);
+	
+	var NumberInput = function (_React$Component3) {
+	    _inherits(NumberInput, _React$Component3);
+	
+	    function NumberInput(props) {
+	        _classCallCheck(this, NumberInput);
+	
+	        var _this3 = _possibleConstructorReturn(this, (NumberInput.__proto__ || Object.getPrototypeOf(NumberInput)).call(this, props));
+	
+	        _this3.state = {
+	            value: props.value
+	        };
+	
+	        _this3.style = {
+	            width: props.width + "px"
+	        };
+	
+	        _this3.handleChange = _this3.handleChange.bind(_this3);
+	
+	        return _this3;
+	    }
+	
+	    _createClass(NumberInput, [{
+	        key: 'handleChange',
+	        value: function handleChange(e) {
+	
+	            if (this.isValidInput(e)) {
+	                this.setState({ value: e.target.value });
+	                this.props.onChange(e);
+	            }
+	        }
+	    }, {
+	        key: 'isValidInput',
+	        value: function isValidInput(e) {
+	            // is it a number? ignore commas because we'll fix that in the render
+	            var regex = new RegExp('^\\d*\\.?\\d*$');
+	            return e.target.value.replace(/,/g, '').match(regex);
+	        }
+	    }, {
+	        key: 'renderValue',
+	        value: function renderValue() {
+	            // put in commas if left of decimal is greater than 4 digits
+	            var regex = new RegExp('^\\d*');
+	            var integers = this.state.value.toString().replace(/,/g, '').match(regex)[0];
+	
+	            if (integers.length > 4) {
+	                return integers.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	            } else {
+	                return this.state.value;
+	            }
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement('input', { className: 'number', style: this.style, type: 'text', value: this.renderValue(), placeholder: this.state.value, onChange: this.handleChange });
+	        }
+	    }]);
+	
+	    return NumberInput;
+	}(_react2.default.Component);
+	
+	module.exports = DonationCalculator;
+
+/***/ },
+/* 178 */
+/*!***************************************************!*\
+  !*** ./src/client/app/Checklist/checklistUtil.js ***!
+  \***************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var ChecklistUtil = function ChecklistUtil() {
+	    _classCallCheck(this, ChecklistUtil);
+	}
+	
+	// public static TOILETRIES_IMAGE_PATH = "../../../images/welcomeKit/toiletries/";
+	// public static toiletriesList = [
+	//     {
+	//         description: "",
+	//         title: "Diapers",
+	//         image: ChecklistUtil.TOILETRIES_IMAGE_PATH + "diaper-FelipeAlvarado.svg",
+	//         newOnly: true
+	//     },
+	//     {
+	//         description: "",
+	//         title: "Toilet Paper",
+	//         image: ChecklistUtil.TOILETRIES_IMAGE_PATH + "toiletPaper-PatrickTrouve.svg",
+	//         newOnly: true
+	//     },
+	//     {
+	//         description: "",
+	//         title: "Shampoo",
+	//         image: ChecklistUtil.TOILETRIES_IMAGE_PATH + "shampoo-paperclip.svg",
+	//         newOnly: true
+	//     },
+	//     {
+	//         description: "",
+	//         title: "Soap",
+	//         image: ChecklistUtil.TOILETRIES_IMAGE_PATH + "soap-StanislavLevin.svg",
+	//         newOnly: true
+	//     },
+	//     {
+	//         description: "",
+	//         title: "Hand Soap",
+	//         image: ChecklistUtil.TOILETRIES_IMAGE_PATH + "handsoap-JurajSedlak.svg",
+	//         newOnly: true
+	//     },
+	//     {
+	//         description: "1 per person",
+	//         title: "Toothbrush",
+	//         image: ChecklistUtil.TOILETRIES_IMAGE_PATH + "toothbrush-HeaPohLin.svg",
+	//         newOnly: true
+	//     },
+	//     {
+	//         description: "",
+	//         title: "Toothpaste",
+	//         image: ChecklistUtil.TOILETRIES_IMAGE_PATH + "toothpaste-AshleyFiveash.svg",
+	//         newOnly: true
+	//     },
+	//     {
+	//         description: "",
+	//         title: "Lotion",
+	//         image: ChecklistUtil.TOILETRIES_IMAGE_PATH + "lotion-OliviuStoian.svg",
+	//         newOnly: true
+	//     },
+	//     {
+	//         description: "",
+	//         title: "Feminine Hygiene Products",
+	//         image: ChecklistUtil.TOILETRIES_IMAGE_PATH + "feminine-iconsphere.svg",
+	//         newOnly: true
+	//     },
+	//     {
+	//         description: "Bandages, Neosporin, Q-tips",
+	//         title: "First Aid Supplies",
+	//         image: ChecklistUtil.TOILETRIES_IMAGE_PATH + "firstaid-ProSymbols.svg",
+	//         newOnly: true
+	//     },
+	//
+	// ];
+	;
+	
+	module.exports = ChecklistUtil;
 
 /***/ }
 /******/ ]);

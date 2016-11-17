@@ -75,7 +75,7 @@ nav {
 }
 
 .menu-item:hover{
-    border-bottom: 3px solid #fc4a14;
+    border-bottom: 3px solid rgba(252,74,20, 0.4)/*#fc4a14*/;
 }
 
 .menu-item.selected{
@@ -89,7 +89,6 @@ nav {
 
 /* Donation Checklist */
 
-/*toilet paper by Patrick Trouvé*/
 .checklist-item {
     border-left: 3px solid transparent;
     cursor:pointer;
@@ -99,7 +98,7 @@ nav {
 }
 
 .checklist-item:hover{
-    border-left: 3px solid #F7B733;
+    border-left: 3px solid rgba(247,183,51, 0.4)/*#F7B733*/;
 }
 
 .checklist-item.selected{
