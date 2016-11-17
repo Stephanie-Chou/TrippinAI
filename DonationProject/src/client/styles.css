@@ -57,3 +57,78 @@ button:focus {
 
 }
 
+
+/* Navbar */
+
+nav {
+    position: fixed;
+    top: 0px;
+    margin: 0 auto;
+    width: 70%;
+    background-color: #4ABDAC;
+}
+.menu-item {
+    display: inline-block;
+    border-bottom: 3px solid transparent;
+    padding: 8px;
+    margin: 8px;
+}
+
+.menu-item:hover{
+    border-bottom: 3px solid #fc4a14;
+}
+
+.menu-item.selected{
+    border-bottom: 3px solid #fc4a14;
+}
+
+.menu-item a{
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Donation Checklist */
+
+/*toilet paper by Patrick Trouvé*/
+.checklist-item {
+    border-left: 3px solid transparent;
+    cursor:pointer;
+    position: relative;
+    padding: 8px;
+    margin: 8px;
+}
+
+.checklist-item:hover{
+    border-left: 3px solid #F7B733;
+}
+
+.checklist-item.selected{
+    border-left: 3px solid #F7B733;
+}
+
+.checklist-item:active {
+    color: #F7B733;
+}
+
+.checklist-item-img {
+    width: 32px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.checklist-item-img path{
+    fill: #fc4a14;
+}
+
+.checklist-item-title {
+    padding: 0px 20px;
+    font-size: 18px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.checklist-item-description {
+    display: inline-block;
+    vertical-align: middle;
+}
+

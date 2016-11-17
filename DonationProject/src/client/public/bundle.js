@@ -65,28 +65,318 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	var cx = __webpack_require__(/*! classnames */ 172);
+	
 	// run  ./node_modules/.bin/webpack -d
 	
-	var Form = function (_React$Component) {
-	    _inherits(Form, _React$Component);
+	var TOILETRIES_IMAGE_PATH = "../../../images/welcomeKit/toiletries/";
+	var toiletriesList = [{
+	    description: "",
+	    title: "Diapers",
+	    image: TOILETRIES_IMAGE_PATH + "diaper-FelipeAlvarado.svg",
+	    newOnly: true
+	}, {
+	    description: "",
+	    title: "Toilet Paper",
+	    image: TOILETRIES_IMAGE_PATH + "toiletPaper-PatrickTrouve.svg",
+	    newOnly: true
+	}, {
+	    description: "",
+	    title: "Shampoo",
+	    image: TOILETRIES_IMAGE_PATH + "shampoo-paperclip.svg",
+	    newOnly: true
+	}, {
+	    description: "",
+	    title: "Soap",
+	    image: TOILETRIES_IMAGE_PATH + "soap-StanislavLevin.svg",
+	    newOnly: true
+	}, {
+	    description: "",
+	    title: "Hand Soap",
+	    image: TOILETRIES_IMAGE_PATH + "handsoap-JurajSedlak.svg",
+	    newOnly: true
+	}, {
+	    description: "1 per person",
+	    title: "Toothbrush",
+	    image: TOILETRIES_IMAGE_PATH + "toothbrush-HeaPohLin.svg",
+	    newOnly: true
+	}, {
+	    description: "",
+	    title: "Toothpaste",
+	    image: TOILETRIES_IMAGE_PATH + "toothpaste-AshleyFiveash.svg",
+	    newOnly: true
+	}, {
+	    description: "",
+	    title: "Lotion",
+	    image: TOILETRIES_IMAGE_PATH + "lotion-OliviuStoian.svg",
+	    newOnly: true
+	}, {
+	    description: "",
+	    title: "Feminine Hygiene Products",
+	    image: TOILETRIES_IMAGE_PATH + "feminine-iconsphere.svg",
+	    newOnly: true
+	}, {
+	    description: "Bandages, Neosporin, Q-tips",
+	    title: "First Aid Supplies",
+	    image: TOILETRIES_IMAGE_PATH + "firstaid-ProSymbols.svg",
+	    newOnly: true
+	}];
+	
+	// ---------------------------
+	//     Nav Bar
+	// ---------------------------
+	
+	var MenuItem = function (_React$Component) {
+	    _inherits(MenuItem, _React$Component);
+	
+	    function MenuItem(props) {
+	        _classCallCheck(this, MenuItem);
+	
+	        var _this = _possibleConstructorReturn(this, (MenuItem.__proto__ || Object.getPrototypeOf(MenuItem)).call(this, props));
+	
+	        _this.state = {
+	            isSelected: false,
+	            name: props.menuItem.name,
+	            renderFunction: props.menuItem.renderFunction
+	        };
+	
+	        _this.handleClick = _this.handleClick.bind(_this);
+	        return _this;
+	    }
+	
+	    _createClass(MenuItem, [{
+	        key: 'handleClick',
+	        value: function handleClick() {
+	            this.setState({
+	                isSelected: true
+	            });
+	
+	            this.state.renderFunction();
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	
+	            var classes = cx(['menu-item', this.state.isSelected && 'selected']);
+	
+	            return _react2.default.createElement(
+	                'div',
+	                { id: this.props.i, className: cx(classes), onClick: this.handleClick.bind(this) },
+	                _react2.default.createElement(
+	                    'a',
+	                    null,
+	                    this.state.name
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return MenuItem;
+	}(_react2.default.Component);
+	
+	var NavBar = function (_React$Component2) {
+	    _inherits(NavBar, _React$Component2);
+	
+	    function NavBar(props) {
+	        _classCallCheck(this, NavBar);
+	
+	        return _possibleConstructorReturn(this, (NavBar.__proto__ || Object.getPrototypeOf(NavBar)).call(this, props));
+	    }
+	
+	    _createClass(NavBar, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'nav',
+	                null,
+	                this.props.menuItems.map(function (menuItem, i) {
+	                    return _react2.default.createElement(MenuItem, { menuItem: menuItem, key: i });
+	                })
+	            );
+	        }
+	    }]);
+	
+	    return NavBar;
+	}(_react2.default.Component);
+	
+	function renderNavBar() {
+	    var menuItems = [{
+	        id: "toiletries",
+	        name: "Toiletries",
+	        renderFunction: renderToiletriesList.bind(this)
+	    }, {
+	        id: "donation",
+	        name: "Donation",
+	        renderFunction: renderDonation.bind(this)
+	    }];
+	
+	    (0, _reactDom.render)(_react2.default.createElement(NavBar, { menuItems: menuItems }), document.getElementById('nav'));
+	}
+	
+	function renderDonation() {
+	    (0, _reactDom.render)(_react2.default.createElement(
+	        'div',
+	        { id: 'donation' },
+	        _react2.default.createElement(
+	            'h1',
+	            null,
+	            'When the 99% Gives 1%'
+	        ),
+	        _react2.default.createElement(
+	            'h4',
+	            null,
+	            'It doesn\'t take a lot to give a lot. What can you do?'
+	        ),
+	        _react2.default.createElement(Form, null)
+	    ), document.getElementById('main'));
+	}
+	
+	function renderToiletriesList() {
+	    var list = toiletriesList;
+	    (0, _reactDom.render)(_react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	            'h1',
+	            null,
+	            'Toiletries Checklist'
+	        ),
+	        _react2.default.createElement(
+	            'h4',
+	            null,
+	            ' All of these items must be donated new and unopened.'
+	        ),
+	        _react2.default.createElement(Checklist, { list: list })
+	    ), document.getElementById('main'));
+	}
+	
+	renderNavBar();
+	
+	// ---------------------------
+	//     Donation Checklist
+	// ---------------------------
+	
+	
+	// checklists can be shared and sent.
+	
+	var Checklist = function (_React$Component3) {
+	    _inherits(Checklist, _React$Component3);
+	
+	    function Checklist(props) {
+	        _classCallCheck(this, Checklist);
+	
+	        return _possibleConstructorReturn(this, (Checklist.__proto__ || Object.getPrototypeOf(Checklist)).call(this, props));
+	    }
+	
+	    _createClass(Checklist, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'ul',
+	                    null,
+	                    this.props.list.map(function (listItem, i) {
+	                        return _react2.default.createElement(ChecklistItem, { listItem: listItem, key: i });
+	                    })
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return Checklist;
+	}(_react2.default.Component);
+	
+	// {
+	//     description: "",
+	//     title: "",
+	//     image:"",
+	//     newOnly: true
+	// },
+	
+	
+	// checklist items can be toggled active/inactive
+	
+	
+	var ChecklistItem = function (_React$Component4) {
+	    _inherits(ChecklistItem, _React$Component4);
+	
+	    function ChecklistItem(props) {
+	        _classCallCheck(this, ChecklistItem);
+	
+	        var _this4 = _possibleConstructorReturn(this, (ChecklistItem.__proto__ || Object.getPrototypeOf(ChecklistItem)).call(this, props));
+	
+	        _this4.state = {
+	            description: props.listItem.description,
+	            title: props.listItem.title,
+	            image: props.listItem.image,
+	            isSelected: false
+	        };
+	
+	        _this4.handleClick = _this4.handleClick.bind(_this4);
+	
+	        return _this4;
+	    }
+	
+	    _createClass(ChecklistItem, [{
+	        key: 'handleClick',
+	        value: function handleClick() {
+	            var selected = !this.state.isSelected;
+	            this.setState({
+	                isSelected: selected
+	            });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var classes = cx(['checklist-item', this.state.isSelected && 'selected']);
+	
+	            return _react2.default.createElement(
+	                'div',
+	                { className: cx(classes), onClick: this.handleClick.bind(this) },
+	                _react2.default.createElement('img', { className: 'checklist-item-img', src: this.state.image }),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'checklist-item-title' },
+	                    this.state.title
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'checklist-item-description' },
+	                    this.state.description
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return ChecklistItem;
+	}(_react2.default.Component);
+	
+	// ---------------------------
+	//     Donation Calculator
+	// ---------------------------
+	
+	var Form = function (_React$Component5) {
+	    _inherits(Form, _React$Component5);
 	
 	    function Form(props) {
 	        _classCallCheck(this, Form);
 	
-	        var _this = _possibleConstructorReturn(this, (Form.__proto__ || Object.getPrototypeOf(Form)).call(this, props));
+	        var _this5 = _possibleConstructorReturn(this, (Form.__proto__ || Object.getPrototypeOf(Form)).call(this, props));
 	
-	        _this.state = {};
+	        _this5.state = {};
 	
-	        _this.state.annualIncome = { value: 10000 };
-	        _this.state.percentage = { value: 1.0 };
+	        _this5.state.annualIncome = { value: 10000 };
+	        _this5.state.percentage = { value: 1.0 };
 	
-	        _this.handleIncomeChange = _this.handleIncomeChange.bind(_this);
-	        _this.handlePercentageChange = _this.handlePercentageChange.bind(_this);
+	        _this5.handleIncomeChange = _this5.handleIncomeChange.bind(_this5);
+	        _this5.handlePercentageChange = _this5.handlePercentageChange.bind(_this5);
 	
-	        _this.calculateAnnualDonation = _this.calculateAnnualDonation.bind(_this);
-	        _this.calculateMonthlyDonation = _this.calculateMonthlyDonation.bind(_this);
+	        _this5.calculateAnnualDonation = _this5.calculateAnnualDonation.bind(_this5);
+	        _this5.calculateMonthlyDonation = _this5.calculateMonthlyDonation.bind(_this5);
 	
-	        return _this;
+	        return _this5;
 	    }
 	
 	    _createClass(Form, [{
@@ -153,17 +443,17 @@
 	    return Form;
 	}(_react2.default.Component);
 	
-	var Result = function (_React$Component2) {
-	    _inherits(Result, _React$Component2);
+	var Result = function (_React$Component6) {
+	    _inherits(Result, _React$Component6);
 	
 	    function Result(props) {
 	        _classCallCheck(this, Result);
 	
-	        var _this2 = _possibleConstructorReturn(this, (Result.__proto__ || Object.getPrototypeOf(Result)).call(this, props));
+	        var _this6 = _possibleConstructorReturn(this, (Result.__proto__ || Object.getPrototypeOf(Result)).call(this, props));
 	
-	        _this2.TITLE = "I Will Donate";
-	        _this2.URL = "http://stephaniechou.com/DonationProject/src/client/index.html";
-	        return _this2;
+	        _this6.TITLE = "I Will Donate";
+	        _this6.URL = "http://stephaniechou.com/DonationProject/src/client/index.html";
+	        return _this6;
 	    }
 	
 	    _createClass(Result, [{
@@ -229,24 +519,25 @@
 	    return Result;
 	}(_react2.default.Component);
 	
-	var NumberInput = function (_React$Component3) {
-	    _inherits(NumberInput, _React$Component3);
+	var NumberInput = function (_React$Component7) {
+	    _inherits(NumberInput, _React$Component7);
 	
 	    function NumberInput(props) {
 	        _classCallCheck(this, NumberInput);
 	
-	        var _this3 = _possibleConstructorReturn(this, (NumberInput.__proto__ || Object.getPrototypeOf(NumberInput)).call(this, props));
+	        var _this7 = _possibleConstructorReturn(this, (NumberInput.__proto__ || Object.getPrototypeOf(NumberInput)).call(this, props));
 	
-	        _this3.state = {
+	        _this7.state = {
 	            value: props.value
 	        };
 	
-	        _this3.style = {
+	        _this7.style = {
 	            width: props.width + "px"
 	        };
-	        _this3.handleChange = _this3.handleChange.bind(_this3);
 	
-	        return _this3;
+	        _this7.handleChange = _this7.handleChange.bind(_this7);
+	
+	        return _this7;
 	    }
 	
 	    _createClass(NumberInput, [{
@@ -287,8 +578,6 @@
 	
 	    return NumberInput;
 	}(_react2.default.Component);
-	
-	(0, _reactDom.render)(_react2.default.createElement(Form, null), document.getElementById('app'));
 
 /***/ },
 /* 1 */
@@ -22169,6 +22458,63 @@
 	
 	module.exports = ReactDOMNullInputValuePropHook;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! (webpack)/~/node-libs-browser/~/process/browser.js */ 3)))
+
+/***/ },
+/* 172 */
+/*!*******************************!*\
+  !*** ./~/classnames/index.js ***!
+  \*******************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2016 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+	/* global define */
+	
+	(function () {
+		'use strict';
+	
+		var hasOwn = {}.hasOwnProperty;
+	
+		function classNames () {
+			var classes = [];
+	
+			for (var i = 0; i < arguments.length; i++) {
+				var arg = arguments[i];
+				if (!arg) continue;
+	
+				var argType = typeof arg;
+	
+				if (argType === 'string' || argType === 'number') {
+					classes.push(arg);
+				} else if (Array.isArray(arg)) {
+					classes.push(classNames.apply(null, arg));
+				} else if (argType === 'object') {
+					for (var key in arg) {
+						if (hasOwn.call(arg, key) && arg[key]) {
+							classes.push(key);
+						}
+					}
+				}
+			}
+	
+			return classes.join(' ');
+		}
+	
+		if (typeof module !== 'undefined' && module.exports) {
+			module.exports = classNames;
+		} else if (true) {
+			// register as 'classnames', consistent with npm package name
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return classNames;
+			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else {
+			window.classNames = classNames;
+		}
+	}());
+
 
 /***/ }
 /******/ ]);

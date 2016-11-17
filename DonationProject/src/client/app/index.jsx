@@ -1,7 +1,246 @@
 import React from 'react';
 import {render} from 'react-dom';
+var cx = require('classnames');
 
 // run  ./node_modules/.bin/webpack -d
+
+var TOILETRIES_IMAGE_PATH = "../../../images/welcomeKit/toiletries/";
+var toiletriesList = [
+    {
+        description: "",
+        title: "Diapers",
+        image: TOILETRIES_IMAGE_PATH + "diaper-FelipeAlvarado.svg",
+        newOnly: true
+    },
+    {
+        description: "",
+        title: "Toilet Paper",
+        image: TOILETRIES_IMAGE_PATH + "toiletPaper-PatrickTrouve.svg",
+        newOnly: true
+    },
+    {
+        description: "",
+        title: "Shampoo",
+        image: TOILETRIES_IMAGE_PATH + "shampoo-paperclip.svg",
+        newOnly: true
+    },
+    {
+        description: "",
+        title: "Soap",
+        image: TOILETRIES_IMAGE_PATH + "soap-StanislavLevin.svg",
+        newOnly: true
+    },
+    {
+        description: "",
+        title: "Hand Soap",
+        image: TOILETRIES_IMAGE_PATH + "handsoap-JurajSedlak.svg",
+        newOnly: true
+    },
+    {
+        description: "1 per person",
+        title: "Toothbrush",
+        image: TOILETRIES_IMAGE_PATH + "toothbrush-HeaPohLin.svg",
+        newOnly: true
+    },
+    {
+        description: "",
+        title: "Toothpaste",
+        image: TOILETRIES_IMAGE_PATH + "toothpaste-AshleyFiveash.svg",
+        newOnly: true
+    },
+    {
+        description: "",
+        title: "Lotion",
+        image: TOILETRIES_IMAGE_PATH + "lotion-OliviuStoian.svg",
+        newOnly: true
+    },
+    {
+        description: "",
+        title: "Feminine Hygiene Products",
+        image: TOILETRIES_IMAGE_PATH + "feminine-iconsphere.svg",
+        newOnly: true
+    },
+    {
+        description: "Bandages, Neosporin, Q-tips",
+        title: "First Aid Supplies",
+        image: TOILETRIES_IMAGE_PATH + "firstaid-ProSymbols.svg",
+        newOnly: true
+    },
+
+];
+
+
+// ---------------------------
+//     Nav Bar
+// ---------------------------
+
+class MenuItem extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            isSelected: false,
+            name: props.menuItem.name,
+        };
+
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick() {
+        this.setState({
+            isSelected: true,
+        });
+
+        this.props.menuItem.renderFunction();
+    }
+
+
+    render() {
+        var classes = cx([
+            'menu-item',
+            this.state.isSelected && 'selected'
+        ]);
+
+        return (
+            <div id={this.props.i} className={cx(classes)} onClick={this.handleClick.bind(this)}><a>{this.state.name}</a></div>
+        )
+    }
+}
+
+class NavBar extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <nav>
+                {this.props.menuItems.map(function(menuItem, i){
+                    return <MenuItem menuItem={menuItem} key={i}/>;
+                })}
+            </nav>
+        )
+    }
+}
+
+function renderNavBar() {
+    var menuItems = [
+        {
+            id: "toiletries",
+            name: "Toiletries",
+            renderFunction: renderToiletriesList.bind(this)
+        },
+        {
+            id: "donation",
+            name: "Donation",
+            renderFunction: renderDonation.bind(this)
+        }
+    ]
+
+    render(<NavBar menuItems={menuItems}/>, document.getElementById('nav'));
+}
+
+function renderDonation() {
+    render(
+        <div id="donation">
+            <h1>When the 99% Gives 1%</h1>
+            <h4>It doesn't take a lot to give a lot. What can you do?</h4>
+            <Form/>
+        </div>,
+        document.getElementById('main')
+    )
+}
+
+function renderToiletriesList() {
+    var list = toiletriesList;
+    render (
+        <div>
+            <h1>Toiletries Checklist</h1>
+            <h4> All of these items must be donated new and unopened.</h4>
+            <Checklist list = {list}/>
+
+        </div>,
+        document.getElementById('main')
+    )
+}
+
+renderNavBar();
+
+// ---------------------------
+//     Donation Checklist
+// ---------------------------
+
+
+// checklists can be shared and sent.
+class Checklist extends React.Component {
+    constructor(props) {
+        super(props)
+    }
+
+    render() {
+        return (
+            <div>
+                <ul>
+                    {this.props.list.map(function(listItem, i){
+                        return <ChecklistItem listItem={listItem} key={i}/>;
+                    })}
+                </ul>
+            </div>
+        )
+    }
+}
+
+// {
+//     description: "",
+//     title: "",
+//     image:"",
+//     newOnly: true
+// },
+
+
+// checklist items can be toggled active/inactive
+class ChecklistItem extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            description : props.listItem.description,
+            title :  props.listItem.title,
+            image :  props.listItem.image,
+            isSelected : false
+        };
+
+        this.handleClick = this.handleClick.bind(this);
+
+    }
+
+    handleClick() {
+        var selected = !this.state.isSelected;
+        this.setState({
+            isSelected: selected
+        })
+    }
+
+    render() {
+        var classes = cx([
+            'checklist-item',
+            this.state.isSelected && 'selected'
+        ]);
+
+        return (
+            <div className={cx(classes)} onClick={this.handleClick.bind(this)}>
+                <img className="checklist-item-img" src={this.state.image}/>
+                <div className="checklist-item-title">{this.state.title}</div>
+                <div className="checklist-item-description">{this.state.description}</div>
+            </div>
+        )
+    }
+}
+
+
+// ---------------------------
+//     Donation Calculator
+// ---------------------------
 
 class Form extends React.Component {
     constructor(props) {
@@ -88,12 +327,13 @@ class NumberInput extends React.Component {
         super(props);
 
         this.state = {
-            value: props.value,
+            value: props.value
         };
 
         this.style = {
             width: props.width + "px"
-        }
+        };
+
         this.handleChange = this.handleChange.bind(this);
 
     }
@@ -134,4 +374,3 @@ class NumberInput extends React.Component {
 }
 
 
-render(<Form/>, document.getElementById('app'));
