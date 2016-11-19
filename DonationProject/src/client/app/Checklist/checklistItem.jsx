@@ -58,7 +58,7 @@ class ChecklistItem extends React.Component {
                     <div className="checklist-item-title">{this.props.listItem.title}</div>
                     <div className="checklist-item-description">{this.props.listItem.description}</div>
 
-                    <div className={cx(searchClasses)}> <a href={amazon_url} target="_blank"><img src="../../../images/search-13-48.png"/></a></div>
+                    <a href={amazon_url} target="_blank"><div className={cx(searchClasses)}> <img src="../../../images/search-13-48.png"/></div></a>
                 </div>
             </div>
 
