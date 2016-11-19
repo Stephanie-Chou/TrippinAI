@@ -16,8 +16,7 @@ class MenuItem extends React.Component {
 
     handleClick() {
         this.props.onClick();
-        this.props.menuItem.renderFunction();
-
+        this.props.menuItem.onClickCallback();
     }
 
 

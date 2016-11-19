@@ -37,7 +37,7 @@ button:focus {
     display:inline-block;
     cursor:pointer;
     color:#DFDCE3;
-    font-family:Arial;
+    font-family: 'Lato', sans-serif;
     padding:16px 31px;
     text-decoration:none;
     text-shadow:0px 1px 0px #fc4a14;
@@ -58,7 +58,11 @@ button:focus {
 }
 
 
-/* Navbar */
+/*
+==============================================
+Navigation
+==============================================
+*/
 
 nav {
     position: fixed;
@@ -66,16 +70,20 @@ nav {
     margin: 0 auto;
     width: 70%;
     background-color: #4ABDAC;
+    z-index: 100;
+    display: inline-block;
 }
+
 .menu-item {
     display: inline-block;
     border-bottom: 3px solid transparent;
     padding: 8px;
     margin: 8px;
+    cursor: pointer;
 }
 
 .menu-item:hover{
-    border-bottom: 3px solid rgba(252,74,20, 0.4)/*#fc4a14*/;
+    border-bottom: 3px solid #b0330e;/*#fc4a14*/;
 }
 
 .menu-item.selected{
@@ -87,18 +95,50 @@ nav {
     text-decoration: none;
 }
 
-/* Donation Checklist */
+
+button.callToAction {
+    margin: 0px 12px;
+    padding: 12px;
+    background: #fc4a14;
+    display: inline-block;
+    color: #DFDCE3;
+    position: relative;
+    vertical-align: top;
+    height: 50px;
+    text-align: center;
+    border: 0;
+    border: none;
+    cursor: pointer;
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+button.callToAction:hover{
+    background: #b0330e;
+}
+
+.counter {
+    display: inline-block;
+}
+/*
+==============================================
+Check List
+==============================================
+*/
 
 .checklist-item {
+    display: inline-block;
     border-left: 3px solid transparent;
     cursor:pointer;
     position: relative;
     padding: 8px;
     margin: 8px;
+    width: 500px;
 }
 
 .checklist-item:hover{
-    border-left: 3px solid rgba(247,183,51, 0.4)/*#F7B733*/;
+    border-left: 3px solid #F7B733;
 }
 
 .checklist-item.selected{
@@ -106,7 +146,7 @@ nav {
 }
 
 .checklist-item:active {
-    color: #F7B733;
+    border-left: 3px solid #ac8023;
 }
 
 .checklist-item-img {
@@ -129,5 +169,103 @@ nav {
 .checklist-item-description {
     display: inline-block;
     vertical-align: middle;
+    max-width: 200px;
+    word-wrap: normal;
 }
 
+.checklist-item-search {
+    display: inline-block;
+    visibility: visible;
+    vertical-align: middle;
+    background-color: #fc4a14;
+    padding: 15px 25px;
+    margin-left:12px;
+    float: right;
+}
+
+.checklist-item-search:hover{
+    background-color: #b0330e;/*#fc4a14*/;
+    animation-name: stretch;
+    animation-duration: 1.5s;
+}
+
+
+.checklist-item-search img {
+    width: 18px;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+
+
+/*ANIMATION*/
+/*
+==============================================
+stretchRight
+==============================================
+*/
+
+.stretchRight{
+    animation-name: stretchRight;
+    -webkit-animation-name: stretchRight;
+
+    animation-duration: 1.5s;
+    -webkit-animation-duration: 1.5s;
+
+    animation-timing-function: ease-out;
+    -webkit-animation-timing-function: ease-out;
+
+    transform-origin: 0% 0%;
+    -ms-transform-origin: 0% 0%;
+    -webkit-transform-origin: 0% 0%;
+}
+
+@keyframes stretchRight {
+    0% {
+        transform: scaleX(0.3);
+    }
+    40% {
+        transform: scaleX(1.02);
+    }
+    60% {
+        transform: scaleX(0.98);
+    }
+    80% {
+        transform: scaleX(1.01);
+    }
+    100% {
+        transform: scaleX(0.98);
+    }
+    80% {
+        transform: scaleX(1.01);
+    }
+    100% {
+        transform: scaleX(1);
+    }
+}
+
+@-webkit-keyframes stretchRight {
+    0% {
+        -webkit-transform: scaleX(0.3);
+    }
+    40% {
+        -webkit-transform: scaleX(1.02);
+    }
+    60% {
+        -webkit-transform: scaleX(0.98);
+    }
+    80% {
+        -webkit-transform: scaleX(1.01);
+    }
+    100% {
+        -webkit-transform: scaleX(0.98);
+    }
+    80% {
+        -webkit-transform: scaleX(1.01);
+    }
+    100% {
+        -webkit-transform: scaleX(1);
+    }
+}

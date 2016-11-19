@@ -66,218 +66,14 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var NavBar = __webpack_require__(/*! ./NavBar/navBar.jsx */ 172);
-	var Checklist = __webpack_require__(/*! ./Checklist/checklist.jsx */ 175);
-	var DonationCalculator = __webpack_require__(/*! ./DonationCalculator.jsx */ 177);
-	var ChecklistUtil = __webpack_require__(/*! ./Checklist/checklistUtil.js */ 178);
+	var Checklist = __webpack_require__(/*! ./Checklist/checklist.jsx */ 176);
+	var DonationCalculator = __webpack_require__(/*! ./DonationCalculator.jsx */ 179);
+	var ChecklistUtil = __webpack_require__(/*! ./Checklist/checklistUtil */ 178);
 	// run  ./node_modules/.bin/webpack -d
-	
-	var TOILETRIES_IMAGE_PATH = "../../../images/welcomeKit/toiletries/";
-	var CLEANING_IMAGE_PATH = "../../../images/welcomeKit/cleaning/";
-	var KITCHEN_IMAGE_PATH = "../../../images/welcomeKit/kitchen/";
-	var HOUSE_IMAGE_PATH = "../../../images/welcomeKit/house/";
-	
-	var toiletriesList = [{
-	    description: "",
-	    title: "Diapers",
-	    image: TOILETRIES_IMAGE_PATH + "diaper-FelipeAlvarado.svg",
-	    newOnly: true
-	}, {
-	    description: "",
-	    title: "Toilet Paper",
-	    image: TOILETRIES_IMAGE_PATH + "toiletPaper-PatrickTrouve.svg",
-	    newOnly: true
-	}, {
-	    description: "",
-	    title: "Shampoo",
-	    image: TOILETRIES_IMAGE_PATH + "shampoo-paperclip.svg",
-	    newOnly: true
-	}, {
-	    description: "",
-	    title: "Soap",
-	    image: TOILETRIES_IMAGE_PATH + "soap-StanislavLevin.svg",
-	    newOnly: true
-	}, {
-	    description: "",
-	    title: "Hand Soap",
-	    image: TOILETRIES_IMAGE_PATH + "handsoap-JurajSedlak.svg",
-	    newOnly: true
-	}, {
-	    description: "1 per person",
-	    title: "Toothbrush",
-	    image: TOILETRIES_IMAGE_PATH + "toothbrush-HeaPohLin.svg",
-	    newOnly: true
-	}, {
-	    description: "",
-	    title: "Toothpaste",
-	    image: TOILETRIES_IMAGE_PATH + "toothpaste-AshleyFiveash.svg",
-	    newOnly: true
-	}, {
-	    description: "",
-	    title: "Lotion",
-	    image: TOILETRIES_IMAGE_PATH + "lotion-OliviuStoian.svg",
-	    newOnly: true
-	}, {
-	    description: "",
-	    title: "Feminine Hygiene Products",
-	    image: TOILETRIES_IMAGE_PATH + "feminine-iconsphere.svg",
-	    newOnly: true
-	}, {
-	    description: "Bandages, Neosporin, Q-tips",
-	    title: "First Aid Supplies",
-	    image: TOILETRIES_IMAGE_PATH + "firstaid-ProSymbols.svg",
-	    newOnly: true
-	}];
-	
-	var cleaningList = [{
-	    description: "",
-	    title: "dish soap",
-	    image: CLEANING_IMAGE_PATH + "dishSoap.svg",
-	    newOnly: true
-	}, {
-	    description: "Bathroom and Kitchen",
-	    title: "Cleansers",
-	    image: CLEANING_IMAGE_PATH + "LaundryDetergent.svg",
-	    newOnly: true
-	}, {
-	    description: "",
-	    title: "Sponges and Cleaning rags",
-	    image: CLEANING_IMAGE_PATH + "sponge.svg",
-	    newOnly: true
-	}, {
-	    description: "8 pack or more",
-	    title: "Paper Towels",
-	    image: CLEANING_IMAGE_PATH + "paperTowels.svg",
-	    newOnly: true
-	}, {
-	    description: "",
-	    title: "Laundry Detergent",
-	    image: CLEANING_IMAGE_PATH + "laundryDetergent.svg",
-	    newOnly: true
-	}, {
-	    description: "Two would be best",
-	    title: "Waste Baskets",
-	    image: CLEANING_IMAGE_PATH + "wastebasket.svg",
-	    newOnly: false
-	}, {
-	    description: "",
-	    title: "Mop",
-	    image: CLEANING_IMAGE_PATH + "sweep.svg",
-	    newOnly: true
-	}, {
-	    description: "",
-	    title: "Broom and Dustpan",
-	    image: CLEANING_IMAGE_PATH + "sweep.svg",
-	    newOnly: true
-	}, {
-	    description: "",
-	    title: "Trash bags",
-	    image: CLEANING_IMAGE_PATH + "wastebasket.svg",
-	    newOnly: true
-	}, {
-	    description: "",
-	    title: "Toilet Brush and Plunger",
-	    image: CLEANING_IMAGE_PATH + "laundryDetergent.svg",
-	    newOnly: true
-	}];
-	
-	var houseList = [{
-	    description: "At least 4, 30\" x54\" ",
-	    title: "Bath Towels",
-	    image: HOUSE_IMAGE_PATH + "towels_.svg",
-	    newOnly: true
-	}, {
-	    description: "",
-	    title: "Queen Sheets and Comforter",
-	    image: HOUSE_IMAGE_PATH + "bed_anbileruAdaleru.svg",
-	    newOnly: true
-	}, {
-	    description: "2",
-	    title: "Plush Blankets",
-	    image: HOUSE_IMAGE_PATH + ".svg",
-	    newOnly: true
-	}, {
-	    description: "4",
-	    title: "Pillows",
-	    image: HOUSE_IMAGE_PATH + "pillow.svg",
-	    newOnly: true
-	}, {
-	    description: "",
-	    title: "Alarm Clock",
-	    image: HOUSE_IMAGE_PATH + "alarmclock.svg",
-	    newOnly: false
-	}, {
-	    description: "Paper, pens, pencils",
-	    title: "Writing Utensils",
-	    image: HOUSE_IMAGE_PATH + "writing.svg",
-	    newOnly: false
-	}, {
-	    description: "",
-	    title: "Lightbulbs",
-	    image: HOUSE_IMAGE_PATH + "lightbulb.svg",
-	    newOnly: false
-	}, {
-	    description: "",
-	    title: "3-Drawered Storage Bins",
-	    image: HOUSE_IMAGE_PATH + "drawers_proSymbols.svg",
-	    newOnly: false
-	}];
-	
-	var kitchenList = [{
-	    description: "4 of each fork, knife, spoon",
-	    title: "Tableware",
-	    image: KITCHEN_IMAGE_PATH + "eating_doubco.svg",
-	    newOnly: false
-	}, {
-	    description: "4 of each plate, bowl, cup",
-	    title: "Dishes",
-	    image: KITCHEN_IMAGE_PATH + "eating_doubco.svg",
-	    newOnly: false
-	}, {
-	    description: "sauce, frying, large cooking (stainless steel)",
-	    title: "Pots and Pans",
-	    image: KITCHEN_IMAGE_PATH + "cookingPot.svg",
-	    newOnly: false
-	}, {
-	    description: "",
-	    title: "Baking tray",
-	    image: KITCHEN_IMAGE_PATH + "eating_doubco.svg",
-	    newOnly: false
-	}, {
-	    description: "like a lasagna dish",
-	    title: "Glass Dishes",
-	    image: KITCHEN_IMAGE_PATH + "eating_doubco.svg",
-	    newOnly: false
-	}, {
-	    description: "",
-	    title: "Mixing and Serving Bowls",
-	    image: KITCHEN_IMAGE_PATH + "bowl_xihnStudio.svg",
-	    newOnly: false
-	}, {
-	    description: "Ladles, large spoons and forks, spatulas etc",
-	    title: "Kitchen Utensils",
-	    image: KITCHEN_IMAGE_PATH + "eating_doubco.svg",
-	    newOnly: false
-	}, {
-	    description: "",
-	    title: "Can Opener",
-	    image: KITCHEN_IMAGE_PATH + "canOpener.svg",
-	    newOnly: false
-	}, {
-	    description: "",
-	    title: "Knife and Scissors",
-	    image: KITCHEN_IMAGE_PATH + "knife_myly.svg",
-	    newOnly: false
-	}, {
-	    description: "",
-	    title: "Cutting Board",
-	    image: KITCHEN_IMAGE_PATH + "cuttingBoard_GregorySujkowski.svg",
-	    newOnly: false
-	}];
 	
 	// -------------------------------------
 	//     Render all views and components
 	// -------------------------------------
-	
 	
 	var Main = function (_React$Component) {
 	    _inherits(Main, _React$Component);
@@ -288,10 +84,11 @@
 	        var _this = _possibleConstructorReturn(this, (Main.__proto__ || Object.getPrototypeOf(Main)).call(this, props));
 	
 	        _this.state = {
-	            currentView: ''
+	            currentView: _this.renderLanding()
 	        };
 	
 	        _this.setView = _this.setView.bind(_this);
+	        _this.renderLanding = _this.renderLanding.bind(_this);
 	        _this.renderDonation = _this.renderDonation.bind(_this);
 	        _this.renderToiletriesList = _this.renderToiletriesList.bind(_this);
 	        _this.renderKitchenList = _this.renderKitchenList.bind(_this);
@@ -301,23 +98,23 @@
 	        _this.menuItems = [{
 	            id: "kitchen",
 	            name: "Kitchen",
-	            renderFunction: _this.renderKitchenList.bind(_this)
+	            onClickCallback: _this.setView.bind(_this, "kitchen")
 	        }, {
 	            id: "house",
 	            name: "House and Linen",
-	            renderFunction: _this.renderHouseList.bind(_this)
+	            onClickCallback: _this.setView.bind(_this, "house")
 	        }, {
 	            id: "cleaning",
 	            name: "Cleaning Supplies",
-	            renderFunction: _this.renderCleaningList.bind(_this)
+	            onClickCallback: _this.setView.bind(_this, "cleaning")
 	        }, {
 	            id: "toiletries",
 	            name: "Toiletries",
-	            renderFunction: _this.renderToiletriesList.bind(_this)
+	            onClickCallback: _this.setView.bind(_this, "toiletries")
 	        }, {
 	            id: "donation",
-	            name: "Donation",
-	            renderFunction: _this.renderDonation.bind(_this)
+	            name: "Calculator",
+	            onClickCallback: _this.setView.bind(_this, "donation")
 	        }];
 	        return _this;
 	    }
@@ -325,14 +122,65 @@
 	    _createClass(Main, [{
 	        key: 'setView',
 	        value: function setView(view) {
+	            var newView;
+	
+	            switch (view) {
+	                case "landing":
+	                    newView = this.renderLanding();
+	                    break;
+	                case "kitchen":
+	                    newView = this.renderKitchenList();
+	                    break;
+	                case "toiletries":
+	                    newView = this.renderToiletriesList();
+	                    break;
+	                case "cleaning":
+	                    newView = this.renderCleaningList();
+	                    break;
+	                case "house":
+	                    newView = this.renderHouseList();
+	                    break;
+	                case "donation":
+	                    newView = this.renderDonation();
+	                    break;
+	            }
+	
 	            this.setState({
-	                currentView: view
+	                currentView: newView
 	            });
+	        }
+	    }, {
+	        key: 'renderLanding',
+	        value: function renderLanding() {
+	            return _react2.default.createElement(
+	                'div',
+	                { id: 'landing' },
+	                _react2.default.createElement(
+	                    'h1',
+	                    null,
+	                    'Refugee Welcome Box'
+	                ),
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    ' For refugees who have lost everything, the items in a Welcome Box are essential to their successful transition to life in the United Statees. The money used to purchase these items comes from the same small grant amount that is used to pay for their rent and additional expenses. By donating the contents of these boxes, you are giving a refugee a better financial future. These Welcome Boxes will make a refugee\'s new house a home.'
+	                ),
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    ' Take a look at the  Welcome Boxes and see what you can donate.'
+	                ),
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    ' The suggested list comes from the International Rescue Committee in Oakland. They are currently accepting donations. Please help them by organizing complete welcome boxes.'
+	                )
+	            );
 	        }
 	    }, {
 	        key: 'renderDonation',
 	        value: function renderDonation() {
-	            var view = _react2.default.createElement(
+	            return _react2.default.createElement(
 	                'div',
 	                { id: 'donation' },
 	                _react2.default.createElement(
@@ -347,92 +195,83 @@
 	                ),
 	                _react2.default.createElement(DonationCalculator, null)
 	            );
-	
-	            this.setView(view);
 	        }
 	    }, {
 	        key: 'renderToiletriesList',
 	        value: function renderToiletriesList() {
-	            var view = _react2.default.createElement(
+	            return _react2.default.createElement(
 	                'div',
 	                null,
 	                _react2.default.createElement(
 	                    'h1',
 	                    null,
-	                    'Toiletries Checklist'
+	                    'Toiletries Welcome Box '
 	                ),
 	                _react2.default.createElement(
 	                    'h4',
 	                    null,
 	                    ' All of these items must be donated new and unopened.'
 	                ),
-	                _react2.default.createElement(Checklist, { id: 'toiletries', list: toiletriesList })
+	                _react2.default.createElement(Checklist, { id: 'toiletries', list: ChecklistUtil.toiletriesList })
 	            );
-	
-	            this.setView(view);
 	        }
 	    }, {
 	        key: 'renderKitchenList',
 	        value: function renderKitchenList() {
-	            var view = _react2.default.createElement(
+	            return _react2.default.createElement(
 	                'div',
 	                null,
 	                _react2.default.createElement(
 	                    'h1',
 	                    null,
-	                    'Kitchen Checklist'
+	                    'Kitchen Welcome Box '
 	                ),
 	                _react2.default.createElement(
 	                    'h4',
 	                    null,
 	                    ' Gently used items are welcome!'
 	                ),
-	                _react2.default.createElement(Checklist, { id: 'kitchen', list: kitchenList })
+	                _react2.default.createElement(Checklist, { id: 'kitchen', list: ChecklistUtil.kitchenList })
 	            );
-	
-	            this.setView(view);
 	        }
 	    }, {
 	        key: 'renderCleaningList',
 	        value: function renderCleaningList() {
-	            var view = _react2.default.createElement(
+	            return _react2.default.createElement(
 	                'div',
 	                null,
 	                _react2.default.createElement(
 	                    'h1',
 	                    null,
-	                    'Cleaning Checklist'
+	                    'Cleaning Welcome Box '
 	                ),
 	                _react2.default.createElement(
 	                    'h4',
 	                    null,
 	                    ' All of these items must be donated new and unopened.'
 	                ),
-	                _react2.default.createElement(Checklist, { id: 'cleaning', list: cleaningList })
+	                _react2.default.createElement(Checklist, { id: 'cleaning', list: ChecklistUtil.cleaningList })
 	            );
-	
-	            this.setView(view);
 	        }
 	    }, {
 	        key: 'renderHouseList',
 	        value: function renderHouseList() {
-	            var view = _react2.default.createElement(
+	
+	            return _react2.default.createElement(
 	                'div',
 	                null,
 	                _react2.default.createElement(
 	                    'h1',
 	                    null,
-	                    'Linens and Household Checklist'
+	                    'Linens and Household Welcome Box '
 	                ),
 	                _react2.default.createElement(
 	                    'h4',
 	                    null,
 	                    ' All linens must be donated new and unopened.'
 	                ),
-	                _react2.default.createElement(Checklist, { id: 'house', list: houseList })
+	                _react2.default.createElement(Checklist, { id: 'house', list: ChecklistUtil.houseList })
 	            );
-	
-	            this.setView(view);
 	        }
 	    }, {
 	        key: 'render',
@@ -440,7 +279,7 @@
 	            return _react2.default.createElement(
 	                'div',
 	                null,
-	                _react2.default.createElement(NavBar, { menuItems: this.menuItems }),
+	                _react2.default.createElement(NavBar, { menuItems: this.menuItems, count: ChecklistUtil.fullCount() }),
 	                _react2.default.createElement(
 	                    'div',
 	                    null,
@@ -22352,6 +22191,10 @@
 	
 	var _reactDom = __webpack_require__(/*! react-dom */ 34);
 	
+	var _counter = __webpack_require__(/*! ../Components/counter */ 173);
+	
+	var _counter2 = _interopRequireDefault(_counter);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -22360,9 +22203,9 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var cx = __webpack_require__(/*! classnames */ 173);
+	var cx = __webpack_require__(/*! classnames */ 174);
 	
-	var MenuItem = __webpack_require__(/*! ./../Components/menuItem.jsx */ 174);
+	var MenuItem = __webpack_require__(/*! ./../Components/menuItem.jsx */ 175);
 	
 	var NavBar = function (_React$Component) {
 	    _inherits(NavBar, _React$Component);
@@ -22373,7 +22216,7 @@
 	        var _this = _possibleConstructorReturn(this, (NavBar.__proto__ || Object.getPrototypeOf(NavBar)).call(this, props));
 	
 	        _this.state = {
-	            isSelected: 0
+	            isSelected: null
 	        };
 	        return _this;
 	    }
@@ -22386,10 +22229,15 @@
 	            });
 	        }
 	    }, {
+	        key: 'onDonate',
+	        value: function onDonate() {
+	            // show a modal
+	            alert("Let me know what you can donate. I'll arrange the drop off of items.");
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            var self = this;
-	
 	            return _react2.default.createElement(
 	                'nav',
 	                null,
@@ -22404,7 +22252,17 @@
 	                    }
 	
 	                    return _react2.default.createElement(MenuItem, { menuItem: menuItem, classes: classes, key: i, onClick: self.handleClick.bind(self, i) });
-	                })
+	                }),
+	                _react2.default.createElement(
+	                    'button',
+	                    { className: 'callToAction', type: 'button', onClick: this.onDonate.bind(this) },
+	                    _react2.default.createElement(_counter2.default, { count: this.props.count }),
+	                    _react2.default.createElement(
+	                        'span',
+	                        null,
+	                        'Donate'
+	                    )
+	                )
 	            );
 	        }
 	    }]);
@@ -22416,6 +22274,70 @@
 
 /***/ },
 /* 173 */
+/*!***********************************************!*\
+  !*** ./src/client/app/Components/counter.jsx ***!
+  \***********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(/*! react-dom */ 34);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Counter = function (_React$Component) {
+	    _inherits(Counter, _React$Component);
+	
+	    function Counter(props) {
+	        _classCallCheck(this, Counter);
+	
+	        var _this = _possibleConstructorReturn(this, (Counter.__proto__ || Object.getPrototypeOf(Counter)).call(this, props));
+	
+	        _this.state = {
+	            count: props.count
+	        };
+	
+	        return _this;
+	    }
+	
+	    _createClass(Counter, [{
+	        key: 'onChange',
+	        value: function onChange(increment) {
+	            var count = increment ? this.state.count++ : this.state.count--;
+	            this.setState({
+	                count: count
+	            });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'counter' },
+	                this.props.count
+	            );
+	        }
+	    }]);
+	
+	    return Counter;
+	}(_react2.default.Component);
+	
+	module.exports = Counter;
+
+/***/ },
+/* 174 */
 /*!*******************************!*\
   !*** ./~/classnames/index.js ***!
   \*******************************/
@@ -22472,7 +22394,7 @@
 
 
 /***/ },
-/* 174 */
+/* 175 */
 /*!************************************************!*\
   !*** ./src/client/app/Components/menuItem.jsx ***!
   \************************************************/
@@ -22496,7 +22418,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var cx = __webpack_require__(/*! classnames */ 173);
+	var cx = __webpack_require__(/*! classnames */ 174);
 	
 	var MenuItem = function (_React$Component) {
 	    _inherits(MenuItem, _React$Component);
@@ -22518,7 +22440,7 @@
 	        key: 'handleClick',
 	        value: function handleClick() {
 	            this.props.onClick();
-	            this.props.menuItem.renderFunction();
+	            this.props.menuItem.onClickCallback();
 	        }
 	    }, {
 	        key: 'render',
@@ -22542,7 +22464,7 @@
 	module.exports = MenuItem;
 
 /***/ },
-/* 175 */
+/* 176 */
 /*!************************************************!*\
   !*** ./src/client/app/Checklist/checklist.jsx ***!
   \************************************************/
@@ -22566,7 +22488,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var ChecklistItem = __webpack_require__(/*! ./checklistItem.jsx */ 176);
+	var ChecklistItem = __webpack_require__(/*! ./checklistItem.jsx */ 177);
 	
 	// checklists can be shared and sent.
 	
@@ -22582,14 +22504,15 @@
 	    _createClass(Checklist, [{
 	        key: 'render',
 	        value: function render() {
+	            var list = this.props.list;
 	            return _react2.default.createElement(
 	                'div',
 	                null,
 	                _react2.default.createElement(
 	                    'ul',
 	                    null,
-	                    this.props.list.map(function (listItem, i) {
-	                        return _react2.default.createElement(ChecklistItem, { listItem: listItem, key: i });
+	                    this.props.list.items.map(function (listItem, i) {
+	                        return _react2.default.createElement(ChecklistItem, { listItem: listItem, id: i, key: i, list: list });
 	                    })
 	                )
 	            );
@@ -22602,7 +22525,7 @@
 	module.exports = Checklist;
 
 /***/ },
-/* 176 */
+/* 177 */
 /*!****************************************************!*\
   !*** ./src/client/app/Checklist/checklistItem.jsx ***!
   \****************************************************/
@@ -22626,7 +22549,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var cx = __webpack_require__(/*! classnames */ 173);
+	var ChecklistUtil = __webpack_require__(/*! ./checklistUtil */ 178);
+	var cx = __webpack_require__(/*! classnames */ 174);
 	
 	// checklist items can be toggled active/inactive
 	// TODO build out some buttons for searching items on the checklist? add a more obvious check mark... left or right
@@ -22640,10 +22564,12 @@
 	        var _this = _possibleConstructorReturn(this, (ChecklistItem.__proto__ || Object.getPrototypeOf(ChecklistItem)).call(this, props));
 	
 	        _this.state = {
-	            isSelected: false
+	            isSelected: props.listItem.isSelected,
+	            isHover: false
 	        };
 	
 	        _this.handleClick = _this.handleClick.bind(_this);
+	        _this.handleHover = _this.handleHover.bind(_this);
 	
 	        return _this;
 	    }
@@ -22651,29 +22577,58 @@
 	    _createClass(ChecklistItem, [{
 	        key: 'handleClick',
 	        value: function handleClick() {
+	            // todo change counter state
 	            var selected = !this.state.isSelected;
+	            // update the list
+	            this.props.list.items[this.props.id].isSelected = selected;
 	            this.setState({
 	                isSelected: selected
 	            });
 	        }
 	    }, {
+	        key: 'handleHover',
+	        value: function handleHover() {
+	            var hover = !this.state.isHover;
+	            this.setState({
+	                isHover: hover
+	            });
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var classes = cx(['checklist-item', this.state.isSelected && 'selected']);
+	            var classes = cx(['checklist-item', this.props.listItem.isSelected && 'selected']);
+	
+	            var searchClasses = cx(['checklist-item-search', !this.state.isHover && 'hidden', this.state.isHover && 'stretchRight']);
+	
+	            var amazon_url = "https://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Daps&field-keywords=" + this.props.listItem.title;
 	
 	            return _react2.default.createElement(
 	                'div',
-	                { key: this.props.i, className: cx(classes), onClick: this.handleClick.bind(this) },
-	                _react2.default.createElement('img', { className: 'checklist-item-img', src: this.props.listItem.image }),
+	                null,
 	                _react2.default.createElement(
 	                    'div',
-	                    { className: 'checklist-item-title' },
-	                    this.props.listItem.title
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'checklist-item-description' },
-	                    this.props.listItem.description
+	                    { key: this.props.id, className: cx(classes), onClick: this.handleClick.bind(this), onMouseEnter: this.handleHover.bind(this), onMouseLeave: this.handleHover.bind(this) },
+	                    _react2.default.createElement('img', { className: 'checklist-item-img', src: this.props.listItem.image }),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'checklist-item-title' },
+	                        this.props.listItem.title
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'checklist-item-description' },
+	                        this.props.listItem.description
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: cx(searchClasses) },
+	                        ' ',
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: amazon_url, target: '_blank' },
+	                            _react2.default.createElement('img', { src: '../../../images/search-13-48.png' })
+	                        )
+	                    )
 	                )
 	            );
 	        }
@@ -22685,7 +22640,292 @@
 	module.exports = ChecklistItem;
 
 /***/ },
-/* 177 */
+/* 178 */
+/*!***************************************************!*\
+  !*** ./src/client/app/Checklist/checklistUtil.js ***!
+  \***************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.fullCount = exports.kitchenList = exports.houseList = exports.cleaningList = exports.toiletriesList = undefined;
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var TOILETRIES_IMAGE_PATH = "../../../images/welcomeKit/toiletries/";
+	var CLEANING_IMAGE_PATH = "../../../images/welcomeKit/cleaning/";
+	var KITCHEN_IMAGE_PATH = "../../../images/welcomeKit/kitchen/";
+	var HOUSE_IMAGE_PATH = "../../../images/welcomeKit/house/";
+	
+	function List(items) {
+	    this.items = items;
+	    this.count = function getItemCount() {
+	        var count = 0;
+	
+	        for (var i = 0; i < this.items.length; i++) {
+	            if (this.items[i].isSelected) {
+	                count = count + 1;
+	            }
+	        }
+	        return count;
+	    };
+	}
+	
+	var toiletriesList = new List([{
+	    description: "",
+	    title: "Diapers",
+	    image: TOILETRIES_IMAGE_PATH + "diaper-FelipeAlvarado.svg",
+	    isSelected: true,
+	    newOnly: true
+	}, {
+	    description: "",
+	    title: "Toilet Paper",
+	    image: TOILETRIES_IMAGE_PATH + "toiletPaper-PatrickTrouve.svg",
+	    isSelected: false,
+	    newOnly: true
+	}, {
+	    description: "",
+	    title: "Shampoo",
+	    image: TOILETRIES_IMAGE_PATH + "shampoo-paperclip.svg",
+	    isSelected: false,
+	    newOnly: true
+	}, {
+	    description: "",
+	    title: "Soap",
+	    image: TOILETRIES_IMAGE_PATH + "soap-StanislavLevin.svg",
+	    isSelected: false,
+	    newOnly: true
+	}, {
+	    description: "",
+	    title: "Hand Soap",
+	    image: TOILETRIES_IMAGE_PATH + "handsoap-JurajSedlak.svg",
+	    isSelected: false,
+	    newOnly: true
+	}, {
+	    description: "1 per person",
+	    title: "Toothbrush",
+	    image: TOILETRIES_IMAGE_PATH + "toothbrush-HeaPohLin.svg",
+	    isSelected: false,
+	    newOnly: true
+	}, {
+	    description: "",
+	    title: "Toothpaste",
+	    image: TOILETRIES_IMAGE_PATH + "toothpaste-AshleyFiveash.svg",
+	    isSelected: false,
+	    newOnly: true
+	}, {
+	    description: "",
+	    title: "Lotion",
+	    image: TOILETRIES_IMAGE_PATH + "lotion-OliviuStoian.svg",
+	    isSelected: false,
+	    newOnly: true
+	}, {
+	    description: "",
+	    title: "Feminine Hygiene Products",
+	    image: TOILETRIES_IMAGE_PATH + "feminine-iconsphere.svg",
+	    isSelected: false,
+	    newOnly: true
+	}, {
+	    description: "Bandages, Neosporin, Q-tips",
+	    title: "First Aid Supplies",
+	    image: TOILETRIES_IMAGE_PATH + "firstaid-ProSymbols.svg",
+	    isSelected: false,
+	    newOnly: true
+	}]);
+	
+	var cleaningList = new List([{
+	    description: "",
+	    title: "dish soap",
+	    image: CLEANING_IMAGE_PATH + "dishSoap.svg",
+	    isSelected: false,
+	    newOnly: true
+	}, {
+	    description: "Bathroom and Kitchen",
+	    title: "Cleansers",
+	    image: CLEANING_IMAGE_PATH + "LaundryDetergent.svg",
+	    isSelected: false,
+	    newOnly: true
+	}, {
+	    description: "",
+	    title: "Sponges and Cleaning rags",
+	    image: CLEANING_IMAGE_PATH + "sponge.svg",
+	    isSelected: false,
+	    newOnly: true
+	}, {
+	    description: "8 pack or more",
+	    title: "Paper Towels",
+	    image: CLEANING_IMAGE_PATH + "paperTowels.svg",
+	    isSelected: false,
+	    newOnly: true
+	}, {
+	    description: "",
+	    title: "Laundry Detergent",
+	    image: CLEANING_IMAGE_PATH + "laundryDetergent.svg",
+	    isSelected: false,
+	    newOnly: true
+	}, {
+	    description: "Two would be best",
+	    title: "Waste Baskets",
+	    image: CLEANING_IMAGE_PATH + "wastebasket.svg",
+	    isSelected: false,
+	    newOnly: false
+	}, {
+	    description: "",
+	    title: "Mop",
+	    image: CLEANING_IMAGE_PATH + "sweep.svg",
+	    isSelected: false,
+	    newOnly: true
+	}, {
+	    description: "",
+	    title: "Broom and Dustpan",
+	    image: CLEANING_IMAGE_PATH + "sweep.svg",
+	    isSelected: false,
+	    newOnly: true
+	}, {
+	    description: "",
+	    title: "Trash bags",
+	    image: CLEANING_IMAGE_PATH + "wastebasket.svg",
+	    isSelected: false,
+	    newOnly: true
+	}, {
+	    description: "",
+	    title: "Toilet Brush and Plunger",
+	    image: CLEANING_IMAGE_PATH + "laundryDetergent.svg",
+	    isSelected: false,
+	    newOnly: true
+	}]);
+	
+	var houseList = new List([{
+	    description: "Quantity Needed: 4, 30\" x54\" ",
+	    title: "Bath Towels",
+	    image: HOUSE_IMAGE_PATH + "towels_.svg",
+	    isSelected: false,
+	    newOnly: true
+	}, {
+	    description: "",
+	    title: "Queen Sheets and Comforter",
+	    image: HOUSE_IMAGE_PATH + "bed_anbileruAdaleru.svg",
+	    isSelected: false,
+	    newOnly: true
+	}, {
+	    description: "Quantity Needed: 2",
+	    title: "Plush Blankets",
+	    image: HOUSE_IMAGE_PATH + "towels_.svg",
+	    isSelected: false,
+	    newOnly: true
+	}, {
+	    description: "Quantity Needed: 4",
+	    title: "Pillows",
+	    image: HOUSE_IMAGE_PATH + "pillow.svg",
+	    isSelected: false,
+	    newOnly: true
+	}, {
+	    description: "",
+	    title: "Alarm Clock",
+	    image: HOUSE_IMAGE_PATH + "alarmclock.svg",
+	    isSelected: false,
+	    newOnly: false
+	}, {
+	    description: "Paper, pens, pencils",
+	    title: "Writing Utensils",
+	    image: HOUSE_IMAGE_PATH + "writing.svg",
+	    isSelected: false,
+	    newOnly: false
+	}, {
+	    description: "",
+	    title: "Lightbulbs",
+	    image: HOUSE_IMAGE_PATH + "lightbulb.svg",
+	    isSelected: false,
+	    newOnly: false
+	}, {
+	    description: "",
+	    title: "3-Drawered Storage Bins",
+	    image: HOUSE_IMAGE_PATH + "drawers_proSymbols.svg",
+	    isSelected: false,
+	    newOnly: false
+	}]);
+	
+	var kitchenList = new List([{
+	    description: "4 of each fork, knife, spoon",
+	    title: "Tableware",
+	    image: KITCHEN_IMAGE_PATH + "eating_doubco.svg",
+	    isSelected: false,
+	    newOnly: false
+	}, {
+	    description: "4 of each plate, bowl, cup",
+	    title: "Dishes",
+	    image: KITCHEN_IMAGE_PATH + "eating_doubco.svg",
+	    isSelected: false,
+	    newOnly: false
+	}, {
+	    description: "sauce, frying, large cooking (stainless steel)",
+	    title: "Pots and Pans",
+	    image: KITCHEN_IMAGE_PATH + "cookingPot.svg",
+	    isSelected: false,
+	    newOnly: false
+	}, {
+	    description: "",
+	    title: "Baking tray",
+	    image: KITCHEN_IMAGE_PATH + "eating_doubco.svg",
+	    isSelected: false,
+	    newOnly: false
+	}, {
+	    description: "like a lasagna dish",
+	    title: "Glass Dishes",
+	    image: KITCHEN_IMAGE_PATH + "eating_doubco.svg",
+	    isSelected: false,
+	    newOnly: false
+	}, {
+	    description: "",
+	    title: "Mixing and Serving Bowls",
+	    image: KITCHEN_IMAGE_PATH + "bowl_xihnStudio.svg",
+	    isSelected: false,
+	    newOnly: false
+	}, {
+	    description: "Ladles, large spoons and forks, spatulas etc",
+	    title: "Kitchen Utensils",
+	    image: KITCHEN_IMAGE_PATH + "eating_doubco.svg",
+	    isSelected: false,
+	    newOnly: false
+	}, {
+	    description: "",
+	    title: "Can Opener",
+	    image: KITCHEN_IMAGE_PATH + "canOpener.svg",
+	    isSelected: false,
+	    newOnly: false
+	}, {
+	    description: "",
+	    title: "Knife and Scissors",
+	    image: KITCHEN_IMAGE_PATH + "knife_myly.svg",
+	    isSelected: false,
+	    newOnly: false
+	}, {
+	    description: "",
+	    title: "Cutting Board",
+	    image: KITCHEN_IMAGE_PATH + "cuttingBoard_GregorySujkowski.svg",
+	    isSelected: false,
+	    newOnly: false
+	}]);
+	
+	var fullCount = function fullCount() {
+	    return toiletriesList.count() + cleaningList.count() + houseList.count() + kitchenList.count();
+	};
+	
+	exports.toiletriesList = toiletriesList;
+	exports.cleaningList = cleaningList;
+	exports.houseList = houseList;
+	exports.kitchenList = kitchenList;
+	exports.fullCount = fullCount;
+
+/***/ },
+/* 179 */
 /*!***********************************************!*\
   !*** ./src/client/app/DonationCalculator.jsx ***!
   \***********************************************/
@@ -22932,95 +23172,6 @@
 	}(_react2.default.Component);
 	
 	module.exports = DonationCalculator;
-
-/***/ },
-/* 178 */
-/*!***************************************************!*\
-  !*** ./src/client/app/Checklist/checklistUtil.js ***!
-  \***************************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	var ChecklistUtil = function ChecklistUtil() {
-	    _classCallCheck(this, ChecklistUtil);
-	}
-	
-	// public static TOILETRIES_IMAGE_PATH = "../../../images/welcomeKit/toiletries/";
-	// public static toiletriesList = [
-	//     {
-	//         description: "",
-	//         title: "Diapers",
-	//         image: ChecklistUtil.TOILETRIES_IMAGE_PATH + "diaper-FelipeAlvarado.svg",
-	//         newOnly: true
-	//     },
-	//     {
-	//         description: "",
-	//         title: "Toilet Paper",
-	//         image: ChecklistUtil.TOILETRIES_IMAGE_PATH + "toiletPaper-PatrickTrouve.svg",
-	//         newOnly: true
-	//     },
-	//     {
-	//         description: "",
-	//         title: "Shampoo",
-	//         image: ChecklistUtil.TOILETRIES_IMAGE_PATH + "shampoo-paperclip.svg",
-	//         newOnly: true
-	//     },
-	//     {
-	//         description: "",
-	//         title: "Soap",
-	//         image: ChecklistUtil.TOILETRIES_IMAGE_PATH + "soap-StanislavLevin.svg",
-	//         newOnly: true
-	//     },
-	//     {
-	//         description: "",
-	//         title: "Hand Soap",
-	//         image: ChecklistUtil.TOILETRIES_IMAGE_PATH + "handsoap-JurajSedlak.svg",
-	//         newOnly: true
-	//     },
-	//     {
-	//         description: "1 per person",
-	//         title: "Toothbrush",
-	//         image: ChecklistUtil.TOILETRIES_IMAGE_PATH + "toothbrush-HeaPohLin.svg",
-	//         newOnly: true
-	//     },
-	//     {
-	//         description: "",
-	//         title: "Toothpaste",
-	//         image: ChecklistUtil.TOILETRIES_IMAGE_PATH + "toothpaste-AshleyFiveash.svg",
-	//         newOnly: true
-	//     },
-	//     {
-	//         description: "",
-	//         title: "Lotion",
-	//         image: ChecklistUtil.TOILETRIES_IMAGE_PATH + "lotion-OliviuStoian.svg",
-	//         newOnly: true
-	//     },
-	//     {
-	//         description: "",
-	//         title: "Feminine Hygiene Products",
-	//         image: ChecklistUtil.TOILETRIES_IMAGE_PATH + "feminine-iconsphere.svg",
-	//         newOnly: true
-	//     },
-	//     {
-	//         description: "Bandages, Neosporin, Q-tips",
-	//         title: "First Aid Supplies",
-	//         image: ChecklistUtil.TOILETRIES_IMAGE_PATH + "firstaid-ProSymbols.svg",
-	//         newOnly: true
-	//     },
-	//
-	// ];
-	;
-	
-	module.exports = ChecklistUtil;
 
 /***/ }
 /******/ ]);

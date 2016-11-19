@@ -11,11 +11,12 @@ class Checklist extends React.Component {
     }
 
     render() {
+        var list = this.props.list
         return (
             <div>
                 <ul>
-                    {this.props.list.map(function(listItem, i){
-                        return <ChecklistItem listItem={listItem} key={i}/>;
+                    {this.props.list.items.map(function(listItem, i){
+                        return <ChecklistItem listItem={listItem} id={i} key={i} list={list}/>;
                     })}
                 </ul>
             </div>
