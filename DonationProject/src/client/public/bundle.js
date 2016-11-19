@@ -22256,7 +22256,6 @@
 	                _react2.default.createElement(
 	                    'button',
 	                    { className: 'callToAction', type: 'button', onClick: this.onDonate.bind(this) },
-	                    _react2.default.createElement(_counter2.default, { count: this.props.count }),
 	                    _react2.default.createElement(
 	                        'span',
 	                        null,
@@ -22269,6 +22268,9 @@
 	
 	    return NavBar;
 	}(_react2.default.Component);
+	
+	// <Counter count={this.props.count}/>
+	
 	
 	module.exports = NavBar;
 
@@ -22620,12 +22622,12 @@
 	                        this.props.listItem.description
 	                    ),
 	                    _react2.default.createElement(
-	                        'div',
-	                        { className: cx(searchClasses) },
-	                        ' ',
+	                        'a',
+	                        { href: amazon_url, target: '_blank' },
 	                        _react2.default.createElement(
-	                            'a',
-	                            { href: amazon_url, target: '_blank' },
+	                            'div',
+	                            { className: cx(searchClasses) },
+	                            ' ',
 	                            _react2.default.createElement('img', { src: '../../../images/search-13-48.png' })
 	                        )
 	                    )
