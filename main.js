@@ -3,9 +3,9 @@
 // MAIN
   function getGreeting() {
     var greetings = {
-    morning: "Good Morning",
-    afternoon: "Good Afternoon",
-    evening: "Good Evening",
+    morning: "Good Morning Sunshine!",
+    afternoon: "Taking an Afternoon Break? Me too!",
+    evening: "Good Evening. Treat yourself, it's been a long day.",
     afterMidnight: "Go to sleep. It's late.",
     default: "Hello there!"
   }
