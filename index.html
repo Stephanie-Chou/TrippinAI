@@ -9,16 +9,64 @@
 
 <body>
 
-  <div class="centerpiece">
-    <h1>This is a Work in Progress</h1>
-    <img src="images/workinprogress.png" >
 
-    <h2>Just like me</h2>
-    <a href="https://www.linkedin.com/in/stephaniechou1
-" target="_blank"><img src="images/glyphicons-social-18-linked-in.png"></a>
-    <a href="mailto:stephanie.chou@outlook.com"><img src="images/glyphicons-social-19-gmail.png"></a>
-    <a href="http://www.github.com/Stephanie-Chou" target="_blank"><img src="images/glyphicons-social-22-github.png"></a>
-
+  <div class="section" id="main">
+    <div class="centerpiece">
+      <div id="greeting"></div>
+      <h1>Love, Stephanie</h1>
+    </div>
   </div>
+
+  <div class="section" id="work">
+    <div class="centerpiece">
+      <h1>This is a Work in Progress</h1>
+      <img src="images/workinprogress.png" >
+
+      <h2>Just like me</h2>
+      <a href="https://www.linkedin.com/in/stephaniechou1
+  " target="_blank"><img src="images/glyphicons-social-18-linked-in.png" class="icon"></a>
+      <a href="mailto:stephanie.chou@outlook.com"><img src="images/glyphicons-social-19-gmail.png" class="icon"></a>
+      <a href="http://www.github.com/Stephanie-Chou" target="_blank"><img src="images/glyphicons-social-22-github.png" class="icon"></a>
+    </div>
+  </div>
+
+<!-- size of circle should be determined by length of time spent. smallest should be 1/4 of a year = 50px diameter -->
+  <div class="section" id="resume">
+    <div class="centerpiece">
+      <h1 id="resumeHeader">What I've been Doing <div id="period" class="animated rotateY"></div> </h1>
+    </div>
+
+    <div id="resume_circles" style="display:none;">
+      <div id="appd" class="experience circle animated">
+        <h3>AppDynamics</h3>
+        <p>Software Engineer & Hackathon Winner</p>
+      </div>
+      <div id="eaton" class="experience circle animated">
+        <h3>Eaton</h3>
+        <p>Intern</p>
+      </div>
+      <div id="uiuc" class="education circle animated">
+        <h3>UIUC</h3>
+        <p>BS Electrical Engineering</p>
+      </div>
+      <div id="dbc" class="education circle animated">
+        <h3>Dev BootCamp</h3>
+        <p>Web Dev</p>
+      </div>
+
+      <div id="javascript" class="skills circle animated">
+        <h3>Javascript</h3>
+        <p>Since 2013</p>
+      </div>
+      <div id="speaking" class="skills circle animated">
+        <h3>Speaking</h3>
+        <p>Grace Hopper Celebration & She's Geeky Panel</p>
+      </div>
+      <div id="css" class="skills circle animated">
+        <h3>CSS</h3>
+        <p>Since 2013</p>
+      </div>
+  </div>
+  <script src="./main.js"></script>
 </body>
 </html>

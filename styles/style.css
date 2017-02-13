@@ -1,15 +1,232 @@
 body {
   top: 0px;
-  background-color: #FAFAFA;
+  color: #FFF;
+  font-family: 'Open Sans', sans-serif;
+
 }
 
-/*fonts*/
-
-h1, h2 {
-  font-family: 'Open Sans', sans-serif;
+.section {
+    left: 0px;
+    min-width: 100%;
+    position: absolute;
+    min-height: 100%;
 }
 
 .centerpiece {
   text-align: center;
   margin-top: 200px;
+}
+
+/*icons*/
+.icon:hover{
+  filter:invert(100%);
+}
+
+.greeting {
+  font-size: 48px;
+}
+
+/*circle*/
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  text-align: center;
+}
+
+.circle h3 {
+  margin: 0px;
+}
+
+.circle p {
+  display: none;
+}
+
+.education {
+  background-color: #fc4a14;
+  /*background: -webkit-radial-gradient(25px 25px, circle, #fc4a14, #000);
+  background: -moz-radial-gradient(25px 25px, circle, #fc4a14, #000);
+  background: radial-gradient(25px 25px, circle, #fc4a14, #000);*/
+}
+
+.experience {
+  background-color: #F7B733;
+  /*background: -webkit-radial-gradient(25px 25px, circle, #F7B733, #000);
+  background: -moz-radial-gradient(25px 25px, circle, #F7B733, #000);
+  background: radial-gradient(25px 25px, circle, #F7B733, #000);*/
+}
+
+.skills {
+  background-color: #4ABDAC;
+  /*background: -webkit-radial-gradient(25px 25px, circle, #4ABDAC, #000);
+  background: -moz-radial-gradient(25px 25px, circle, #4ABDAC, #000);
+  background: radial-gradient(25px 25px, circle, #4ABDAC, #000);*/
+}
+
+.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+/*ROTATE AROUND Y AXIS*/
+@keyframes rotateY {
+  from { transform: rotateY(180deg);}
+  to {transform: rotateY(0deg);}
+}
+
+.rotateY {
+  -webkit-transform-origin: top center;
+  transform-origin: top center;
+  -webkit-animation-name: rotateY;
+  animation-name: rotateY;
+}
+
+/*PULSE ANIMATION*/
+@keyframes pulse {
+  20% {
+    -webkit-transform: scale(2, 2);
+    transform: scale(2, 2);;
+  }
+
+  40% {
+    -webkit-transform: scale(2.25,2.25);
+    transform: scale(2.25,2.25);;
+  }
+
+  60% {
+    -webkit-transform: scale(2.1,2.1);;
+    transform: scale(2.25,2.25);;
+  }
+
+  80% {
+    -webkit-transform: scale(2, 2);;
+    transform: scale(2,2););
+  }
+
+  to {
+    -webkit-transform: scale(1, 1);;
+    transform: scale(1, 1);;
+  }
+}
+
+.pulse {
+  -webkit-transform-origin: top center;
+  transform-origin: top center;
+  -webkit-animation-name: pulse;
+  animation-name: pulse;
+}
+
+#period {
+  display:inline-block;
+  border-radius: 50%;
+  height: 10px;
+  width: 10px;
+  background-color: #3e337d;
+  position: absolute;
+  margin-top: 25px;
+  margin-left: 5px;
+  animation-iteration-count: infinite;
+}
+
+#period:hover {
+  cursor: pointer;
+}
+
+.fadeIn {
+  -webkit-animation-name: fadeIn;
+  animation-name: fadeIn;
+  -webkit-animation-duration: 5s;
+  animation-duration: 5s;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  -webkit-transition: all 1s ease;
+  transition: all 1s ease;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0}
+  to {opacity: 1}
+}
+
+.fadeOut {
+  -webkit-animation-name: fadeIn;
+  animation-name: fadeIn;
+  -webkit-animation-duration: 5s;
+  animation-duration: 5s;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+   -webkit-transition: all 1s ease;
+  transition: all 1s ease;
+}
+
+@keyframes fadeOut {
+  from {opacity: 1}
+  to {opacity: 0}
+}
+
+.moveResumeHeader {
+  -webkit-animation-name: moveResumeHeader;
+  animation-name: moveResumeHeader;
+  -webkit-animation-duration: 3s;
+  animation-duration: 3s;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+   -webkit-transition: all 1s ease;
+  transition: all 1s ease;
+}
+
+@keyframes moveResumeHeader {
+  from {transform: translate(0px, 0px);}
+  to {transform: translate(-300px, -150px);}
+}
+
+
+/* sections */
+#resume {
+  top: 100%;
+  background-color: #4155b4;
+}
+
+#work {
+  top: 200%;
+  background-color: #3e337d;
+}
+
+#main {
+  top: 0px;
+  background-color: #4ABDAC;
+}
+
+/*Circles*/
+
+#appd {
+  left: 600px;
+  top: 50px;
+}
+#eaton {
+  left: 300px;
+  top: 300px;
+}
+#uiuc {
+  left: 550px;
+  top: 270px;
+}
+#dbc {
+  left: 250px;
+  top: 100px;
+}
+#javascript {
+  left: 300px;
+  top: 400px;
+}
+#speaking {
+  left: 400px;
+  top: 100px;
+}
+#css {
+  left: 850px;
+  top: 250px;
 }
