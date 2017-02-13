@@ -2,19 +2,20 @@ body {
   top: 0px;
   color: #FFF;
   font-family: 'Open Sans', sans-serif;
-
+  left: 0px;
+  overflow: none;
 }
 
 .section {
     left: 0px;
-    min-width: 100%;
     position: absolute;
+    min-width: 100%;
     min-height: 100%;
 }
 
 .centerpiece {
   text-align: center;
-  margin-top: 200px;
+  padding-top: 100px;
 }
 
 /*icons*/
@@ -26,42 +27,30 @@ body {
   font-size: 48px;
 }
 
-/*circle*/
-.circle {
-  position: absolute;
-  border-radius: 50%;
-  width: 100px;
-  height: 100px;
-  text-align: center;
+/*RESUME*/
+
+.bar {
+  padding: 0px 20px 0px 20px;
+  white-space: nowrap;
+  text-overflow: no-wrap;
+  margin: 2px;
+  width: 0px;
 }
 
-.circle h3 {
+.bar p, h3 {
   margin: 0px;
-}
-
-.circle p {
-  display: none;
 }
 
 .education {
   background-color: #fc4a14;
-  /*background: -webkit-radial-gradient(25px 25px, circle, #fc4a14, #000);
-  background: -moz-radial-gradient(25px 25px, circle, #fc4a14, #000);
-  background: radial-gradient(25px 25px, circle, #fc4a14, #000);*/
 }
 
 .experience {
   background-color: #F7B733;
-  /*background: -webkit-radial-gradient(25px 25px, circle, #F7B733, #000);
-  background: -moz-radial-gradient(25px 25px, circle, #F7B733, #000);
-  background: radial-gradient(25px 25px, circle, #F7B733, #000);*/
 }
 
 .skills {
   background-color: #4ABDAC;
-  /*background: -webkit-radial-gradient(25px 25px, circle, #4ABDAC, #000);
-  background: -moz-radial-gradient(25px 25px, circle, #4ABDAC, #000);
-  background: radial-gradient(25px 25px, circle, #4ABDAC, #000);*/
 }
 
 .animated {
@@ -180,7 +169,7 @@ body {
 
 @keyframes moveResumeHeader {
   from {transform: translate(0px, 0px);}
-  to {transform: translate(-300px, -150px);}
+  to {transform: translate(-300px, -50px);}
 }
 
 
@@ -198,35 +187,4 @@ body {
 #main {
   top: 0px;
   background-color: #4ABDAC;
-}
-
-/*Circles*/
-
-#appd {
-  left: 600px;
-  top: 50px;
-}
-#eaton {
-  left: 300px;
-  top: 300px;
-}
-#uiuc {
-  left: 550px;
-  top: 270px;
-}
-#dbc {
-  left: 250px;
-  top: 100px;
-}
-#javascript {
-  left: 300px;
-  top: 400px;
-}
-#speaking {
-  left: 400px;
-  top: 100px;
-}
-#css {
-  left: 850px;
-  top: 250px;
 }

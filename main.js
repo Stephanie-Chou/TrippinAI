@@ -50,29 +50,10 @@
     {name:"css", duration: 3}
   ];
 
-  function setCircleSize() {
+  function getResumeBarSize(dur) {
     // 1 year = 150px;
     var yearSize = 150;
-    var id;
-    var dur;
-    var el;
-    var dimension;
-
-    for (var i = 0; i < resumeEls.length; i++) {
-      id = resumeEls[i].name;
-      dur = resumeEls[i].duration;
-      el = document.getElementById(id);
-
-      if (!el) {
-        continue;
-      }
-
-      dimension = Math.sqrt(yearSize*yearSize*dur);
-      el.style.height = dimension.toString() + "px";
-      el.style.width = dimension.toString() + "px";
-      el.getElementsByTagName("h3")[0].style.marginTop = (dimension*.4).toString() + "px";
-      el.getElementsByTagName("p")[0].style.marginTop = (dimension*.4).toString() + "px";
-    }
+    return yearSize*dur;
   }
 
   // ANIMATE THE PERIOD
@@ -89,31 +70,46 @@
 
   function onClickPeriod() {
     moveResumeHeader();
-    setTimeout(showCircles, 1000)
+    setTimeout(showBars, 1000)
   }
 
   function moveResumeHeader() {
     document.getElementById("resumeHeader").classList.add("moveResumeHeader");
   }
 
-  function showCircles() {
-    document.getElementById("resume_circles").style.display="block";
-    document.getElementById("resume_circles").classList.add("fadeIn");
+  function showBars() {
+    document.getElementById("resumeBars").style.display="block";
+    document.getElementById("resumeBars").classList.add("fadeIn");
+
+    var bars = resumeEls;
+    var animationDuration = 2;
+    var i = 0;
+    // load each bar. wait for a bar to load before starting the next one. each animation should take a second.
+    // 1 year = 150px;
+
+    var bar, barEl, dur;
+    while (bars.length > 0) {
+      bar = bars.shift()
+      barEl = document.getElementById(bar.name);
+      dur = bar.duration;
+      setTimeout(animateBar(barEl, dur, animationDuration), animationDuration*1000);
+      i++;
+    }
   }
 
-  function onmouseoverCircle(){
-    this.classList.add("rotateY");
-    // show details.
-    this.getElementsByTagName("p")[0].style.display="block";
-    this.getElementsByTagName("h3")[0].style.display="none";
+  function animateBar(bar, dur, animationDuration) {
+    var id = setInterval(frame, animationDuration);
+    var len = getResumeBarSize(dur);
+    var pos = 0;
 
-  }
-
-  function onmouseoutCircle() {
-    this.classList.toggle("rotateY");
-    this.getElementsByTagName("p")[0].style.display="none";
-    this.getElementsByTagName("h3")[0].style.display="block";
-
+    function frame() {
+      if (pos >= len) {
+          clearInterval(id);
+      } else {
+          pos++;
+          bar.style.width = pos + 'px';
+      }
+    }
   }
 
   function initPeriod() {
@@ -123,18 +119,7 @@
     period.onclick = onClickPeriod;
   }
 
-  function initCircle() {
-    setCircleSize();
-    var circles = document.getElementsByClassName("circle");
-
-    for (var i = 0; i < circles.length; i++) {
-      circles[i].onmouseover = onmouseoverCircle;
-      circles[i].onmouseout = onmouseoutCircle;
-    }
-  }
-
   function init() {
-    initCircle();
     initPeriod();
     initGreeting();
   }
