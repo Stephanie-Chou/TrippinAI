@@ -219,7 +219,7 @@ body {
 
 
 /*MOBILE*/
-@media only screen and (max-width: 36em) {
+@media all and (max-width: 768px) {
   h1 {
     font-size: 3.5rem;
   }
@@ -277,7 +277,7 @@ body {
   }*/
 }
 
-@media screen and (min-width: 736px ) and (max-width: 1600px) {
+@media screen and (min-width: 768px ) and (max-width: 1600px) {
   h1 {
     font-size: 36px;
   }
