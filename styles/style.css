@@ -146,6 +146,12 @@ p{
   transition: all 1s ease;
 }
 
+@media all and (max-width:768px){
+  .icon {
+    height: 56px;
+  }
+}
+
 /*RESUME*/
 
 .resumeElement {
