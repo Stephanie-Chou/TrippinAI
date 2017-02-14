@@ -11,14 +11,14 @@
 
 
   <div class="section" id="main">
-    <div class="centerpiece">
-      <div id="greeting"></div>
-      <h1>Love, Stephanie</h1>
+    <div class="center container">
+      <h1 id="greeting"></h1>
+      <h2>Love, Stephanie</h2>
     </div>
   </div>
 
   <div class="section" id="work">
-    <div class="centerpiece">
+    <div class="center container">
       <h1>This is a Work in Progress</h1>
       <img src="images/workinprogress.png" >
 
@@ -32,41 +32,48 @@
 
 <!-- size of circle should be determined by length of time spent. smallest should be 1/4 of a year = 50px diameter -->
   <div class="section" id="resume">
-    <div class="centerpiece">
-      <h1 id="resumeHeader">What I've been Doing <div id="period" class="animated rotateY"></div> </h1>
+    <div class="center container">
+        <h1 id="resumeHeader">What I've been Doing <div id="period" class="animated rotateY"></div> </h1>
+      </div>
+    <div class="container">
+
+
+      <div id="resumeBars" style="display: none;">
+        <div id="appd" class="bar experience">
+          <h3>AppDynamics</h3>
+          <p>Software Engineer & Hackathon Winner</p>
+        </div>
+        <div id="eaton" class="bar experience">
+          <h3>Eaton</h3>
+          <p>Intern</p>
+        </div>
+        <div id="uiuc" class="bar education">
+          <h3>UIUC</h3>
+          <p>BS Electrical Engineering</p>
+        </div>
+        <div id="dbc" class="bar education">
+          <h3>Dev Bootcamp</h3>
+          <p>Web Dev</p>
+        </div>
+
+        <div id="javascript" class="bar skills">
+          <h3>Javascript</h3>
+          <p>Since 2013</p>
+        </div>
+        <div id="speaking" class="bar skills">
+          <h3>Speaking</h3>
+          <p>Grace Hopper Celebration & She's Geeky Panel</p>
+        </div>
+        <div id="css" class="bar skills">
+          <h3>CSS</h3>
+          <p>Since 2013</p>
+        </div>
     </div>
-
-    <div id="resumeBars" style="margin-left: 100px; display:none;">
-      <div id="appd" class="bar experience">
-        <h3>AppDynamics</h3>
-        <p>Software Engineer & Hackathon Winner</p>
-      </div>
-      <div id="eaton" class="bar experience">
-        <h3>Eaton</h3>
-        <p>Intern</p>
-      </div>
-      <div id="uiuc" class="bar education">
-        <h3>UIUC</h3>
-        <p>BS Electrical Engineering</p>
-      </div>
-      <div id="dbc" class="bar education">
-        <h3>Dev Bootcamp</h3>
-        <p>Web Dev</p>
-      </div>
-
-      <div id="javascript" class="bar skills">
-        <h3>Javascript</h3>
-        <p>Since 2013</p>
-      </div>
-      <div id="speaking" class="bar skills">
-        <h3>Speaking</h3>
-        <p>Grace Hopper Celebration & She's Geeky Panel</p>
-      </div>
-      <div id="css" class="bar skills">
-        <h3>CSS</h3>
-        <p>Since 2013</p>
-      </div>
   </div>
-  <script src="./main.js"></script>
+
+
+  <script src="./greeting.js" type="text/javascript"></script>
+  <script src="./animate.js" type="text/javascript"></script>
+  <script src="./main.js" type="text/javascript"></script>
 </body>
 </html>

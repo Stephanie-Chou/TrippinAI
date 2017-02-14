@@ -4,27 +4,34 @@ body {
   font-family: 'Open Sans', sans-serif;
   left: 0px;
   overflow: none;
+  height: 100%;
+  width: 100%;
 }
 
 .section {
-    left: 0px;
-    position: absolute;
-    min-width: 100%;
-    min-height: 100%;
+  left: 0px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 
-.centerpiece {
+.center {
   text-align: center;
-  padding-top: 100px;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 /*icons*/
-.icon:hover{
+.icon {
   filter:invert(100%);
 }
 
+.icon:hover{
+  filter:invert(0%);
+}
+
 .greeting {
-  font-size: 48px;
 }
 
 /*RESUME*/
@@ -120,10 +127,6 @@ body {
   animation-iteration-count: infinite;
 }
 
-#period:hover {
-  cursor: pointer;
-}
-
 .fadeIn {
   -webkit-animation-name: fadeIn;
   animation-name: fadeIn;
@@ -156,23 +159,6 @@ body {
   to {opacity: 0}
 }
 
-.moveResumeHeader {
-  -webkit-animation-name: moveResumeHeader;
-  animation-name: moveResumeHeader;
-  -webkit-animation-duration: 3s;
-  animation-duration: 3s;
-  -webkit-animation-fill-mode: forwards;
-  animation-fill-mode: forwards;
-   -webkit-transition: all 1s ease;
-  transition: all 1s ease;
-}
-
-@keyframes moveResumeHeader {
-  from {transform: translate(0px, 0px);}
-  to {transform: translate(-300px, -50px);}
-}
-
-
 /* sections */
 #resume {
   top: 100%;
@@ -188,3 +174,103 @@ body {
   top: 0px;
   background-color: #4ABDAC;
 }
+
+
+@media screen and (max-width: 480px) {
+  .container {
+    margin: 0px 20px;
+  }
+
+  .moveResumeHeader {
+    -webkit-animation-name: moveResumeHeader;
+    animation-name: moveResumeHeader;
+    -webkit-animation-duration: 3s;
+    animation-duration: 3s;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+     -webkit-transition: all 1s ease;
+    transition: all 1s ease;
+  }
+
+  @keyframes moveResumeHeader {
+    from {transform: translate(0px, 0px);}
+    to {transform: translate(50px, 150px);}
+  }
+}
+
+@media screen and (max-width: 1600px) {
+  h1 {
+    font-size: 36px;
+  }
+
+  h2 {
+    font-size: 24px;
+  }
+
+  h3 {
+    font-size: 20px;
+  }
+
+  p {
+    font-size: 14px;
+  }
+
+  .container {
+    margin: 0px 100px;
+  }
+
+  .moveResumeHeader {
+    -webkit-animation-name: moveResumeHeader;
+    animation-name: moveResumeHeader;
+    -webkit-animation-duration: 3s;
+    animation-duration: 3s;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+     -webkit-transition: all 1s ease;
+    transition: all 1s ease;
+  }
+
+  @keyframes moveResumeHeader {
+    from {transform: translate(0px, 0px);}
+    to {transform: translate(300px, 50px);}
+  }
+}
+
+@media screen and (min-width: 1600px) {
+  h1 {
+    font-size: 48px;
+  }
+
+  h2 {
+    font-size: 36px;
+  }
+
+  h3 {
+    font-size: 28px;
+  }
+
+  p {
+    font-size: 18px;
+  }
+
+  .container {
+    margin: 0px 150px;
+  }
+
+  .moveResumeHeader {
+    -webkit-animation-name: moveResumeHeader;
+    animation-name: moveResumeHeader;
+    -webkit-animation-duration: 3s;
+    animation-duration: 3s;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+     -webkit-transition: all 1s ease;
+    transition: all 1s ease;
+  }
+
+  @keyframes moveResumeHeader {
+    from {transform: translate(0px, 0px);}
+    to {transform: translate(500px, 50px);}
+  }
+}
+
