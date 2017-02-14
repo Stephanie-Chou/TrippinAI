@@ -1,13 +1,14 @@
   // RESUME
 
   var resumeEls = [
+    {name:"amazon", duration: 1},
     {name:"appd", duration: 2},
     {name:"eaton", duration: .25},
     {name:"uiuc", duration: 4},
     {name:"dbc", duration: .333},
-    {name:"javascript", duration: 3},
+    {name:"frontend", duration: 3},
     {name:"speaking", duration: 2},
-    {name:"css", duration: 3}
+    {name:"french", duration: 1}
   ];
 
   function getResumeBarSize(dur) {
@@ -79,9 +80,8 @@
   window.onscroll = function() {onScroll()}
 
   function onScroll() {
-    var resumeSection = document.getElementById("resume");
+    var resumeSection = document.getElementById("resumeBars");
     if(isInViewport(resumeSection)) {
-      console.log("hello world")
       onEnterResumeSection();
     }
   }
