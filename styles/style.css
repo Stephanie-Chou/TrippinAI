@@ -28,7 +28,7 @@ body {
 }
 
 .icon:hover{
-  filter:invert(0%);
+  filter:invert(80%);
 }
 
 .greeting {
@@ -198,9 +198,32 @@ body {
 
 
 @media screen and (max-width: 480px) {
+
+  h1 {
+    font-size: 56px;
+  }
+
+  h2 {
+    font-size: 58px;
+  }
+
+  h3 {
+    font-size: 36px;
+  }
+
+  p {
+    font-size: 20px;
+  }
+
   .container {
     margin: 0px 20px;
   }
+
+  .icon {
+    filter:invert(100%);
+    width: 36px;
+  }
+
 
   .moveResumeHeader {
     -webkit-animation-name: moveResumeHeader;
