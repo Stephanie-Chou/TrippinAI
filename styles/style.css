@@ -1,25 +1,53 @@
 body {
   top: 0px;
+  left: 0px;
   color: #FFF;
   font-family: 'Open Sans', sans-serif;
-  left: 0px;
-  overflow: none;
   height: 100%;
   width: 100%;
+  margin: 0px;
+  overflow-x:hidden;
 }
 
 .section {
+  position: relative;
+  overflow: hidden;
+  max-height: none;
+}
+
+.section:before {
   left: 0px;
+  top:0px;
   position: absolute;
   width: 100%;
   height: 100%;
+  background-size: contain;
 }
 
-.center {
+.content {
   text-align: center;
+  display: flex;
+  justify-content: center;
   position: relative;
-  top: 50%;
-  transform: translateY(-50%);
+  height: 100%;
+  align-items:center;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+.content-background {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  z-index: -1;
+  overflow: hidden;
+  background: #4ABDAC;
+}
+
+.container {
+  position: relative; height: 100vh; align-items:center; background-size: cover; overflow: hidden; width: 100%; padding: 0px; top:0px; background: #4ABDAC;
 }
 
 /*icons*/
@@ -49,10 +77,12 @@ body {
   text-overflow: no-wrap;
   width: 0px;
   float: left;
+  text-align: left;
 }
 
 .resumeElement .bar p, h3, h4 {
   margin: 0px;
+  display: inline;
 }
 
 .resumeElement .logo {
@@ -61,24 +91,34 @@ body {
   display: inline-block;
   position: relative;
   float: left;
+  display: none;
 }
 
 .resumeElement .duration {
   display: inline-block;
   margin-left: 2px;
   margin-top: 24px;
+  color: #3e337d;
 }
 
-.education {
-  background-color: #fc4a14;
+.bar:after {
+  content: '';
+  display: block;
+  height: 4px;
+  width: 100%;
+  margin: 0 auto;
 }
 
-.experience {
-  background-color: #F7B733;
+.education.bar:after {
+  background: #fc4a14;
 }
 
-.skills {
-  background-color: #4ABDAC;
+.experience.bar:after  {
+  background: #F7B733;
+}
+
+.skills.bar:after {
+  background: #4ABDAC;
 }
 
 .animated {
@@ -99,41 +139,6 @@ body {
   transform-origin: top center;
   -webkit-animation-name: rotateY;
   animation-name: rotateY;
-}
-
-/*PULSE ANIMATION*/
-@keyframes pulse {
-  20% {
-    -webkit-transform: scale(2, 2);
-    transform: scale(2, 2);;
-  }
-
-  40% {
-    -webkit-transform: scale(2.25,2.25);
-    transform: scale(2.25,2.25);;
-  }
-
-  60% {
-    -webkit-transform: scale(2.1,2.1);;
-    transform: scale(2.25,2.25);;
-  }
-
-  80% {
-    -webkit-transform: scale(2, 2);;
-    transform: scale(2,2););
-  }
-
-  to {
-    -webkit-transform: scale(1, 1);;
-    transform: scale(1, 1);;
-  }
-}
-
-.pulse {
-  -webkit-transform-origin: top center;
-  transform-origin: top center;
-  -webkit-animation-name: pulse;
-  animation-name: pulse;
 }
 
 #period {
@@ -181,49 +186,66 @@ body {
 }
 
 /* sections */
+
+#main {
+  top: 0px;
+  height: 100%;
+  background-color: #4ABDAC;
+}
+
 #resume {
-  top: 100%;
+  min-height: 100%;
   background-color: #4155b4;
 }
 
 #work {
-  top: 200%;
+  min-height: 100%;
   background-color: #3e337d;
 }
 
-#main {
-  top: 0px;
-  background-color: #4ABDAC;
-}
 
-
-@media screen and (max-width: 480px) {
+/*MOBILE*/
+@media only screen and (max-width: 736px) {
 
   h1 {
-    font-size: 56px;
+    font-size: 48px;
   }
 
   h2 {
-    font-size: 58px;
+    font-size: 36px;
   }
 
   h3 {
-    font-size: 36px;
+    font-size: 24px;
   }
 
   p {
     font-size: 20px;
   }
 
-  .container {
-    margin: 0px 20px;
+  .content {
+    flex-wrap: nowrap;
   }
 
   .icon {
     filter:invert(100%);
-    width: 36px;
+    width: 32px;
+    margin: 0px 8px;
   }
 
+  .resumeElement {
+    height: 60px;
+    float: left;
+    clear: both;
+    margin: 8px;
+  }
+
+  .resumeElement .duration {
+    display: inline-block;
+    margin-left: 2px;
+    margin-top: 0px;
+    font-size: 36px;
+  }
 
   .moveResumeHeader {
     -webkit-animation-name: moveResumeHeader;
@@ -238,11 +260,11 @@ body {
 
   @keyframes moveResumeHeader {
     from {transform: translate(0px, 0px);}
-    to {transform: translate(0px, 150px);}
+    to {transform: translate(0px, -250px);}
   }
 }
 
-@media screen and (max-width: 1600px) {
+@media screen and (min-width: 736px ) and (max-width: 1600px) {
   h1 {
     font-size: 36px;
   }
@@ -259,10 +281,6 @@ body {
     font-size: 14px;
   }
 
-  .container {
-    margin: 0px 100px;
-  }
-
   .moveResumeHeader {
     -webkit-animation-name: moveResumeHeader;
     animation-name: moveResumeHeader;
@@ -276,7 +294,7 @@ body {
 
   @keyframes moveResumeHeader {
     from {transform: translate(0px, 0px);}
-    to {transform: translate(300px, 50px);}
+    to {transform: translate(-300px, -100px);}
   }
 }
 
@@ -300,9 +318,6 @@ body {
     font-size: 18px;
   }
 
-  .container {
-    margin: 0px 150px;
-  }
 
   .moveResumeHeader {
     -webkit-animation-name: moveResumeHeader;

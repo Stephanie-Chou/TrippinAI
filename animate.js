@@ -32,7 +32,7 @@
   }
 
   function showBars() {
-    document.getElementById("resumeBars").style.display="block";
+    document.getElementById("resumeBars").style.opacity="1";
     document.getElementById("resumeBars").classList.add("fadeIn");
 
     var bars = resumeEls;
