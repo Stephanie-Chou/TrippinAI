@@ -25,16 +25,11 @@
   // ANIMATE THE RESUME SECTION
 
   function onEnterResumeSection() {
-    moveResumeHeader();
-    setTimeout(showBars, 1000)
-  }
-
-  function moveResumeHeader() {
-    document.getElementById("resumeHeader").classList.add("moveResumeHeader");
+    showBars();
   }
 
   function showBars() {
-    document.getElementById("resumeBars").style.opacity="1";
+    // document.getElementById("resumeBars").style.opacity="1";
     document.getElementById("resumeBars").classList.add("fadeIn");
 
     var bars = resumeEls;
@@ -43,17 +38,17 @@
     // load each bar. wait for a bar to load before starting the next one. each animation should take a second.
     // 1 year = 150px;
 
-    var bar, barEl, dur;
+    var bar, durationEl, dur;
     while (bars.length > 0) {
       bar = bars.shift()
-      barEl = document.getElementById(bar.name);
+      durationEl = document.getElementById(bar.name).children[2];
       dur = bar.duration;
-      setTimeout(animateBar(barEl, dur, animationDuration), animationDuration*1000);
+      setTimeout(animateBar(durationEl, dur, animationDuration), animationDuration*1000);
       i++;
     }
   }
 
-  function animateBar(bar, dur, animationDuration) {
+  function animateBar(durationEl, dur, animationDuration) {
     var id = setInterval(frame, animationDuration);
     var len = getResumeBarSize(dur);
     var pos = 0;
@@ -63,7 +58,7 @@
           clearInterval(id);
       } else {
           pos++;
-          bar.style.width = pos + 'px';
+          durationEl.style.width = pos + 'px';
       }
     }
   }
@@ -78,8 +73,16 @@
   }
 
   window.onscroll = function() {onScroll()}
-
   function onScroll() {
+    onUpdateResumeSection();
+  }
+
+  // window.onresize = function() {onResize()}
+  // function onResize() {
+  //   onUpdateResumeSection();
+  // }
+
+  function onUpdateResumeSection() {
     var resumeSection = document.getElementById("resumeBars");
     if(isInViewport(resumeSection)) {
       onEnterResumeSection();

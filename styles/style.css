@@ -147,60 +147,39 @@ p{
 /*RESUME*/
 
 .resumeElement {
-    height: 85px;
-    float: left;
-    clear: both;
-    margin: 5px;
+  float: left;
+  clear: both;
+  margin: 5px;
 }
 
 .bar {
   padding: 0px 20px 0px 20px;
-  white-space: nowrap;
-  text-overflow: no-wrap;
-  width: 0px;
+  max-width: 100%;
   float: left;
   text-align: left;
 }
 
 .resumeElement .bar p, h3, h4 {
   margin: 0px;
-  /*display: inline;*/
-}
-
-.resumeElement .logo {
-  width: 46px;
-  height: 46px;
-  display: inline-block;
-  position: relative;
-  float: left;
-  display: none;
 }
 
 .resumeElement .duration {
-  display: inline-block;
-  margin-left: 2px;
-  margin-top: 24px;
-  color: #3e337d;
-  display: none;
-}
-
-.bar:after {
-  content: '';
-  display: block;
   height: 4px;
-  width: 100%;
-  margin: 0 auto;
+  width: 100px;
+  display: block;
+  float: left;
+  position: relative;
 }
 
-.education.bar:after {
+.resumeElement.education .duration{
   background: #fc4a14;
 }
 
-.experience.bar:after  {
+.resumeElement.experience .duration{
   background: #F7B733;
 }
 
-.skills.bar:after {
+.resumeElement.skills .duration{
   background: #4ABDAC;
 }
 
