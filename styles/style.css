@@ -6,7 +6,13 @@ body {
   height: 100%;
   width: 100%;
   margin: 0px;
-  overflow-x:hidden;
+}
+
+@media all and (device-width:768px) and (device-height:1024px) and (orientation:portrait){body{height:1024px}
+}
+@media all and (device-width:768px) and (device-height:1024px) and (orientation:landscape){body{height:768px}
+}
+@media screen and (device-aspect-ratio:40/71){body{height:500px}
 }
 
 h1{
@@ -31,6 +37,12 @@ h2{
   font-size:1.8rem;
   font-weight:300
 }
+@media all and (max-width:768px){
+  h2{
+    word-wrap: break-word;
+  }
+}
+
 @media all and (min-width:768px){
   h2{font-size:2rem}
 }
@@ -129,10 +141,6 @@ p{
     width: 32px;
     margin: 0px 8px;
   }
-}
-
-
-.greeting {
 }
 
 /*RESUME*/

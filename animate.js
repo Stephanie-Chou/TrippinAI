@@ -16,8 +16,11 @@
     // mobile devices: 1yr = 50px
     // small screens <1024 : 1yr = 150px
     // larger screens >1024 (max): 1yr = 200px
-    var yearSize = 150;
-    return yearSize*dur;
+    var html = document.documentElement;
+    maxDur = 4;
+    var maxWidth = html.clientWidth > 1024 ? 1024 : html.clientWidth*.8;
+    // (window.innerWidth || html.clientWidth)
+    return dur/maxDur *maxWidth;
   }
 
   // ANIMATE THE RESUME SECTION
