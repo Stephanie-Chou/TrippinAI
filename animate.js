@@ -19,7 +19,6 @@
     var html = document.documentElement;
     maxDur = 4;
     var maxWidth = html.clientWidth > 1024 ? 1024 : html.clientWidth*.8;
-    // (window.innerWidth || html.clientWidth)
     return dur/maxDur *maxWidth;
   }
 

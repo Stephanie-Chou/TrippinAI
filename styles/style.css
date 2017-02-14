@@ -2,10 +2,10 @@ body {
   top: 0px;
   left: 0px;
   color: #FFF;
-  font-family: 'Open Sans', sans-serif;
   height: 100%;
   width: 100%;
   margin: 0px;
+  font-family: 'Open Sans', sans-serif;
 }
 
 @media all and (device-width:768px) and (device-height:1024px) and (orientation:portrait){body{height:1024px}
@@ -20,7 +20,8 @@ h1{
   padding:0;
   font-size:5rem;
   font-weight:300;
-  line-height:1.2
+  line-height:1.2;
+  font-family: 'Copse', serif;
 }
 
 @media all and (min-width:768px){
@@ -35,7 +36,8 @@ h2{
   padding:0;
   display:block;
   font-size:1.8rem;
-  font-weight:300
+  font-weight:300;
+
 }
 @media all and (max-width:768px){
   h2{
@@ -61,7 +63,6 @@ p{
 @media all and (min-width:1024px){
   p{font-size:1.8rem}
 }
-
 
 .section {
   position: relative;
@@ -128,19 +129,19 @@ p{
 
 /*icons*/
 .icon {
-  filter:invert(100%);
+  margin: 36px 14px;
+  height: 36px;
 }
 
-.icon:hover{
-  filter:invert(80%);
-}
-
-@media all and (max-width: 768px) {
-  .icon {
-    filter:invert(100%);
-    width: 32px;
-    margin: 0px 8px;
-  }
+.icon:hover {
+  -webkit-animation-name: fadeTo;
+  animation-name: fadeTo;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  -webkit-transition: all 1s ease;
+  transition: all 1s ease;
 }
 
 /*RESUME*/
@@ -265,6 +266,11 @@ p{
 @keyframes fadeOut {
   from {opacity: 1}
   to {opacity: 0}
+}
+
+@keyframes fadeTo {
+  from {opacity: 1}
+  to {opacity: .5}
 }
 
 /* sections */
