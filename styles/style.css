@@ -9,6 +9,48 @@ body {
   overflow-x:hidden;
 }
 
+h1{
+  margin:0;
+  padding:0;
+  font-size:5rem;
+  font-weight:300;
+  line-height:1.2
+}
+
+@media all and (min-width:768px){
+  h1{font-size:5rem}
+}
+@media all and (min-width:1024px){
+  h1{font-size:6rem}
+}
+
+h2{
+  margin:0;
+  padding:0;
+  display:block;
+  font-size:1.8rem;
+  font-weight:300
+}
+@media all and (min-width:768px){
+  h2{font-size:2rem}
+}
+@media all and (min-width:1024px){
+  h2{font-size:2.2rem}
+}
+
+p{
+  font-size:1.4rem;
+  font-weight:100
+}
+
+@media all and (min-width:768px){
+  p{font-size:1.6rem}
+}
+@media all and (min-width:1024px){
+  p{font-size:1.8rem}
+}
+
+
 .section {
   position: relative;
   overflow: hidden;
@@ -61,7 +103,15 @@ body {
 }
 
 .container {
-  position: relative; height: 100vh; align-items:center; background-size: cover; overflow: hidden; width: 100%; padding: 0px; top:0px; background: #4ABDAC;
+  position: relative;
+  height: 100vh;
+  align-items:center;
+  background-size: cover;
+  overflow: hidden;
+  width: 100%;
+  padding: 0px;
+  top:0px;
+  background: #4ABDAC;
 }
 
 /*icons*/
@@ -73,16 +123,25 @@ body {
   filter:invert(80%);
 }
 
+@media all and (max-width: 768px) {
+  .icon {
+    filter:invert(100%);
+    width: 32px;
+    margin: 0px 8px;
+  }
+}
+
+
 .greeting {
 }
 
 /*RESUME*/
 
 .resumeElement {
-  height: 46px;
-  float: left;
-  clear: both;
-  margin: 2px;
+    height: 85px;
+    float: left;
+    clear: both;
+    margin: 5px;
 }
 
 .bar {
@@ -113,6 +172,7 @@ body {
   margin-left: 2px;
   margin-top: 24px;
   color: #3e337d;
+  display: none;
 }
 
 .bar:after {
@@ -216,136 +276,3 @@ body {
   min-height: 100%;
   background-color: #3e337d;
 }
-
-
-/*MOBILE*/
-@media all and (max-width: 768px) {
-  h1 {
-    font-size: 3.5rem;
-  }
-
-  h2 {
-    font-size: 2.5rem;
-  }
-
-  h3 {
-    font-size: 2rem;
-  }
-
-  p {
-    font-size: 1.5rem;
-  }
-
-  .content {
-    flex-wrap: nowrap;
-  }
-
-  .icon {
-    filter:invert(100%);
-    width: 32px;
-    margin: 0px 8px;
-  }
-
-  .resumeElement {
-    height: 60px;
-    float: left;
-    clear: both;
-    margin: 8px;
-  }
-
-  .resumeElement .duration {
-    display: inline-block;
-    margin-left: 2px;
-    margin-top: 0px;
-    font-size: 36px;
-  }
-
-  /*.moveResumeHeader {
-    -webkit-animation-name: moveResumeHeader;
-    animation-name: moveResumeHeader;
-    -webkit-animation-duration: 3s;
-    animation-duration: 3s;
-    -webkit-animation-fill-mode: forwards;
-    animation-fill-mode: forwards;
-     -webkit-transition: all 1s ease;
-    transition: all 1s ease;
-  }
-
-  @keyframes moveResumeHeader {
-    from {transform: translate(0px, 0px);}
-    to {transform: translate(0px, -250px);}
-  }*/
-}
-
-@media screen and (min-width: 768px ) and (max-width: 1600px) {
-  h1 {
-    font-size: 36px;
-  }
-
-  h2 {
-    font-size: 24px;
-  }
-
-  h3 {
-    font-size: 20px;
-  }
-
-  p {
-    font-size: 14px;
-  }
-
-/*  .moveResumeHeader {
-    -webkit-animation-name: moveResumeHeader;
-    animation-name: moveResumeHeader;
-    -webkit-animation-duration: 3s;
-    animation-duration: 3s;
-    -webkit-animation-fill-mode: forwards;
-    animation-fill-mode: forwards;
-     -webkit-transition: all 1s ease;
-    transition: all 1s ease;
-  }
-
-  @keyframes moveResumeHeader {
-    from {transform: translate(0px, 0px);}
-    to {transform: translate(-300px, -100px);}
-  }*/
-}
-
-@media screen and (min-width: 1600px) {
-  h1 {
-    font-size: 48px;
-  }
-
-  h2 {
-    font-size: 36px;
-  }
-
-  h3 {
-    font-size: 28px;
-  }
-
-  h4 {
-    font-size: 22px;
-  }
-  p {
-    font-size: 18px;
-  }
-
-
-  .moveResumeHeader {
-    -webkit-animation-name: moveResumeHeader;
-    animation-name: moveResumeHeader;
-    -webkit-animation-duration: 3s;
-    animation-duration: 3s;
-    -webkit-animation-fill-mode: forwards;
-    animation-fill-mode: forwards;
-     -webkit-transition: all 1s ease;
-    transition: all 1s ease;
-  }
-
-  @keyframes moveResumeHeader {
-    from {transform: translate(0px, 0px);}
-    to {transform: translate(500px, 50px);}
-  }
-}
-
