@@ -22,6 +22,20 @@ body {
   width: 100%;
   height: 100%;
   background-size: contain;
+  box-sizing: border-box;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%
+  text-align: center;
+}
+
+.grid:after {
+    content: " ";
+    display: block;
+    clear: both;
 }
 
 .content {
@@ -82,7 +96,7 @@ body {
 
 .resumeElement .bar p, h3, h4 {
   margin: 0px;
-  display: inline;
+  /*display: inline;*/
 }
 
 .resumeElement .logo {
@@ -205,22 +219,21 @@ body {
 
 
 /*MOBILE*/
-@media only screen and (max-width: 736px) {
-
+@media only screen and (max-width: 36em) {
   h1 {
-    font-size: 48px;
+    font-size: 3.5rem;
   }
 
   h2 {
-    font-size: 36px;
+    font-size: 2.5rem;
   }
 
   h3 {
-    font-size: 24px;
+    font-size: 2rem;
   }
 
   p {
-    font-size: 20px;
+    font-size: 1.5rem;
   }
 
   .content {
@@ -247,7 +260,7 @@ body {
     font-size: 36px;
   }
 
-  .moveResumeHeader {
+  /*.moveResumeHeader {
     -webkit-animation-name: moveResumeHeader;
     animation-name: moveResumeHeader;
     -webkit-animation-duration: 3s;
@@ -261,7 +274,7 @@ body {
   @keyframes moveResumeHeader {
     from {transform: translate(0px, 0px);}
     to {transform: translate(0px, -250px);}
-  }
+  }*/
 }
 
 @media screen and (min-width: 736px ) and (max-width: 1600px) {
@@ -281,7 +294,7 @@ body {
     font-size: 14px;
   }
 
-  .moveResumeHeader {
+/*  .moveResumeHeader {
     -webkit-animation-name: moveResumeHeader;
     animation-name: moveResumeHeader;
     -webkit-animation-duration: 3s;
@@ -295,7 +308,7 @@ body {
   @keyframes moveResumeHeader {
     from {transform: translate(0px, 0px);}
     to {transform: translate(-300px, -100px);}
-  }
+  }*/
 }
 
 @media screen and (min-width: 1600px) {
