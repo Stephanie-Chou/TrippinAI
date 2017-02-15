@@ -1,14 +1,14 @@
   // RESUME
 
   var resumeEls = [
-    {name:"amazon", duration: 1},
+    {name:"amazon", duration: .5},
     {name:"appd", duration: 2},
     {name:"eaton", duration: .25},
     {name:"uiuc", duration: 4},
     {name:"dbc", duration: .333},
     {name:"frontend", duration: 3},
     {name:"speaking", duration: 2},
-    {name:"french", duration: 1}
+    {name:"french", duration: 3}
   ];
 
   function getResumeBarSize(dur) {

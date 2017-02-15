@@ -121,7 +121,6 @@ p{
 
 .content:after{content:"";clear:both}
 
-
 .content-background {
   position: absolute;
   top: 0px;
@@ -193,6 +192,12 @@ p{
   display: block;
   float: left;
   position: relative;
+  text-align: right;
+}
+
+.resumeElement .duration-label{
+  display: inline-block;
+  margin-left: 4px;
 }
 
 .resumeElement.education .duration{
@@ -221,22 +226,57 @@ p{
 }
 
 .rotateY {
-  -webkit-transform-origin: top center;
-  transform-origin: top center;
+  -webkit-transform-origin: center center;
+  transform-origin: center center;
   -webkit-animation-name: rotateY;
   animation-name: rotateY;
 }
 
-#period {
+.circle {
   display:inline-block;
   border-radius: 50%;
-  height: 10px;
-  width: 10px;
+  height: 1em;
+  width: 1em;
   background-color: #3e337d;
-  position: absolute;
-  margin-top: 25px;
-  margin-left: 5px;
+  border: 2px solid white;
   animation-iteration-count: infinite;
+  position: absolute;
+}
+
+.circle.purple {
+  background-color: #4155b4;
+  height: 4em;
+  width: 4em;
+  -webkit-animation-delay: .25s; /* Safari 4.0 - 8.0 */
+  animation-delay: .25s;
+}
+
+.circle.green {
+  background-color: #4ABDAC;
+  height: 1.5em;
+  width: 1.5em;
+  -webkit-animation-delay: .75s; /* Safari 4.0 - 8.0 */
+  animation-delay: .75s;
+  /*transform: translate(40px, -5px);*/
+  left: 13px;
+  top: -5px;
+}
+
+.circle.red {
+  background-color: #FC4A14;
+  -webkit-animation-delay: .5s; /* Safari 4.0 - 8.0 */
+  animation-delay: .5s;
+  /*transform: translate(30px, 55px);*/
+  top: 55px;
+}
+
+.circle.yellow {
+  background-color: #F7B733;
+  height: 3em;
+  width: 3em;
+  /*transform: translate(-5px, 30px);*/
+  top: 35px;
+  left: -45px;
 }
 
 .fadeIn {

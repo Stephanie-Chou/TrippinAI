@@ -14,7 +14,7 @@
       greeting = greetings.afterMidnight;
     } else if (4 < now  && now < 12) {
       greeting = greetings.morning;
-    } else if (11 < now  && now < 18) {
+    } else if (11 < now  && now < 17) {
       greeting = greetings.afternoon;
     } else if(now > 18) {
       greeting = greetings.evening;
