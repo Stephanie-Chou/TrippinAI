@@ -14,8 +14,6 @@ body {
 }
 
 h1{
-  margin:0;
-  padding:0;
   font-size:5rem;
   font-weight:300;
   line-height:1.2;
@@ -23,7 +21,7 @@ h1{
 }
 
 @media all and (max-width:768px){
-  h1{font-size:5rem}
+  h1{font-size:4rem}
 }
 
 @media all and (min-width:768px){
@@ -60,14 +58,14 @@ p{
 }
 
 @media all and (max-width:768px){
-  p{font-size:1.6rem}
+  p{font-size:1.2rem}
 }
 
 @media all and (min-width:768px){
-  p{font-size:1.6rem}
+  p{font-size:1.4rem}
 }
 @media all and (min-width:1024px){
-  p{font-size:1.8rem}
+  p{font-size:1.6rem}
 }
 
 .section {
@@ -101,14 +99,28 @@ p{
 
 .content {
   text-align: center;
-  display: flex;
-  justify-content: center;
   position: relative;
-  height: 100%;
   align-items:center;
-  flex-wrap: wrap;
-  flex-direction: column;
+  display:-webkit-flex;
+  display:-ms-flexbox;
+  display:flex;
+  -webkit-flex-wrap:wrap;
+  -ms-flex-wrap:wrap;
+  flex-wrap:wrap;
+  -webkit-flex-direction:column;
+  -ms-flex-direction:column;
+  flex-direction:column;
+  -webkit-align-items:center;
+  -ms-flex-align:center;
+  align-items:center;
+  -webkit-justify-content:center;
+  -ms-flex-pack:center;
+  justify-content:center;
+  height:100%;
 }
+
+.content:after{content:"";clear:both}
+
 
 .content-background {
   position: absolute;
@@ -152,7 +164,7 @@ p{
 
 @media all and (max-width:768px){
   .icon {
-    height: 6em;
+    height: 4em;
   }
 }
 
@@ -176,7 +188,7 @@ p{
 }
 
 .resumeElement .duration {
-  height: 4px;
+  height: 16px;
   width: 100px;
   display: block;
   float: left;

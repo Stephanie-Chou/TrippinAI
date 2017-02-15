@@ -2,7 +2,7 @@
     var greetings = {
     morning: "Good Morning Sunshine!",
     afternoon: "Taking an Afternoon Break? Me too!",
-    evening: "Good Evening! Treat yourself, it's been a long day.",
+    evening: "Bonsoir mes Amis.",
     afterMidnight: "Go to sleep. It's late.",
     default: "Hello there!"
   }
