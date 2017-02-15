@@ -30,7 +30,7 @@
 
   function showBars() {
     // document.getElementById("resumeBars").style.opacity="1";
-    document.getElementById("resumeBars").classList.add("fadeIn");
+    // document.getElementById("resumeBars").classList.add("fadeIn");
 
     var bars = resumeEls;
     var animationDuration = 2;
