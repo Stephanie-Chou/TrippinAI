@@ -23,7 +23,7 @@ h1{
 }
 
 @media all and (max-width:768px){
-  h1{font-size:7rem}
+  h1{font-size:5rem}
 }
 
 @media all and (min-width:768px){
