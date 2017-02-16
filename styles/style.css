@@ -68,6 +68,14 @@ p{
   p{font-size:1.6rem}
 }
 
+a {
+  color: #F7B733;
+}
+
+a:hover {
+  color: #FFF;
+}
+
 .section {
   position: relative;
   overflow: hidden;
@@ -332,4 +340,22 @@ p{
 #work {
   min-height: 100%;
   background-color: #3e337d;
+}
+
+#about {
+  min-height: 100%;
+  color: black;
+}
+
+#about-background {
+  background: url("../images/onaRail.jpg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: bottom;
+  opacity: .2;
+}
+
+.about-canvas{
+  background: #FFF;
+  opacity: .1;
 }
