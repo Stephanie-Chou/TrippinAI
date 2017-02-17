@@ -100,9 +100,9 @@ a:hover {
 }
 
 .grid:after {
-    content: " ";
-    display: block;
-    clear: both;
+  content: " ";
+  display: block;
+  clear: both;
 }
 
 .content {
@@ -174,6 +174,37 @@ a:hover {
     height: 4em;
   }
 }
+
+/*Button*/
+
+.button {
+  min-width: 230px;
+  color:#FFF;
+  -webkit-border-radius: 28;
+  -moz-border-radius: 28;
+  border-radius: 28px;
+  font-size: 20px;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+}
+
+.button:hover {
+  -webkit-animation-name: fadeTo;
+  animation-name: fadeTo;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  -webkit-transition: all 1s ease;
+  transition: all 1s ease;
+}
+.action {
+  background-color: #3E337D;
+}
+
+
 
 /*RESUME*/
 
@@ -348,7 +379,7 @@ a:hover {
 }
 
 #about-background {
-  background: url("../images/onaRail.jpg");
+  background: url("../assets/images/onaRail.jpg");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: bottom;
