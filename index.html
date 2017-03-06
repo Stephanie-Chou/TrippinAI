@@ -11,7 +11,7 @@
   <meta property="og:url"         content="http://stephaniechou.com/" />
   <meta property="og:type"        conent="website"/>
   <meta property="og:image"       content="http://stephaniechou.com/assets/images/logos/favicon.png" />
-
+  <meta name="keywords"           content="Engineer, Software, Woman in Tech, Baking, Harry Potter, Seattle" />
   <!-- Fonts -->
   <link href="styles/style.css" rel="stylesheet" type="text/css" >
   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
@@ -40,7 +40,7 @@
       <div class="content-background"></div>
     </div>
 
-    <div class="section" id="resume" itemprop="resume">
+    <div class="section" id="resume" itemscope itemtype="http://schema.org/Person">
       <div class="content" style="margin: 100px 0px; ">
         <h1 id="resumeHeader" style="width: 100%;">What I've been Doing</h1>
 
@@ -52,59 +52,53 @@
 
         <div id="resumeBars" style="opacity:1;">
             <div class="resumeElement experience">
-              <!-- <img class="logo" src= "./assets/images/logos/amazonlogo.jpg"> -->
               <div id="amazon" class="bar">
-                <h2>Amazon - Prime Now</h2>
-                <p>Web Development Engineer</p>
+                <h2><span itemprop="affiliation">Amazon</span> - <span itemprop="department">Prime Now</span></h2>
+                <p itemprop="jobTitle">Web Development Engineer</p>
                 <div class="duration"></div>
                 <div class="duration-label">Current</div>
               </div>
             </div>
 
             <div class="resumeElement experience">
-              <!-- <img class="logo" src= "./assets/images/logos/appdynamics-logo.png"> -->
               <div id="appd" class="bar">
-                <h2>AppDynamics - UI</h2>
-                <p>Software Engineer & Hackathon Winner</p>
+                <h2><span itemprop="affiliation">AppDynamics</span> - <span itemprop="department">UI</span></h2>
+                <p itemprop="jobTitle">Software Engineer & Hackathon Winner</p>
                 <div class="duration"></div>
                 <div class="duration-label">2 yr</div>
               </div>
             </div>
 
             <div class="resumeElement experience">
-              <!-- <img class="logo" src= "./assets/images/logos/eaton-logo.png"> -->
               <div id="eaton" class="bar">
-                <h2>Eaton - Power Starters and Enclosed Controls</h2>
-                <p>Engineering & Technology Intern</p>
+                <h2><span itemprop="affiliation">Eaton</span> - <span itemprop="department"> Power Starters and Enclosed Controls</span></h2>
+                <p itemprop="jobTitle">Engineering & Technology Intern</p>
                 <div class="duration"></div>
                 <div class="duration-label">3 mo</div>
               </div>
             </div>
 
             <div class="resumeElement education">
-              <!-- <img class="logo" src= "./assets/images/logos/university-of-illinois-squarelogo.png"> -->
               <div id="uiuc" class="bar">
-                <h2>University of Illinois Urbana-Champaign</h2>
-                <p>BS Electrical Engineering</p>
+                <h2 itemprop="alunmiOf">University of Illinois Urbana-Champaign</h2>
+                <p itemprop="major">BS Electrical Engineering</p>
                 <div class="duration"></div>
                 <div class="duration-label">4 yr</div>
               </div>
             </div>
 
             <div class="resumeElement education">
-              <!-- <img class="logo" src= "./assets/images/logos/dev-bootcamp-logo.png"> -->
               <div id="dbc" class="bar">
-                <h2>Dev Bootcamp</h2>
-                <p>1000 hours of Web Development</p>
+                <h2 itemprop="alumniOf">Dev Bootcamp</h2>
+                <p itemprop="major">1000 hours of Web Development</p>
                 <div class="duration"></div>
                 <div class="duration-label">4 mo</div>
               </div>
             </div>
 
             <div class="resumeElement skills">
-              <!-- <img class="logo" src= "./assets/images/logos/HTML5-CSS3-JS.jpg"> -->
               <div id="frontend" class="bar">
-                <h2>Frontend Web Development</h2>
+                <h2 itemprop="skill">Frontend Web Development</h2>
                 <p>Angular.js, React, CSS, HTML</p>
                 <div class="duration"></div>
                 <div class="duration-label">3 yr</div>
@@ -112,9 +106,8 @@
             </div>
 
             <div class="resumeElement skills">
-              <!-- <img class="logo" src= "./assets/images/logos/anitaborg-logo.png"> -->
               <div id="speaking" class="bar">
-                <h2>Speaking</h2>
+                <h2 itemprop="skill">Speaking</h2>
                 <p>Grace Hopper Celebration & She's Geeky Panel</p>
                 <div class="duration"></div>
                 <div class="duration-label">2 yr</div>
@@ -122,9 +115,8 @@
             </div>
 
             <div class="resumeElement skills">
-              <!-- <img class="logo" src= "./assets/images/logos/french-flag.png"> -->
               <div id="french" class="bar">
-                <h2>French</h2>
+                <h2 itemprop="skill">French</h2>
                 <p>Conversational</p>
                 <div class="duration"></div>
                 <div class="duration-label">3 yr</div>
@@ -146,8 +138,8 @@
       </div>
     </div>
 
-    <div class="section" id="about" itemprop="about">
-      <div class="content" style="margin: 100px 0px;">
+    <div class="section" id="about" itemscope itemtype="http://schema.org/Person">
+      <div class="content" style="margin: 100px 0px;" itemprop="about">
         <h1>Me</h1>
 
         <div style="flex-direction: column; max-width: 70%; text-align: left;">
