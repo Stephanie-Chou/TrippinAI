@@ -29,11 +29,7 @@
   }
 
   function showBars() {
-    // document.getElementById("resumeBars").style.opacity="1";
-    // document.getElementById("resumeBars").classList.add("fadeIn");
-
     var bars = resumeEls;
-    var animationDuration = 2;
     var i = 0;
     // load each bar. wait for a bar to load before starting the next one. each animation should take a second.
     // 1 year = 150px;
@@ -43,23 +39,8 @@
       bar = bars.shift()
       durationEl = document.getElementById(bar.name).children[2];
       dur = bar.duration;
-      setTimeout(animateBar(durationEl, dur, animationDuration), animationDuration*1000);
-      i++;
-    }
-  }
-
-  function animateBar(durationEl, dur, animationDuration) {
-    var id = setInterval(frame, animationDuration);
-    var len = getResumeBarSize(dur);
-    var pos = 0;
-
-    function frame() {
-      if (pos >= len) {
-          clearInterval(id);
-      } else {
-          pos++;
-          durationEl.style.width = pos + 'px';
-      }
+      var len = getResumeBarSize(dur);
+      durationEl.style.width = len+ 'px';
     }
   }
 
@@ -76,11 +57,6 @@
   function onScroll() {
     onUpdateResumeSection();
   }
-
-  // window.onresize = function() {onResize()}
-  // function onResize() {
-  //   onUpdateResumeSection();
-  // }
 
   function onUpdateResumeSection() {
     var resumeSection = document.getElementById("resumeBars");
