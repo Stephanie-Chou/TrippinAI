@@ -200,10 +200,14 @@ a:hover {
   -webkit-transition: all 1s ease;
   transition: all 1s ease;
 }
+
 .action {
   background-color: #3E337D;
 }
 
+.action2 {
+  background-color: #4155b4;
+}
 
 
 /*RESUME*/
@@ -376,6 +380,10 @@ a:hover {
 #about {
   min-height: 100%;
   color: black;
+}
+
+#blog {
+  background-color: #F7B733;
 }
 
 #about-background {
