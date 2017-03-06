@@ -14,7 +14,7 @@ body {
 }
 
 h1{
-  font-size:5rem;
+  font-size:3rem;
   font-weight:300;
   line-height:1.2;
   font-family: 'Copse', serif;
@@ -25,17 +25,17 @@ h1{
 }
 
 @media all and (min-width:768px){
-  h1{font-size:5rem}
+  h1{font-size:3rem}
 }
 @media all and (min-width:1024px){
-  h1{font-size:6rem}
+  h1{font-size:4rem}
 }
 
 h2{
   margin:0;
   padding:0;
   display:block;
-  font-size:1.8rem;
+  font-size:1.5rem;
   font-weight:300;
 
 }
@@ -46,14 +46,14 @@ h2{
 }
 
 @media all and (min-width:768px){
-  h2{font-size:2rem}
+  h2{font-size:1.8rem}
 }
 @media all and (min-width:1024px){
-  h2{font-size:2.2rem}
+  h2{font-size:2rem}
 }
 
 p{
-  font-size:1.4rem;
+  font-size:1rem;
   font-weight:100
 }
 
@@ -65,7 +65,7 @@ p{
   p{font-size:1.4rem}
 }
 @media all and (min-width:1024px){
-  p{font-size:1.6rem}
+  p{font-size:1.2rem}
 }
 
 a {
