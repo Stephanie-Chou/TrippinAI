@@ -389,7 +389,7 @@ a:hover {
 #about-background {
   background: url("../assets/images/onaRail.jpg");
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
   background-position: bottom;
   opacity: .2;
 }
