@@ -255,103 +255,59 @@ a:hover {
   background: #4ABDAC;
 }
 
-.animated {
-  -webkit-animation-duration: 1s;
-  animation-duration: 1s;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
-}
 
-/*ROTATE AROUND Y AXIS*/
-@keyframes rotateY {
-  from { transform: rotateY(180deg);}
-  to {transform: rotateY(0deg);}
-}
+/*LOGO*/
 
-.rotateY {
-  -webkit-transform-origin: center center;
-  transform-origin: center center;
-  -webkit-animation-name: rotateY;
-  animation-name: rotateY;
+.logo {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 7em;
+  height: 7em;
+  margin-left: 20px;
+  margin-top: 20px;
 }
 
 .circle {
   display:inline-block;
   border-radius: 50%;
-  height: 1em;
-  width: 1em;
+  height: 1rem;
+  width: 1rem;
   background-color: #3e337d;
   border: 2px solid white;
-  animation-iteration-count: infinite;
   position: absolute;
 }
 
 .circle.purple {
   background-color: #4155b4;
-  height: 4em;
-  width: 4em;
-  -webkit-animation-delay: .25s; /* Safari 4.0 - 8.0 */
-  animation-delay: .25s;
+  height: 60%;
+  width: 60%;
+  top: 1rem;
+  left: 2rem;
 }
 
 .circle.green {
   background-color: #4ABDAC;
-  height: 1.5em;
-  width: 1.5em;
-  -webkit-animation-delay: .75s; /* Safari 4.0 - 8.0 */
-  animation-delay: .75s;
-  /*transform: translate(40px, -5px);*/
-  left: 13px;
-  top: -5px;
+  height: 25%;
+  width: 25%;
+  left: 5rem;
+  top: 0.5rem;
 }
 
 .circle.red {
   background-color: #FC4A14;
-  -webkit-animation-delay: .5s; /* Safari 4.0 - 8.0 */
-  animation-delay: .5s;
-  /*transform: translate(30px, 55px);*/
-  top: 55px;
+  height: 15%;
+  width: 15%;
+  top: 4.3rem;
+  left: 3.3rem;
 }
 
 .circle.yellow {
   background-color: #F7B733;
-  height: 3em;
-  width: 3em;
-  /*transform: translate(-5px, 30px);*/
-  top: 35px;
-  left: -45px;
-}
-
-.fadeIn {
-  -webkit-animation-name: fadeIn;
-  animation-name: fadeIn;
-  -webkit-animation-duration: 5s;
-  animation-duration: 5s;
-  -webkit-animation-fill-mode: forwards;
-  animation-fill-mode: forwards;
-  -webkit-transition: all 1s ease;
-  transition: all 1s ease;
-}
-
-@keyframes fadeIn {
-  from {opacity: 0}
-  to {opacity: 1}
-}
-
-.fadeOut {
-  -webkit-animation-name: fadeIn;
-  animation-name: fadeIn;
-  -webkit-animation-duration: 5s;
-  animation-duration: 5s;
-  -webkit-animation-fill-mode: forwards;
-  animation-fill-mode: forwards;
-   -webkit-transition: all 1s ease;
-  transition: all 1s ease;
-}
-
-@keyframes fadeOut {
-  from {opacity: 1}
-  to {opacity: 0}
+  height: 45%;
+  width: 45%;
+  top: 3.1rem;
+  left: 1rem;
 }
 
 @keyframes fadeTo {
