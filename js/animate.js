@@ -7,7 +7,7 @@
     {name:"eaton", duration: .25},
     {name:"uiuc", duration: 4},
     {name:"dbc", duration: .333},
-    {name:"frontend", duration: 3},
+    {name:"frontend", duration: 5},
     {name:"speaking", duration: 2},
     {name:"french", duration: 3}
   ];
