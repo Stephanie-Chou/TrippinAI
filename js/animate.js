@@ -19,7 +19,7 @@
     // larger screens >1024 (max): 1yr = 200px
     var html = document.documentElement;
     maxDur = 4;
-    var maxWidth = html.clientWidth > 1024 ? 1024 : html.clientWidth*.8;
+    var maxWidth = html.clientWidth > 1024 ? 1024 : html.clientWidth*.5;
     return dur/maxDur *maxWidth;
   }
 
