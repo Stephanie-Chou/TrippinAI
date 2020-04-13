@@ -1,7 +1,7 @@
   // RESUME
 
   var resumeEls = [
-    {name:"amazon", duration: 2},
+    {name:"amazon", duration: 3},
     {name:"appd", duration: 2},
     {name:"eaton", duration: .25},
     {name:"uiuc", duration: 4},
