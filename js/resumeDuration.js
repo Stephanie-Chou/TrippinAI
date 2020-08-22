@@ -45,7 +45,7 @@ var resumeEls = [
 
 
 document.addEventListener("DOMContentLoaded", function(){
-  showBars();
+  // showBars();
 });
 
 
