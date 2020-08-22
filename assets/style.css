@@ -14,28 +14,26 @@ body {
 }
 
 h1{
-  font-size:3rem;
   font-weight:300;
-  line-height:1.2;
   font-family: 'Copse', serif;
 }
 
 @media all and (max-width:768px){
-  h1{font-size:4rem}
+  h1{font-size:3rem}
 }
 
 @media all and (min-width:768px){
-  h1{font-size:3rem}
+  h1{font-size:2.2rem}
 }
 @media all and (min-width:1024px){
-  h1{font-size:4rem}
+  h1{font-size:3rem}
 }
 
 h2{
   margin:0;
   padding:0;
   display:block;
-  font-size:1.5rem;
+  font-size:1.2rem;
   font-weight:300;
 
 }
@@ -46,14 +44,14 @@ h2{
 }
 
 @media all and (min-width:768px){
-  h2{font-size:1.8rem}
+  h2{font-size:1.4rem}
 }
 @media all and (min-width:1024px){
-  h2{font-size:2rem}
+  h2{font-size:1.6rem}
 }
 
 p{
-  font-size:1rem;
+  font-size:.5rem;
   font-weight:100
 }
 
@@ -62,7 +60,7 @@ p{
 }
 
 @media all and (min-width:768px){
-  p{font-size:1.4rem}
+  p{font-size:1rem}
 }
 @media all and (min-width:1024px){
   p{font-size:1.2rem}
@@ -211,47 +209,51 @@ a:hover {
 
 
 /*RESUME*/
-
-.resumeElement {
-  float: left;
-  clear: both;
-  margin: 5px;
+.resume-container {
+  text-align: left;
+  width: 80%;
+  justify-content: center;
 }
 
-.bar {
+.resume-element-container {
+  float: left;
+  clear: both;
+  width: 100%;
+  margin: 5px;
+  display: flex;
+}
+
+.resume-element-container .resume-content {
   padding: 0px 20px 0px 20px;
-  max-width: 100%;
+  width: 80%;
   float: left;
   text-align: left;
 }
 
-.resumeElement .bar p, h3, h4 {
-  margin: 0px;
-}
-
-.resumeElement .duration {
-  height: 16px;
-  width: 100px;
+.resume-element-container .demarcation {
+  height: 80px;
+  width: 8px;
   display: block;
   float: left;
   position: relative;
   text-align: right;
 }
 
-.resumeElement .duration-label{
+.resume-element-container .left-content{
   display: inline-block;
-  margin-left: 4px;
+  margin: 16px;
+  width: 15%;
 }
 
-.resumeElement.education .duration{
+.resume-element-container.education .demarcation{
   background: #fc4a14;
 }
 
-.resumeElement.experience .duration{
+.resume-element-container.experience .demarcation{
   background: #F7B733;
 }
 
-.resumeElement.skills .duration{
+.resume-element-container.skills .demarcation{
   background: #4ABDAC;
 }
 
