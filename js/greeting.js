@@ -9,6 +9,7 @@
 
   var greeting;
   var now = new Date().toTimeString().substring(0,2);
+  console.log(now)
 
     if (now < 5) {
       greeting = greetings.afterMidnight;
