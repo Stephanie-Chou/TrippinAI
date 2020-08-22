@@ -1,7 +1,12 @@
   // RESUME
 
-  var resumeEls = [
-    {name:"amazon", duration: 3},
+var today = new Date();
+var currentJobStart = new Date('March 13, 2017');
+var currentDuration = (today - currentJobStart)/(1000*60*60*24*365);
+
+
+var resumeEls = [
+    {name:"amazon", duration: currentDuration},
     {name:"appd", duration: 2},
     {name:"eaton", duration: .25},
     {name:"uiuc", duration: 4},
