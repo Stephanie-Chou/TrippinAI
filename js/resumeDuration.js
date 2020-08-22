@@ -27,12 +27,6 @@ var resumeEls = [
     return dur/maxDur *maxWidth;
   }
 
-  // ANIMATE THE RESUME SECTION
-
-  function onEnterResumeSection() {
-    showBars();
-  }
-
   function showBars() {
     var bars = resumeEls;
     var i = 0;
@@ -49,27 +43,9 @@ var resumeEls = [
     }
   }
 
-  function isInViewport(element) {
-    var rect = element.getBoundingClientRect();
-    var html = document.documentElement;
-    return (
-      rect.top >= 0 &&
-      rect.left >= 0
-    );
-  }
 
-  window.onscroll = function() {onScroll()}
-  function onScroll() {
-    onUpdateResumeSection();
-  }
+document.addEventListener("DOMContentLoaded", function(){
+  showBars();
+});
 
-  function onUpdateResumeSection() {
-    var resumeSection = document.getElementById("resumeBars");
-    if(isInViewport(resumeSection)) {
-      onEnterResumeSection();
-    }
-  }
 
-  function initPeriod() {
-    var period = document.getElementById("period");
-  }
