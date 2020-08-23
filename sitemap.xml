@@ -6,39 +6,17 @@
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 <!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
 
+
 <url>
   <loc>http://stephaniechou.com/</loc>
-  <lastmod>2017-03-06T22:44:50+00:00</lastmod>
-  <changefreq>monthly</changefreq>
+  <lastmod>2020-08-23T04:09:49+00:00</lastmod>
+  <priority>1.00</priority>
 </url>
 <url>
-  <loc>http://stephaniechou.com/assets/Stephanie_Chou_Resume2016.pdf</loc>
-  <lastmod>2017-03-06T22:44:50+00:00</lastmod>
-  <changefreq>monthly</changefreq>
+  <loc>http://stephaniechou.com/assets/Stephanie_Chou_Resume2017.pdf</loc>
+  <lastmod>2020-08-23T04:09:49+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
-<url>
-  <loc>http://stephaniechou.com/blog/</loc>
-  <lastmod>2017-03-06T08:38:23+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-</url>
-<url>
-  <loc>http://stephaniechou.com/blog/2017/03/04/appd-women-spotlight-response.html</loc>
-  <lastmod>2017-03-06T08:38:23+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-</url>
-<url>
-  <loc>http://stephaniechou.com/blog/2015/01/02/dbc-vs-college.html</loc>
-  <lastmod>2017-03-06T08:38:23+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-</url>
-<url>
-  <loc>http://stephaniechou.com/blog/2013/10/18/surprising-reaction.html</loc>
-  <lastmod>2017-03-06T08:38:23+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-</url>
-<url>
-  <loc>http://stephaniechou.com/blog/2013/10/05/my-own-website.html</loc>
-  <lastmod>2017-03-06T08:38:23+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-</url>
+
+
 </urlset>
