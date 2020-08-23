@@ -56,7 +56,7 @@ p{
 }
 
 @media all and (max-width:768px){
-  p{font-size:1.2rem}
+  p{font-size:.8rem}
 }
 
 @media all and (min-width:768px){
@@ -90,19 +90,6 @@ a:hover {
   box-sizing: border-box;
 }
 
-.grid {
-  display: flex;
-  flex-direction: column;
-  min-height: 100%
-  text-align: center;
-}
-
-.grid:after {
-  content: " ";
-  display: block;
-  clear: both;
-}
-
 .content {
   text-align: center;
   position: relative;
@@ -125,6 +112,50 @@ a:hover {
   height:100%;
 }
 
+@media all and (max-width:768px){
+  .container {
+    position: relative;
+    align-items:center;
+    background-size: cover;
+    overflow: hidden;
+    width: 100%;
+    padding: 0px;
+    top:0px;
+    background: #4ABDAC;
+    height: 80vh;
+  }
+}
+
+@media all and (min-width:768px){
+  .container {
+    position: relative;
+    align-items:center;
+    background-size: cover;
+    overflow: hidden;
+    width: 100%;
+    padding: 0px;
+    top:0px;
+    background: #4ABDAC;
+    height: 100vh;
+  }
+}
+
+
+@media all and (min-width:1024px){
+  .container {
+    position: relative;
+    align-items:center;
+    background-size: cover;
+    overflow: hidden;
+    width: 100%;
+    padding: 0px;
+    top:0px;
+    background: #4ABDAC;
+    height: 80vh;
+  }
+}
+
+
 .content:after{content:"";clear:both}
 
 .content-background {
@@ -135,18 +166,6 @@ a:hover {
   right: 0px;
   z-index: -1;
   overflow: hidden;
-  background: #4ABDAC;
-}
-
-.container {
-  position: relative;
-  height: 100vh;
-  align-items:center;
-  background-size: cover;
-  overflow: hidden;
-  width: 100%;
-  padding: 0px;
-  top:0px;
   background: #4ABDAC;
 }
 
@@ -209,41 +228,45 @@ a:hover {
 
 
 /*RESUME*/
-.resume-container {
-  text-align: left;
-  width: 70%;
-  justify-content: center;
-}
 
-.resume-element-container {
-  float: left;
-  clear: both;
-  width: 100%;
-  margin: 5px;
-  display: flex;
-}
+  .resume-container {
+    text-align: left;
+    width: 70%;
+    justify-content: center;
+  }
 
-.resume-element-container .resume-content {
-  padding: 0px 20px 0px 20px;
-  width: 80%;
-  float: left;
-  text-align: left;
-}
+  .resume-element-container {
+    float: left;
+    clear: both;
+    width: 100%;
+    margin: 5px;
+    display: flex;
 
-.resume-element-container .demarcation {
-  height: 80px;
-  width: 8px;
-  display: block;
-  float: left;
-  position: relative;
-  text-align: right;
-}
+  }
 
-.resume-element-container .left-content{
-  display: inline-block;
-  margin: 16px;
-  width: 15%;
-}
+  .resume-element-container .resume-content {
+    padding: 0px 20px 0px 20px;
+    width: 80%;
+    float: left;
+    text-align: left;
+  }
+
+  .resume-element-container .demarcation {
+    height: inherit;
+    width: 8px;
+    display: block;
+    float: left;
+    position: relative;
+    text-align: right;
+  }
+
+  .resume-element-container .left-content{
+    display: inline-block;
+    margin: 16px;
+    width: 15%;
+  }
+
+
 
 .resume-element-container.education .demarcation{
   background: #fc4a14;
@@ -259,6 +282,12 @@ a:hover {
 
 
 /*LOGO*/
+
+.avatar {
+  height: 10rem;
+  width: 10rem;
+  border-radius: 50%;
+}
 
 .logo {
   position: relative;
@@ -345,10 +374,10 @@ a:hover {
 }
 
 #about-background {
-  background: url("../assets/images/onaRail.jpg");
+  background: url("../assets/images/rainlights_headshot.jpeg");
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: bottom;
+  background-position: top;
   opacity: .2;
 }
 
