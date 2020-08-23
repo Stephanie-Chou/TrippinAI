@@ -311,33 +311,33 @@ a:hover {
 
 .circle.purple {
   background-color: #4155b4;
-  height: 60%;
-  width: 60%;
+  height: 45%;
+  width: 45%;
   top: 1rem;
   left: 2rem;
 }
 
 .circle.green {
   background-color: #4ABDAC;
-  height: 25%;
-  width: 25%;
-  left: 5rem;
-  top: 0.5rem;
+  height: 20%;
+  width: 20%;
+  left: 4.5rem;
+  top: 1rem;
 }
 
 .circle.red {
   background-color: #FC4A14;
-  height: 15%;
-  width: 15%;
-  top: 4.3rem;
+  height: 12.5%;
+  width: 12.5%;
+  top: 4rem;
   left: 3.3rem;
 }
 
 .circle.yellow {
   background-color: #F7B733;
-  height: 45%;
-  width: 45%;
-  top: 3.1rem;
+  height: 38%;
+  width: 38%;
+  top: 2.8rem;
   left: 1rem;
 }
 
