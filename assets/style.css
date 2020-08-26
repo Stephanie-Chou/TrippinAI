@@ -67,11 +67,11 @@ p{
 }
 
 a {
-  color: #F7B733;
+  color: #FFF;
 }
 
 a:hover {
-  color: #FFF;
+  color: #F7B733;
 }
 
 .section {
@@ -110,6 +110,7 @@ a:hover {
   -ms-flex-pack:center;
   justify-content:center;
   height:100%;
+  margin: 50px 0;
 }
 
 @media all and (max-width:768px){
@@ -194,6 +195,7 @@ a:hover {
 
 /*Button*/
 
+
 .button {
   min-width: 230px;
   color:#FFF;
@@ -227,12 +229,22 @@ a:hover {
 }
 
 
+/*INTRO*/
+.greeting {
+  display: inline;
+}
+
+.greeting a {
+  color: #FFF;
+}
+
 /*RESUME*/
 
   .resume-container {
     text-align: left;
-    width: 70%;
+    width: 80%;
     justify-content: center;
+    margin-bottom: 2rem;
   }
 
   .resume-element-container {
