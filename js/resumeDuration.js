@@ -6,7 +6,8 @@ var currentDuration = (today - currentJobStart)/(1000*60*60*24*365);
 
 
 var resumeEls = [
-    {name:"amazon", duration: currentDuration},
+    {name:"shopify", duration: 0},
+    {name:"amazon", duration: 5},
     {name:"appd", duration: 2},
     {name:"eaton", duration: .25},
     {name:"uiuc", duration: 4},
