@@ -122,8 +122,7 @@ a:hover {
     width: 100%;
     padding: 0px;
     top:0px;
-    background: #4ABDAC;
-    height: 80vh;
+/*    height: 80vh;*/
   }
 }
 
@@ -136,7 +135,6 @@ a:hover {
     width: 100%;
     padding: 0px;
     top:0px;
-    background: #4ABDAC;
     height: 100vh;
   }
 }
@@ -151,8 +149,8 @@ a:hover {
     width: 100%;
     padding: 0px;
     top:0px;
-    background: #4ABDAC;
-    height: 80vh;
+    background-color: #fc8bab;
+    color: #192340;
   }
 }
 
@@ -167,7 +165,31 @@ a:hover {
   right: 0px;
   z-index: -1;
   overflow: hidden;
-  background: #4ABDAC;
+  background: #fc8bab;
+}
+
+
+@media all and (max-width:768px){
+  .column-container {
+    flex-direction: column;
+    max-width: 80%;
+    text-align: left;
+    display: grid;
+  }
+}
+
+
+
+@media all and (min-width:1024px){
+  .column-container {
+    flex-direction: column;
+    max-width: 80%;
+    text-align: left;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    grid-gap: 10vh;
+  }
 }
 
 /*icons*/
@@ -194,15 +216,10 @@ a:hover {
 }
 
 /*Button*/
-
-
 .button {
-  min-width: 230px;
-  color:#FFF;
-  -webkit-border-radius: 28;
-  -moz-border-radius: 28;
-  border-radius: 28px;
-  font-size: 20px;
+  background: none;
+  border-color: #f8cbab;
+  border-style: solid;
   padding: 10px 20px 10px 20px;
   text-decoration: none;
   text-align: center;
@@ -220,22 +237,33 @@ a:hover {
   transition: all 1s ease;
 }
 
+.button a {
+  color:#f8cbab;
+}
+
 .action {
-  background-color: #3E337D;
+  border-color: #f8cbab;
 }
 
 .action2 {
-  background-color: #4155b4;
+  border-color: #4155b4;
 }
 
 
 /*INTRO*/
-.greeting {
-  display: inline;
-}
 
-.greeting a {
-  color: #FFF;
+.greeting {
+  width: 100%;
+  display: block;
+  background: none;
+  border-color: #d16210;
+  border-style: solid;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+  text-align: center;
+  color: #d16210;
+  text-transform: uppercase;
+  font-weight: 800;
 }
 
 /*RESUME*/
@@ -247,52 +275,51 @@ a:hover {
     margin-bottom: 2rem;
   }
 
-  .resume-element-container {
-    float: left;
-    clear: both;
-    width: 100%;
-    margin: 5px;
-    display: flex;
-
+  .resume-container h1 {
+    color: #fff4eb;
   }
 
-  .resume-element-container .resume-content {
-    padding: 0px 20px 0px 20px;
-    width: 80%;
-    float: left;
-    text-align: left;
+  .resume-container-section {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 1fr;
   }
 
-  .resume-element-container .demarcation {
-    height: inherit;
-    width: 8px;
-    display: block;
-    float: left;
-    position: relative;
-    text-align: right;
+  .resume-element-container .resume-date {
+    color: #f26b5e;
+  }
+  
+  .resume-element-container .resume-title {
+    text-transform: uppercase;
+    color: #fff4eb;
   }
 
-  .resume-element-container .left-content{
-    display: inline-block;
-    margin: 16px;
-    width: 15%;
+  .resume-element-container .resume-subtitle {
+    color: #fff4eb;
   }
 
 
+/*JOURNAL SECTION*/
 
-.resume-element-container.education .demarcation{
-  background: #fc4a14;
+#journal h2 {
+  text-transform: uppercase;
+  font-weight: 800;
 }
 
-.resume-element-container.experience .demarcation{
-  background: #F7B733;
+#journal h4 {
+  color: #f8cbab;
 }
 
-.resume-element-container.skills .demarcation{
-  background: #4ABDAC;
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+  padding: 0 10vh;
 }
 
 /*DREAM JOURNAL*/
+
 .entry {
   text-align: left;
   flex-direction: column;
@@ -312,104 +339,49 @@ a:hover {
 /*LOGO*/
 
 .avatar {
-  height: 10rem;
-  width: 10rem;
-  border-radius: 50%;
+  width: 15vh;
+  height: 30vh;
+  transform: translate(-12.5px, 0px) rotate(0deg);
+  opacity: 1;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
 }
 
-.logo {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  width: 7em;
-  height: 7em;
-  margin-left: 20px;
-  margin-top: 20px;
-}
-
-.circle {
-  display:inline-block;
-  border-radius: 50%;
-  height: 1rem;
-  width: 1rem;
-  background-color: #3e337d;
-  border: 2px solid white;
-  position: absolute;
-}
-
-.circle.purple {
-  background-color: #4155b4;
-  height: 45%;
-  width: 45%;
-  top: 1rem;
-  left: 2rem;
-}
-
-.circle.green {
-  background-color: #4ABDAC;
-  height: 20%;
-  width: 20%;
-  left: 4.5rem;
-  top: 1rem;
-}
-
-.circle.red {
-  background-color: #FC4A14;
-  height: 12.5%;
-  width: 12.5%;
-  top: 4rem;
-  left: 3.3rem;
-}
-
-.circle.yellow {
-  background-color: #F7B733;
-  height: 38%;
-  width: 38%;
-  top: 2.8rem;
-  left: 1rem;
-}
 
 @keyframes fadeTo {
   from {opacity: 1}
   to {opacity: .5}
 }
 
-/* sections */
-
-#main {
-  top: 0px;
-  height: 100%;
-  background-color: #4ABDAC;
+/* containers */
+#welcome {
+  background-color: #f8cbab;
+  color: #192340;
 }
 
 #resume {
   min-height: 100%;
-  background-color: #4155b4;
+  background-color: #40140a;
 }
 
 #contact {
-  min-height: 100%;
-  background-color: #3e337d;
+  color: #f8cbab;
+  background-color: #192340;
+}
+
+
+#journal {
+  background-color: #bf9850;
 }
 
 #about {
   min-height: 100%;
-  color: black;
+  color: #192340;
+  background-color: #f26b53;
 }
 
-#journal {
-  background-color: #F7B733;
-}
-
-#about-background {
-  background: url("../assets/images/rainlights_headshot.jpeg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: top;
-  opacity: .2;
-}
-
-.about-canvas{
-  background: #E6E6E6;
-  opacity: .1;
+#about h1{
+  color: #fff4eb;
 }
