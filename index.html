@@ -23,173 +23,116 @@
 
 <body>
   <main>
-    <div class="container" itemprop="welcome">
+    <div class="container" id="welcome" itemprop="welcome">
       <div class="content">
+        <div class="column-container">
+          <div><img src="assets/images/me_and_fig.jpg" class="avatar" alt="Avatar"></div>
 
-        <img src="assets/images/solstice_headshot.jpeg" class="avatar" alt="Avatar">
-
-        <h1><span id="greeting"></span></h1>
-        <h2>Love, Stephanie</h2>
-
-        <div class="logo">
-          <div class="circle purple"></div>
-          <div class="circle yellow"></div>
-          <div class="circle green"></div>
-          <div class="circle red"></div>
+          <div>
+            <div><h1>Stephanie Chou</h1></div>
+            <div class="greeting"><span id="greeting"></span></div>
+          </div>
         </div>
       </div>
 
       <div class="content-background"></div>
     </div>
 
-    <div class="section" id="resume" itemscope itemtype="http://schema.org/Person">
-      <div class="content">
-        <h1 id="resumeHeader" style="width: 100%;">What I've been Doing</h1>
-
-        <div id="resume" class="resume-container" style="opacity:1;">
-          
-          <div class="resume-element-container experience">
-            <div class="demarcation"></div>
-            <div class="left-content"> <p>Feb 2022-Now</p></div>
-            <div id="imdb" class="resume-content">
-              <h2><span itemprop="affiliation">Shopify</span></h2>
-              <p itemprop="jobTitle">Engineering Manager for the Edting Experience Frontend Team</p>
-            </div>
-          </div>
-          
-          <div class="resume-element-container experience">
-            <div class="demarcation"></div>
-            <div class="left-content"> <p>Nov 2019 - Feb 2022</p></div>
-            <div id="imdb" class="resume-content">
-              <h2><span itemprop="affiliation">IMDb</span></h2>
-              <p itemprop="jobTitle">Software Development Manager for the Consumer Web Team</p>
-            </div>
-          </div>
-
-          <div class="resume-element-container experience">
-            <div class="demarcation"></div>
-            <div class="left-content"> <p>Mar 2017 - Nov 2019</p></div>
-            <div id="amazon" class="resume-content">
-              <h2><span itemprop="affiliation">Amazon</span></h2>
-              <p itemprop="jobTitle">Frontend Software Engineer at Prime Now, PeopleTech and Amazon Publishing. Built products used by millions.</p>
-            </div>
-          </div>
-
-          <div class="resume-element-container experience">
-            <div class="demarcation"></div>
-            <div class="left-content"> <p>Dec 2014 - Feb 2017</p></div>
-            <div id="appd" class="resume-content">
-              <h2><span itemprop="affiliation">AppDynamics</span></h2>
-              <p itemprop="jobTitle">Software Engineer on the UI team & 2016 Hackathon Winner</p>
-            </div>
-          </div>
-
-          <div class="resume-element-container experience">
-            <div class="demarcation"></div>
-            <div class="left-content"> <p>June 2013 - Aug 2013</p></div>
-            <div id="eaton" class="resume-content">
-              <h2><span itemprop="affiliation">Eaton</span></h2>
-              <p itemprop="jobTitle">Engineering & Technology Intern in the Power Starters and Enclosed Controls Division</p>
-            </div>
-          </div>
-
-          <div class="resume-element-container education">
-            <div class="demarcation"></div>
-            <div class="left-content"> <p>Aug 2010 - May 2014</p></div>
-            <div id="uiuc" class="resume-content">
-              <h2 itemprop="alunmiOf">University of Illinois Urbana-Champaign</h2>
-              <p itemprop="major">BS Electrical Engineering. hundreds of hours of coursework, thousands of dollars and I've only used 1 course professionally: CS 225, Data Structures. I'll traverse that tree for ya. Impressed?</p>
-            </div>
-          </div>
-
-          <div class="resume-element-container education">
-            <div class="demarcation"></div>
-            <div class="left-content"> <p>June 2014 - Sept 2014</p></div>
-            <div id="dbc" class="resume-content">
-              <h2 itemprop="alumniOf">Dev Bootcamp</h2>
-              <p itemprop="major">1000 hours of Intensive Web Development</p>
-            </div>
-          </div>
-
-          <div class="resume-element-container skills">
-            <div class="demarcation"></div>
-            <div id="frontend" class="resume-content">
-              <h2 itemprop="skill">Frontend Web Development</h2>
-              <p>React, CSS, HTML, Javascript</p>
-            </div>
-          </div>
-
-          <div class="resume-element-container skills">
-            <div class="demarcation"></div>
-            <div id="speaking" class="resume-content">
-              <h2 itemprop="skill">Idea Sharing</h2>
-              <p> 2015 Grace Hopper Celebration Round Table Panelist & <a href="https://girlgeek.io/speaker/stephanie-chou/"> Aug 2015 She's Geeky Panelist</a></p>
-            </div>
-          </div>
-
-          <div class="resume-element-container skills">
-            <div class="demarcation"></div>
-            <div id="french" class="resume-content">
-              <h2 itemprop="skill">Language Learning</h2>
-              <p> I speak conversational French. When I travel, I learn enough to order food i like and count to the number of people I'm traveling with. This way, I can say "table for 5 please!" Then I come home and forget what I learned. My family uses me as a translator.</p>
-            </div>
-          </div>
-        </div>
-        <a class="button action" href="./assets/resume2022.pdf" target="_blank">
-          <div class="button-text">
-            <span >Resumé</span>
-          </div>
-        </a>
-      </div>
-    </div>
-
-    <div class="section" id="journal" itemprop="journal">
-      <div class="content">
-        <div style="flex-direction: column; max-width: 80%; text-align: left;">
-
-          <h1>"I think we dream so we don't have to be apart for so long. If we're in each other's dreams, we can be together all the time."</h1>
-          <h2> - Winnie the Pooh</h2>
-        </div>
-      </div>
-    </div>
-
-    <div class="section" id="about" itemscope itemtype="http://schema.org/Person">
+    <div class="container" id="about" itemscope itemtype="http://schema.org/Person">
       <div class="content" itemprop="about">
-        <h1>Me</h1>
+        <h1>About Me</h1>
 
         <div style="flex-direction: column; max-width: 80%; text-align: left;">
           <h2>Hello there!</h2>
 
-          <p>I am from Chicago (okay, okay... the suburbs) and always will be, no matter where I move. I spent the first two years out of college in San Francisco. Now I'm in Seattle. </p>
+          <p>I am from Chicago (okay, okay... the suburbs). I spent the first two years out of college in San Francisco. Now I'm in Seattle. </p>
 
           <p>I started my engineering journey as an Electrical Engineering student. I was sitting in a class for Power and Energy when, on a whim, I checked if my name was an available domain. It was! So I whipped out my credit card and bought it.</p>
 
-          <p>Why frontend web development? That feeling when you refresh a browser and see your work materialize is addictive.</p>
-
-          <p>If it’s too gray and rainy to hike, you'll find me bouldering or attempting to throw some pottery (My pandemic hobby and newest obsession).<p>
-
-          <p>Bye!</p>
-
-          <p>P.S. Try this recipe for <a href="http://nytimes.com/recipes/11376-no-knead-bread" target="_blank">No-Knead Bread</a>. It’s basically witchcraft.</p>
-
+          <p>If it’s too gray and rainy to hike, you'll find me playing board games or attempting to throw some pottery (My pandemic hobby and newest obsession).<p>
         </div>
       </div>
-      <div id="about-background" class="content-background"></div>
-      <div class="about-canvas content-background"></div>
     </div>
 
-    <div class="section" id="contact" itemprop="contact">
-      <div class="content" style="margin: 100px 0px;">
+    <div class="container" id="resume" itemscope itemtype="http://schema.org/Person">
+      <div class="content">
+        <div id="resume" class="resume-container" style="opacity:1;">
+          <div class="resume-container-section">
+            <h1>Experience</h1>
+            <div>
+              <div class="resume-element-container">
+                <div class="resume-date"><p>Feb 2022-Now</p></div>
+                <div id="imdb" class="resume-content">
+                  <p class="resume-title" itemprop="jobTitle">Engineering Manager</p>
+                  <p class="resume-subtitle"><span itemprop="affiliation">Shopify</span></p>
+                </div>
+              </div>
+              
+              <div class="resume-element-container">
+                <div class="resume-date"><p>Nov 2019 - Feb 2022</p></div>
+                <div id="imdb" class="resume-content">
+                  <p class="resume-title" itemprop="jobTitle">Software Development Manager</p>
+                  <p class="resume-subtitle"><span itemprop="affiliation">IMDb</span></p>
+                </div>
+              </div>
+
+              <div class="resume-element-container">
+                <div class="resume-date"><p>Mar 2017 - Nov 2019</p></div>
+                <div id="amazon" class="resume-content">
+                  <p class="resume-title" itemprop="jobTitle">Frontend Software Engineer</p>
+                  <p class="resume-subtitle"><span itemprop="affiliation">Amazon</span></p>
+                </div>
+              </div>
+
+              <div class="resume-element-container">
+                <div class="resume-date"><p>Dec 2014 - Feb 2017</p></div>
+                <div id="appd" class="resume-content">
+                  <p class="resume-title" itemprop="jobTitle">Software Engineer</p>
+                  <p class="resume-subtitle"><span itemprop="affiliation">AppDynamics</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="resume-container-section">
+            <h1>Education</h1>
+            <div> 
+              <div class="resume-element-container education">
+                <div class="resume-date"><p>2014</p></div>
+                <div id="uiuc" class="resume-content">
+                  <p class="resume-title" itemprop="major">Bachelor of Science Electrical Engineering</p>
+                  <p class="resume-subtitle" itemprop="alunmiOf">University of Illinois Urbana-Champaign</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" id="journal" itemprop="journal">
+      <div class="content">
+        <div class="column-container">
+          <div>
+            <h2>"I think we dream so we don't have to be apart for so long. If we're in each other's dreams, we can be together all the time."</h2>
+            <h4> - Winnie the Pooh</h4>
+          </div>
+          <div class="button-container">
+            <div class="button"><a href="https://stephaniechou.com/dream_journal">Enter the Dream Journal</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" id="contact" itemprop="contact">
+      <div class="content">
         <h1>This is a Work in Progress</h1>
-
-        <h2>Just like me</h2>
-
+        <a href="https://stephaniechou.com/assets/resume2022.pdf">Click to see Resume</a>
         <div style="flex-direction: row;">
           <a href="https://www.linkedin.com/in/stephaniechou1" target="_blank"><img src="assets/images/linkedin.svg" class="icon" alt="linkedin"></a>
           <a href="http://www.github.com/Stephanie-Chou" target="_blank"><img src="assets/images/github.svg" class="icon" alt="github"></a>
           <a href="https://www.instagram.com/hellojello92/"target="_blank"><img src="assets/images/instagram.png" class="icon" alt="instagram"></a>
         </div>
-
       </div>
     </div>
   </main>
@@ -197,7 +140,6 @@
 
 
   <script src="./js/greeting.js" type="text/javascript"></script>
-  <script src="./js/resumeDuration.js" type="text/javascript"></script>
   <script src="./js/main.js" type="text/javascript"></script>
 </body>
 </html>
