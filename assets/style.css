@@ -147,7 +147,7 @@ a:hover {
     width: 100%;
     padding: 0px;
     top:0px;
-    background-color: #fc8bab;
+    background-color: #f8cbab;
     color: #192340;
   }
 }
@@ -163,7 +163,7 @@ a:hover {
   right: 0px;
   z-index: -1;
   overflow: hidden;
-  background: #fc8bab;
+  background: #f8cbab;
 }
 
 @media all and (max-width:768px){
@@ -352,6 +352,44 @@ a:hover {
   font-style: italic;
 }
 
+
+/*SKILLS*/
+.proficiency-title {
+  color: #192340;
+  text-transform: uppercase;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.proficiencies-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: 200px;
+  width: 100%;
+}
+
+.proficiency-bar-container {
+  height: 20px;
+  position: relative;
+}
+
+.proficiency-bar {
+  background-color: #d16210;
+  width: 180px;
+  height: 20px;
+  position: absolute;
+  top:0;
+  left:0;
+}
+
+.proficiency-bar-under {
+  background-color: #f8cbab;
+  width: 200px;
+  height: 20px;
+  position: absolute;
+  top:0;
+  left:0;
+}
+
 /*LOGO*/
 
 .avatar {
@@ -391,6 +429,16 @@ a:hover {
 #journal {
   background-color: #bf9850;
   color: #192340;
+}
+
+#skills {
+  background-color: #f2e1ae;
+  color: #192340;
+}
+
+#skills h4 {
+  color: #d16210;
+  font-family: 'Montserrat', sans-serif;
 }
 
 #about {
