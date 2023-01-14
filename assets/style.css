@@ -419,16 +419,37 @@ a:hover {
 
 /*LOGO*/
 
+@media all and (max-width:768px){
 .avatar {
-  width: 15vh;
   height: 30vh;
-  transform: translate(-12.5px, 0px) rotate(0deg);
+  opacity: 1;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+}}
+
+@media all and (min-width:768px){
+.avatar {
+  height: 50vh;
   opacity: 1;
   border-top-left-radius: 50%;
   border-top-right-radius: 50%;
   border-bottom-left-radius: 50%;
   border-bottom-right-radius: 50%;
 }
+}
+@media all and (min-width:1024px){
+.avatar {
+  height: 60vh;
+  opacity: 1;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+}
+}
+
 
 
 @keyframes fadeTo {
