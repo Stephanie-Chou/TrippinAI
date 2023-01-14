@@ -5,7 +5,7 @@ body {
   height: 100%;
   width: 100%;
   margin: 0px;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Gotu', sans-serif;
 }
 
 @media all and (device-width:768px) and (device-height:1024px) and (orientation:portrait){body{height:1024px}
@@ -15,11 +15,10 @@ body {
 
 h1{
   font-weight:300;
-  font-family: 'Copse', serif;
 }
 
 @media all and (max-width:768px){
-  h1{font-size:3rem}
+  h1{font-size:2rem}
 }
 
 @media all and (min-width:768px){
@@ -122,7 +121,6 @@ a:hover {
     width: 100%;
     padding: 0px;
     top:0px;
-/*    height: 80vh;*/
   }
 }
 
@@ -149,7 +147,7 @@ a:hover {
     width: 100%;
     padding: 0px;
     top:0px;
-    background-color: #f8cbab;
+    background-color: #fc8bab;
     color: #192340;
   }
 }
@@ -168,17 +166,13 @@ a:hover {
   background: #fc8bab;
 }
 
-
 @media all and (max-width:768px){
   .column-container {
     flex-direction: column;
-    max-width: 80%;
-    text-align: left;
     display: grid;
+    max-width: 80%;
   }
 }
-
-
 
 @media all and (min-width:1024px){
   .column-container {
@@ -264,39 +258,59 @@ a:hover {
   color: #d16210;
   text-transform: uppercase;
   font-weight: 800;
+  font-family: 'Montserrat', sans-serif;
 }
 
 /*RESUME*/
 
-  .resume-container {
-    text-align: left;
-    width: 80%;
-    justify-content: center;
-    margin-bottom: 2rem;
-  }
+.resume-container {
+  text-align: left;
+  width: 80%;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
 
-  .resume-container h1 {
-    color: #fff4eb;
-  }
+.resume-container h1 {
+  color: #fff4eb;
+}
 
-  .resume-container-section {
+
+
+@media all and (max-width:768px){
+  .resume-container-section {}
+}
+
+@media all and (min-width:768px){
+    .resume-container-section {
       display: grid;
       grid-auto-flow: column;
       grid-auto-columns: 1fr;
-  }
 
-  .resume-element-container .resume-date {
-    color: #f26b5e;
   }
-  
-  .resume-element-container .resume-title {
-    text-transform: uppercase;
-    color: #fff4eb;
-  }
+}
+@media all and (min-width:1024px){
+    .resume-container-section {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 1fr;
 
-  .resume-element-container .resume-subtitle {
-    color: #fff4eb;
   }
+}
+
+.resume-element-container .resume-date {
+  color: #f26b5e;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.resume-element-container .resume-title {
+  text-transform: uppercase;
+  color: #fff4eb;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.resume-element-container .resume-subtitle {
+  color: #fff4eb;
+}
 
 
 /*JOURNAL SECTION*/
@@ -304,10 +318,12 @@ a:hover {
 #journal h2 {
   text-transform: uppercase;
   font-weight: 800;
+  font-family: 'Montserrat', sans-serif;
 }
 
 #journal h4 {
   color: #f8cbab;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .button-container {
@@ -374,6 +390,7 @@ a:hover {
 
 #journal {
   background-color: #bf9850;
+  color: #192340;
 }
 
 #about {
@@ -384,4 +401,5 @@ a:hover {
 
 #about h1{
   color: #fff4eb;
+  font-family: 'Montserrat', sans-serif;
 }
