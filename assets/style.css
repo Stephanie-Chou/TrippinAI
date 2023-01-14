@@ -430,14 +430,13 @@ a:hover {
 /*LOGO*/
 
 @media all and (max-width:768px){
-.avatar {
-  height: 30vh;
-  opacity: 1;
-  border-top-left-radius: 50%;
-  border-top-right-radius: 50%;
-  border-bottom-left-radius: 50%;
-  border-bottom-right-radius: 50%;
-}}
+  .avatar {
+    height: 30vh;
+    opacity: 1;
+    border-radius: 500px;
+  }
+}
+
 
 @media all and (min-width:768px){
 .avatar {
