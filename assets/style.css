@@ -360,13 +360,6 @@ a:hover {
   font-family: 'Montserrat', sans-serif;
 }
 
-.proficiencies-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-auto-rows: 200px;
-  width: 80%;
-}
-
 @media all and (max-width:768px){
   .proficiencies-container {
     display: grid;
