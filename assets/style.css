@@ -397,6 +397,7 @@ a:hover {
   background-color: #d16210;
   height: 20px;
   position: absolute;
+  border-radius:500px;
   top:0;
   left:0;
 }
@@ -406,6 +407,7 @@ a:hover {
   width: 200px;
   height: 20px;
   position: absolute;
+  border-radius:500px;
   top:0;
   left:0;
 }
