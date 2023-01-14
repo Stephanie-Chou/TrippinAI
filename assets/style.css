@@ -468,6 +468,10 @@ a:hover {
   background-color: #192340;
 }
 
+#contact h4 {
+  color: #d16210;
+  text-transform: uppercase;
+}
 
 #journal {
   background-color: #bf9850;
