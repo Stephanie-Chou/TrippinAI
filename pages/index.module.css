@@ -1,0 +1,132 @@
+@font-face {
+  font-family: "ColfaxAI";
+  src: url(https://cdn.openai.com/API/fonts/ColfaxAIRegular.woff2)
+      format("woff2"),
+    url(https://cdn.openai.com/API/fonts/ColfaxAIRegular.woff) format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "ColfaxAI";
+  src: url(https://cdn.openai.com/API/fonts/ColfaxAIBold.woff2) format("woff2"),
+    url(https://cdn.openai.com/API/fonts/ColfaxAIBold.woff) format("woff");
+  font-weight: bold;
+  font-style: normal;
+}
+.main,
+.main input {
+  font-size: 16px;
+  line-height: 24px;
+  color: #2D2D2D;
+  font-family: "ColfaxAI", Helvetica, sans-serif;
+}
+.main {
+  display: flex;
+  flex-direction: column;
+  padding-top: 60px;
+  margin: auto;
+  background-color: #FFFF;
+}
+.main .input {
+  margin: auto;
+}
+.main .icon {
+  width: 34px;
+}
+.main h3 {
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: bold;
+  color: #202123;
+  margin: 16px 0 40px;
+}
+.main form {
+  display: flex;
+  flex-direction: column;
+  width: 320px;
+}
+.main input[type="text"] {
+  padding: 12px 16px;
+  border: 1px solid #10a37f;
+  border-radius: 4px;
+  margin-bottom: 24px;
+  outline-color: #10a37f;
+}
+.main ::placeholder {
+  color: #8e8ea0;
+  opacity: 1;
+}
+.main input[type="submit"] {
+  padding: 12px 0;
+  color: #fff;
+  background-color: #10a37f;
+  border: none;
+  border-radius: 4px;
+  text-align: center;
+  cursor: pointer;
+}
+.main .result {
+  font-weight: thin;
+  margin-top: 40px;
+}
+
+.main td, .main th {
+  border: 1px solid #ddd;
+  padding: 8px;
+  font-size: 12px;
+}
+
+.main tr:nth-child(even){background-color: #f2f2f2;}
+
+.main tr:hover {background-color: #ddd;}
+
+.main th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+}
+
+.main .itineraryPage {
+  height: 100vh;
+  min-width: 320px;
+  width: 600px;
+  margin-bottom: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #F9F5F0;
+}
+
+.itineraryPage .container {
+  margin: 20px;
+}
+
+.main .itineraryPage .header {
+  height: 20vh;
+  padding-top: 20px;
+}
+
+.itineraryPage .longDescription {
+  text-align: justify;
+  margin: 24px 0;
+}
+
+.tag {
+  height: 40px;
+  width: 120px;
+  margin: 24px 0;
+  background-color: #2D2D2D;
+  color: #F9F5F0;
+  padding: 4px;
+}
+
+.tag .tagHeader {
+  font-size: 18px;
+  text-transform: uppercase;
+}
+
+.tag .tagSubheader {
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+
