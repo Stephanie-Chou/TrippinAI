@@ -9,8 +9,11 @@ export default function Home() {
   const [cityInput, setCityInput] = useState("");
   const [dayTrips, setDayTrips] = useState();
   const [activities, setActivities] = useState();
-  const [stream, setStream] = useState("");
+  const [loading, setLoading] = useState(false);
 
+  function renderLoader() {
+    return loading? <div className={styles.ldsellipsis}><div></div><div></div><div></div><div></div></div> : null;
+  }
   function renderWalkingTourShort(tour) {
     return tour.map((step) => {
       return <li>{step.name}</li>
@@ -102,7 +105,6 @@ export default function Home() {
   }
 
   async function fetchDayTrips() {
-      console.log('fetch day trips');
       const response = await fetch("/api/generateDayTrip", {
         method: "POST",
         headers: {
@@ -127,7 +129,6 @@ export default function Home() {
           try {
             const text = JSON.parse(data).text ?? "";
             streamResponse+= text;
-            setStream((prev) => prev + text);
           } catch (e) {
             console.error(e);
           }
@@ -147,13 +148,14 @@ export default function Home() {
       }
 
       if (done){
+        console.log("day trips", JSON.parse(streamResponse))
         setDayTrips(JSON.parse(streamResponse).day_trips);
+
       }
 
   }
 
   async function fetchActivities() {
-      console.log('fetch activities');
       const response = await fetch("/api/generateActivity", {
         method: "POST",
         headers: {
@@ -177,7 +179,6 @@ export default function Home() {
           try {
             const text = JSON.parse(data).text ?? "";
             streamResponse+= text;
-            setStream((prev) => prev + text);
           } catch (e) {
             console.error(e);
           }
@@ -197,20 +198,23 @@ export default function Home() {
       }
 
       if (done){
+        console.log("activities", JSON.parse(streamResponse))
         setActivities(JSON.parse(streamResponse).activities);
+        setLoading(false);
       }
       
   }
   async function onSubmit(event) {
+    setLoading(true);
     event.preventDefault();
     fetchActivities();
-    // fetchDayTrips();
+    fetchDayTrips();
   }
 
   return (
     <div>
       <Head>
-        <title>OpenAI Quickstart</title>
+        <title>Trip Planner</title>
       </Head>
 
       <main className={styles.main}>
@@ -226,9 +230,9 @@ export default function Home() {
             />
             <input type="submit" value="Plan it for Me" />
           </form>
+          {renderLoader()}
         </div>
         <div className={styles.result}>
-          streamed {stream}
           {renderDayItineraries()}
           {renderDayTripItinerary()}
         </div>

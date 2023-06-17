@@ -56,16 +56,10 @@ export async function OpenAIStream(payload) {
         }
         try {
           const json = JSON.parse(data);
-          console.log("JSON ", json.choices[0])
           const text = json.choices[0].text || "";
-        //   if (counter < 2 && (text.match(/\n/) || []).length) {
-        //     // this is a prefix character (i.e., "\n\n"), do nothing
-        //     return;
-        //   }
           // stream transformed JSON resposne as SSE
           const payload = {text: text};
 
-          console.log("~~TEXT",  text);
           // https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
           controller.enqueue(
             encoder.encode(`data: ${JSON.stringify(payload)}\n\n`)
