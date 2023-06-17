@@ -50,7 +50,7 @@ export default async function (req) {
 function generateActivityPrompt(city) {
   const capitalizedCity =
     city[0].toUpperCase() + city.slice(1).toLowerCase();
-    return `A json string including the top 3 sites to see in a city as well as 2 recommended day trips for a first time tourist. JSON object should contain activities, an array of activity objects. The JSON object should also contain day_trips, an array of day_trip objects.
+    return `A json string including the top 3 sites to see in a city as well as 2 recommended day trips for a first time tourist. JSON object should contain activities, an array of activity objects.
 
     City: Rome
     itinerary: {

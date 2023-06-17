@@ -132,9 +132,9 @@
 
 /** loading spinner */
 .ldsellipsis {
-  display: inline-block;
   position: relative;
   width: 80px;
+  margin: auto;
   height: 80px;
 }
 .ldsellipsis div {
@@ -144,6 +144,7 @@
   height: 13px;
   border-radius: 50%;
   background: #000;
+
   animation-timing-function: cubic-bezier(0, 1, 1, 0);
 }
 .ldsellipsis div:nth-child(1) {

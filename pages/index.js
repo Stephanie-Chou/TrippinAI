@@ -9,10 +9,19 @@ export default function Home() {
   const [cityInput, setCityInput] = useState("");
   const [dayTrips, setDayTrips] = useState();
   const [activities, setActivities] = useState();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState({
+    activities: false,
+    dayTrips: false,
+  });
 
   function renderLoader() {
-    return loading? <div className={styles.ldsellipsis}><div></div><div></div><div></div><div></div></div> : null;
+    const {activities, dayTrips} = loading;
+    return (activities || dayTrips) ? 
+      <div>
+        <div className={styles.ldsellipsis}><div></div><div></div><div></div><div></div></div>
+        {activities ? "Loading Activities " : null}
+        {dayTrips ? "Loading Day Trips" : null}
+      </div>: null;
   }
   function renderWalkingTourShort(tour) {
     return tour.map((step) => {
@@ -148,9 +157,12 @@ export default function Home() {
       }
 
       if (done){
-        console.log("day trips", JSON.parse(streamResponse))
+        console.log("day trips", streamResponse);
         setDayTrips(JSON.parse(streamResponse).day_trips);
-
+        setLoading((prev) => ({
+          activities: prev.activities,
+          dayTrips: false,
+        }));
       }
 
   }
@@ -198,17 +210,23 @@ export default function Home() {
       }
 
       if (done){
-        console.log("activities", JSON.parse(streamResponse))
+        console.log("activities", streamResponse)
         setActivities(JSON.parse(streamResponse).activities);
-        setLoading(false);
+        setLoading((prev) => ({
+          activities: false,
+          dayTrips: prev.dayTrips,
+        }));
       }
       
   }
   async function onSubmit(event) {
-    setLoading(true);
+    setLoading({
+      activities:true,
+      dayTrips: true,
+    });
     event.preventDefault();
     fetchActivities();
-    fetchDayTrips();
+    // fetchDayTrips();
   }
 
   return (
