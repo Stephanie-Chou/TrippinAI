@@ -5,6 +5,9 @@ import {
   createParser,
 } from "eventsource-parser";
 
+import Page from "./Page";
+import Itinerary from "./Itinerary";
+
 export default function Home() {
   const [cityInput, setCityInput] = useState("");
   const [dayTrips, setDayTrips] = useState([]);
@@ -26,68 +29,45 @@ export default function Home() {
       </div>: null;
   }
 
-  function renderWalkingTourShort(tour) {
-    if (!tour) return null;
-    console.log('short tour ', tour);
-
-    return tour.map((step) => {
-      return <li>{step.name}</li>
-    });
-  }
-
-  function renderWalkingTourLong(neighborhood, tour) {
+  function renderWalkingTourLong(tour) {
     if (!tour) return null;
     return (
-      <div>
+      <ol>
         {tour.map((step) => <li>{step.name}: {step.desc}</li>)}
-      </div>
+      </ol>
     );
   }
 
-  function renderDayItineraries() {
+  function renderDays() {
     if (!activities) return;
+    let subheader;
     return activities.map((day) => {
+      subheader = "Day " + day.day;
       return (
-        <div>
-          <div className={styles.itineraryPage}>
-            <div className={styles.header}>
-            <div className={styles.tag}>
-              <div className={styles.tagHeader}>{cityInput}</div>
-              <div className={styles.tagSubheader}>Day {day.day}</div>
-            </div>
-            </div>
-            <div className={styles.container}>
-              <table>
-                <tr>
-                  <th> Date and Location </th>
-                  <th> Description </th>
-                </tr>
-                <tr>
-                  <td>{day.site}</td>
-                  <td>{day.short_desc}</td>
-                </tr>
-                <tr>
-                  <td> <div>Lunch</div> {day.food.lunch.name}</td>
-                  <td>{day.food.lunch.desc}</td>
-                </tr>
-                <tr>
-                  <td>Walking tour of {day.neighborhood}</td>
-                  <td>
-                    <ol>{renderWalkingTourShort(day.walking_tour)}</ol>
-                  </td>
-                </tr>
-                <tr>
-                  <td> <div>Dinner</div> {day.food.dinner.name}</td>
-                  <td>{day.food.dinner.desc}</td>
-                </tr>
-              </table>
+        <>
+          <Page
+            header={cityInput}
+            subheader={subheader}
+          >
+            <Itinerary day={day}/>
+          </Page>
+          
+          <Page
+            header={cityInput}
+            subheader={subheader}
+          >
+            <h2> {day.site}</h2>
+            {day.long_desc}
+          </Page>
 
-              <h2> {neighborhood} Walking Tour</h2>
-              {day.long_desc}
-              {renderWalkingTourLong(day.neighborhood, day.walking_tour)}
-            </div>
-          </div>
-        </div>
+          <Page
+            header={cityInput}
+            subheader={subheader}
+          >
+            <h2> {day.neighborhood} Walking Tour</h2>
+            {renderWalkingTourLong(day.walking_tour)}
+          </Page>
+        </>
       )
     });
   }
@@ -97,15 +77,11 @@ export default function Home() {
 
     return dayTrips.map((trip) => {
       return (
-        <div className={styles.itineraryPage}>
-          <div className={styles.header}>
-            <div className={styles.tag}>
-              <div className={styles.tagHeader}>{cityInput}</div>
-              <div className={styles.tagSubheader}>Day Trip</div>
-            </div>
-          </div>
-          <div className={styles.container}>
-            <h1>{trip.name}</h1>
+        <Page
+          header={cityInput}
+          subheader="Day Trip"
+        >
+          <h1>{trip.name}</h1>
             <div className={styles.longDescription}>{trip.long_desc}</div>
             <table>
               <tr>
@@ -125,8 +101,7 @@ export default function Home() {
                 <td>{trip.food.desc}</td>
               </tr>
             </table>
-          </div>
-        </div>
+        </Page>     
       )
     })
 
@@ -226,8 +201,77 @@ export default function Home() {
       dayTrips: true,
     });
     event.preventDefault();
+/*
+    let sampleResponse = [{
+        "day":"1",
+        "neighborhood": "Dinard",
+        "site": "Pointe du Moulinet",
+        "short_desc":"Iconic Dinard landmark known for its stunning views.",
+        "long_desc": "Pointe du Moulinet is one of Dinard's most popular attractions, offering stunning views of the Emerald Coast and a dramatic promontory that stretches out into the sea. Take a stroll along the boardwalk and admire the picturesque landscape with its white-sand beaches and crystal-clear waters.",
+        "walking_tour":[
+          {"name": "Les Planches Promenade", "desc": ""},
+          {"name": "Dinard Casino", "desc": ""},
+          {"name": "Villa Maria", "desc": ""}
+        ],
+        "food": {
+          "lunch": {
+            "name":  "Le Grand Bleu",
+            "desc": "Taste fresh seafood specialties, such as moules marinières, in an elegant setting with stunning views."
+          },
+          "dinner": {
+            "name":  "La Verrière",
+            "desc": "Enjoy classic French cuisine with a twist in a cozy atmosphere."
+          }
+        }
+      },
+      {
+        "day":"2",
+        "neighborhood": "St Malo",
+        "site": "St Malo Old Town",
+        "short_desc": "Dramatic fortified city with cobblestone streets and picturesque views.",
+        "long_desc": "Explore the historic streets of St Malo's old town, a walled city filled with cobblestone lanes and picturesque views of the sea. Visit the iconic Grand Bé, an ancient fortress with a rich history, and marvel at the impressive ramparts that encircle the old town.",
+        "walking_tour": [
+          {"name": "Château de St Malo", "desc": ""},
+          {"name": "Cathedral of St Vincent", "desc": ""},
+          {"name": "Grand Bé", "desc": ""}
+        ],
+        "food": {
+          "lunch": {
+            "name":  "La Table de Marius",
+            "desc": "Treat yourself to a delicious seafood meal in a cozy atmosphere in the heart of St Malo."
+          },
+          "dinner": {
+            "name":  "La Boucanerie",
+            "desc": "Indulge in traditional Breton cuisine, including buckwheat pancakes and seafood dishes."
+          }
+        }
+      },
+      {
+        "day":"3",
+        "neighborhood": "Dinan",
+        "site": "Dinan Old Town",
+        "short_desc": "Charming medieval town with cobblestone streets and half-timbered houses.",
+        "long_desc": "Dinan is a picturesque medieval town located on the banks of the Rance River. Explore the cobblestone streets and admire the half-timbered houses, as well as the many churches and monuments that dot the landscape. Discover unique boutiques and soak up the atmosphere of this charming town.",
+        "walking_tour": [
+          {"name": "Porte St-Malo", "desc": ""},
+          {"name": "Place des Merciers", "desc": ""},
+          {"name": "Tourelles du Château", "desc": ""}
+        ],
+        "food": {
+          "lunch": {
+            "name":  "Le Vieux Logis",
+            "desc": "Enjoy a delightful meal in a charming setting, featuring traditional French cuisine with a modern twist."
+          },
+          "dinner": {
+            "name":  "La Petite Maison du Vieux Dinan",
+            "desc": "Indulge in delicious Breton dishes, such as cotriade, while admiring the beautiful views of Dinan."
+          }
+        }
+      }];
+
+    setActivities(sampleResponse);*/
     fetchActivities();
-    // fetchDayTrips();
+    fetchDayTrips();
   }
 
   async function getStreamResponse(data) {
@@ -281,7 +325,7 @@ export default function Home() {
           {renderLoader()}
         </div>
         <div className={styles.result}>
-          {renderDayItineraries()}
+          {renderDays()}
           {renderDayTripItinerary()}
         </div>
       </main>
