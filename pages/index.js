@@ -226,7 +226,7 @@ export default function Home() {
     });
     event.preventDefault();
     fetchActivities();
-    // fetchDayTrips();
+    fetchDayTrips();
   }
 
   return (
