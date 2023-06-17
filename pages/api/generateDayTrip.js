@@ -101,3 +101,29 @@ function generateDayTripPrompt(city) {
     day_trips:
     `;
 }
+
+/*
+sample response
+{
+  "day_trips":[
+    {
+      "name":"Snoqualmie Falls",
+      "short_desc":"Witness the power of nature at one of the most iconic waterfalls in the Pacific Northwest.",
+      "long_desc":"Snoqualmie Falls is a breathtaking 270-foot waterfall located in the foothills of the Cascade Mountains. Take in the majestic beauty of this natural wonder and enjoy a picnic lunch in the lush forest surroundings.",
+      "food":{
+        "name":"Salish Lodge & Spa",
+        "desc":"Enjoy a delicious meal at Salish Lodge & Spa, located just steps away from the falls. Their award-winning cuisine features local ingredients and regional specialties"
+      }
+    },
+    {
+      "name":"Seattle Waterfront",
+      "short_desc":"Explore the vibrant waterfront of Seattle.",
+      "long_desc":"Stroll along the Seattle Waterfront and take in the lively sights and sounds of the city. Browse the local crafts and souvenirs in the shops, then grab a bite to eat at one of the many eateries that line the waterfront.",
+      "food":{
+        "name":"The Crab Pot",
+        "desc":"Feast on a variety of seafood specialties, such as their famous seafood platters featuring fresh-caught Dungeness crab, clams, mussels, and shrimp"
+      }
+    }
+  ]
+}
+*/

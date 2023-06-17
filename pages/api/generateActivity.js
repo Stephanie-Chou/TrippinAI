@@ -64,15 +64,15 @@ function generateActivityPrompt(city) {
           "walking_tour": [
             {
               "name": "Roman Forum",
-              "desc":"Immerse yourself in the ruins of the political and social center of Ancient Rome, filled with temples, basilicas, and ancient buildings."
+              "desc":""
             },
             {
               "name": "Palatine Hill",
-              "desc":"Explore the birthplace of Rome's civilization and enjoy panoramic views of the city from this historic hill."
+              "desc":""
             },
             {
               "name": "Circus Maximus",
-              "desc":"Wander through the ancient chariot racing stadium and imagine the excitement of the games that once took place here."
+              "desc":""
             }
           ],
           "food": {
@@ -95,15 +95,15 @@ function generateActivityPrompt(city) {
           "walking_tour": [
             {
               "name": "St. Peter's Basilica",
-              "desc":"Discover the largest church in the world, known for its breathtaking architecture and religious significance."
+              "desc":""
             },
             {
               "name": "Vatican Gardens",
-              "desc":"Stroll through the beautifully landscaped gardens, filled with lush greenery, fountains, and sculptures."
+              "desc":""
             },
             {
               "name": "Castel Sant'Angelo",
-              "desc":"Visit this ancient fortress and former papal residence, offering panoramic views of Rome from its terrace."
+              "desc":""
             }
           ],
           "food": {
@@ -126,15 +126,15 @@ function generateActivityPrompt(city) {
           "walking_tour": [
             {
               "name": "Villa Farnesina",
-              "desc":"Explore this Renaissance villa adorned with exquisite frescoes by renowned artists like Raphael."
+              "desc":""
             },
             {
               "name": "Gianicolo Hill",
-              "desc":"Climb to the top of this hill for stunning views of Rome's skyline and the opportunity to witness the traditional midday cannon firing."
+              "desc":""
             },
             {
               "name": "Isola Tiberina",
-              "desc":"Cross the Tiber River to reach this charming island and take a leisurely stroll along its picturesque streets."
+              "desc":""
             }
           ],
           "food": {
@@ -159,9 +159,9 @@ function generateActivityPrompt(city) {
         "short_desc": " Historic farmers' market known for fresh produce, seafood, and eclectic shops.",
         "long_desc": "Established in 1907, Pike Place Market is one of the oldest continuously operated public farmers' markets in the U.S. It offers an exciting blend of local produce, fresh seafood, specialty foods, artisan crafts, and lively atmosphere.",
         "walking_tour": [
-          {"name": "Seattle Waterfront", "desc" :"Take a stroll along the waterfront, enjoying views of Elliott Bay and exploring attractions like the Seattle Aquarium."},
-          {"name": "Post Alley", "desc" :"Wander through the charming Post Alley, known for its quirky shops, street art, and the famous Gum Wall."},
-          {"name": "Seattle Art Museum (SAM)","desc" :"Visit the renowned art museum and explore its diverse collection spanning contemporary art to ancient artifacts."}
+          {"name": "Seattle Waterfront", "desc" :""},
+          {"name": "Post Alley", "desc" :""},
+          {"name": "Seattle Art Museum (SAM)","desc" :""}
         ],
         "food":{
           "lunch": {"name": "Pike Place Chowder", "desc": "Indulge in delicious and hearty chowders featuring fresh local ingredients."},
@@ -175,9 +175,9 @@ function generateActivityPrompt(city) {
         "short_desc":"Seattle's iconic under-bridge troll sculpture.",
         "long_desc": " A quirky public art installation in Seattle's Fremont neighborhood, featuring a massive troll sculpture clutching a real-life Volkswagen Beetle under a bridge. It's a must-see for visitors seeking unique and playful attractions.",
         "walking_tour": [
-          {"name": "Fremont Sunday Market", "desc": "Browse the eclectic mix of crafts, vintage items, and local produce at this vibrant open-air market."},
-          {"name": "Gas Works Park", "desc": "Enjoy panoramic views of the Seattle skyline and explore the unique industrial remnants of a gasification plant turned park."},
-          {"name": "Theo Chocolate Factory", "desc": "Take a guided tour of the organic and fair-trade chocolate factory, and indulge in delicious samples."}
+          {"name": "Fremont Sunday Market", "desc": ""},
+          {"name": "Gas Works Park", "desc": ""},
+          {"name": "Theo Chocolate Factory", "desc": ""}
         ],
         "food":{
           "lunch": {"name": "Paseo Caribbean Food", "desc": "Savor mouthwatering Caribbean sandwiches filled with flavorful marinated meats and spices."},
@@ -191,9 +191,9 @@ function generateActivityPrompt(city) {
         "short_desc":"Serene urban park with water tower viewpoint.",
         "long_desc":"Seattle's Volunteer Park is a peaceful urban escape, where visitors can enjoy the beauty of a Victorian-style conservatory, walk along scenic paths, and admire panoramic views from the historic water tower. It's a perfect spot to unwind and connect with nature in the heart of the city.",
         "walking_tour": [
-          {"name": "Broadway Avenue", "desc": "Explore the bustling heart of Capitol Hill, lined with trendy boutiques, cafes, and vibrant nightlife."},
-          {"name": "Volunteer Park Conservatory", "desc": "Discover the beautiful Victorian-style glasshouse, showcasing a diverse collection of plants from around the world."},
-          {"name": "Elliott Bay Book Company", "desc": "Get lost in the stacks of this iconic independent bookstore, known for its extensive selection and cozy reading nooks."}
+          {"name": "Broadway Avenue", "desc": ""},
+          {"name": "Volunteer Park Conservatory", "desc": ""},
+          {"name": "Elliott Bay Book Company", "desc": ""}
         ],
         "food":{
           "lunch": {"name": "Stateside", "desc": "Enjoy a fusion of French and Vietnamese flavors, with dishes like banh mi and crispy duck rolls."},

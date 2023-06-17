@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./index.module.css";
 import {
   createParser,
@@ -7,13 +7,15 @@ import {
 
 export default function Home() {
   const [cityInput, setCityInput] = useState("");
-  const [dayTrips, setDayTrips] = useState();
-  const [activities, setActivities] = useState();
+  const [dayTrips, setDayTrips] = useState([]);
+  const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState({
     activities: false,
     dayTrips: false,
   });
 
+  useEffect(() => {fetchWalkingTours(activities)}, [activities])
+  
   function renderLoader() {
     const {activities, dayTrips} = loading;
     return (activities || dayTrips) ? 
@@ -23,12 +25,25 @@ export default function Home() {
         {dayTrips ? "Loading Day Trips" : null}
       </div>: null;
   }
+
   function renderWalkingTourShort(tour) {
+    if (!tour) return null;
+    console.log('short tour ', tour);
+
     return tour.map((step) => {
       return <li>{step.name}</li>
     });
   }
-  
+
+  function renderWalkingTourLong(neighborhood, tour) {
+    if (!tour) return null;
+    return (
+      <div>
+        {tour.map((step) => <li>{step.name}: {step.desc}</li>)}
+      </div>
+    );
+  }
+
   function renderDayItineraries() {
     if (!activities) return;
     return activities.map((day) => {
@@ -66,6 +81,10 @@ export default function Home() {
                   <td>{day.food.dinner.desc}</td>
                 </tr>
               </table>
+
+              <h2> {neighborhood} Walking Tour</h2>
+              {day.long_desc}
+              {renderWalkingTourLong(day.neighborhood, day.walking_tour)}
             </div>
           </div>
         </div>
@@ -126,45 +145,17 @@ export default function Home() {
         throw new Error(`Request failed with status ${response.statusText}`);
       }
 
-     // This data is a ReadableStream
-     const data = response.body;
-     if (!data) {
-       return;
-     }
-     let streamResponse = "";
-      const onParse = (event) => {
-        if (event.type === "event") {
-          const data = event.data;
-          try {
-            const text = JSON.parse(data).text ?? "";
-            streamResponse+= text;
-          } catch (e) {
-            console.error(e);
-          }
-        }
+      const data = response.body;
+      if (!data) {
+        return;
       }
-  
-      // https://web.dev/streams/#the-getreader-and-read-methods
-      const reader = data.getReader();
-      const decoder = new TextDecoder();
-      const parser = createParser(onParse);
-      let done = false;
-      while (!done) {
-        const { value, done: doneReading } = await reader.read();
-        done = doneReading;
-        const chunkValue = decoder.decode(value);
-        parser.feed(chunkValue);
-      }
-
-      if (done){
-        console.log("day trips", streamResponse);
+      getStreamResponse(data).then((streamResponse) => {
         setDayTrips(JSON.parse(streamResponse).day_trips);
         setLoading((prev) => ({
           activities: prev.activities,
           dayTrips: false,
         }));
-      }
-
+      });
   }
 
   async function fetchActivities() {
@@ -184,41 +175,51 @@ export default function Home() {
      if (!data) {
        return;
      }
-     let streamResponse = "";
-      const onParse = (event) => {
-        if (event.type === "event") {
-          const data = event.data;
-          try {
-            const text = JSON.parse(data).text ?? "";
-            streamResponse+= text;
-          } catch (e) {
-            console.error(e);
-          }
-        }
-      }
-  
-      // https://web.dev/streams/#the-getreader-and-read-methods
-      const reader = data.getReader();
-      const decoder = new TextDecoder();
-      const parser = createParser(onParse);
-      let done = false;
-      while (!done) {
-        const { value, done: doneReading } = await reader.read();
-        done = doneReading;
-        const chunkValue = decoder.decode(value);
-        parser.feed(chunkValue);
+     getStreamResponse(data).then((streamResponse) => {
+      setActivities(JSON.parse(streamResponse).activities);
+      setLoading((prev) => ({
+        activities: false,
+        dayTrips: prev.dayTrips,
+      }));
+     });
+  }
+
+  function fetchWalkingTours(activities) {
+      activities.forEach((activity) => {
+        fetchWalkingTour(activity)
+      })
+    }
+
+    async function fetchWalkingTour(activity) {
+      let neighborhood = activity.neighborhood;
+      let tourStops = activity.walking_tour.map((stop) => stop.name);
+
+      const response = await fetch("/api/generateWalkingTour", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ neighborhood, tourStops }),
+      });
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.statusText}`);
       }
 
-      if (done){
-        console.log("activities", streamResponse)
-        setActivities(JSON.parse(streamResponse).activities);
-        setLoading((prev) => ({
-          activities: false,
-          dayTrips: prev.dayTrips,
-        }));
-      }
-      
+    // This data is a ReadableStream
+    const data = response.body;
+    if (!data) {
+      return;
+    }
+
+    getStreamResponse(data).then((streamResponse) => {
+      let updatedActivities = activities;
+      updatedActivities[activity.day-1].walking_tour = JSON.parse(streamResponse);
+      console.log('updated activities ', neighborhood, updatedActivities);
+      setActivities(updatedActivities);
+    });
+
   }
+
   async function onSubmit(event) {
     setLoading({
       activities:true,
@@ -226,7 +227,36 @@ export default function Home() {
     });
     event.preventDefault();
     fetchActivities();
-    fetchDayTrips();
+    // fetchDayTrips();
+  }
+
+  async function getStreamResponse(data) {
+    let streamResponse = "";
+    const onParse = (event) => {
+      if (event.type === "event") {
+        const data = event.data;
+        try {
+          const text = JSON.parse(data).text ?? "";
+          streamResponse+= text;
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+
+    // https://web.dev/streams/#the-getreader-and-read-methods
+    const reader = data.getReader();
+    const decoder = new TextDecoder();
+    const parser = createParser(onParse);
+    let done = false;
+    while (!done) {
+      const { value, done: doneReading } = await reader.read();
+      done = doneReading;
+      const chunkValue = decoder.decode(value);
+      parser.feed(chunkValue);
+    }
+
+    return streamResponse;
   }
 
   return (
