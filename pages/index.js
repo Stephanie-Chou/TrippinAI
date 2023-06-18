@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { useState, useEffect, use } from "react";
 import styles from "./index.module.css";
+
 import {
   createParser,
 } from "eventsource-parser";
@@ -32,8 +33,8 @@ export default function Home() {
     return (activities || dayTrips) ? 
       <div>
         <div className={styles.ldsellipsis}><div></div><div></div><div></div><div></div></div>
-        {activities ? "Loading Activities " : null}
-        {dayTrips ? "Loading Day Trips" : null}
+        {activities ? "...Loading Activities" : null}
+        {dayTrips ? " ...Loading Day Trips" : null}
       </div>: null;
   }
 
@@ -64,7 +65,7 @@ export default function Home() {
             header={locationName}
             subheader={subheader}
           >
-            <h2> {day.site}</h2>
+            <h3> {day.site}</h3>
             {day.long_desc}
           </Page>
 
@@ -72,7 +73,7 @@ export default function Home() {
             header={locationName}
             subheader={subheader}
           >
-            <h2> {day.neighborhood} Walking Tour</h2>
+            <h3> {day.neighborhood} Walking Tour</h3>
             {renderWalkingTourLong(day.walking_tour)}
           </Page>
         </>
@@ -255,6 +256,9 @@ export default function Home() {
           const text = JSON.parse(data).text ?? "";
           streamResponse+= text;
           setStream(streamResponse);
+          if (streamResponse.length > 300) {
+            streamResponse="";
+          }
         } catch (e) {
           console.error(e);
         }
@@ -280,29 +284,36 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>Trip Planner</title>
+        <title>JourneyGenie - The AI Powered Travel Planner</title>
+        <link rel="icon" href="/JourneyGenieLogo_thick.png" />
       </Head>
 
       <main className={styles.main}>
-        <div className={styles.input}>
-          <h3>Trip Planner 1.0 - {cityInput}</h3>
-          <form onSubmit={onSubmit}>
-            <input
-              type="text"
-              name="city"
-              placeholder="Tell me where you are going (city)"
-              value={cityInput}
-              onChange={(e) => {
-                setCityInput(e.target.value);
-                setLocationName(e.target.value);
-              }}
-            />
-            <input type="submit" value="Plan it for Me" />
-          </form>
-          {renderLoader()}
+        <div className={styles.hero}>
+          <div className={styles.input}>
+            <img src="/JourneyGenieLogo_thick.png" className={styles.icon} />
+            <h2>JourneyGenie</h2>
+            <h4> The AI Powered Travel Planner </h4>
+            <form onSubmit={onSubmit}>
+              <input
+                type="text"
+                name="city"
+                placeholder="Tell me where you are going (city)"
+                value={cityInput}
+                onChange={(e) => {
+                  setCityInput(e.target.value);
+                  setLocationName(e.target.value);
+                }}
+              />
+              <input type="submit" value="Plan it for Me" />
+            </form>
+            {renderLoader()}
+          </div>
         </div>
+                
         <div className={styles.result}>
           <div className={styles.stream}>{stream}</div>
+          {locationName ? <h4>Travel Plan for <span className={styles.cityName}> {locationName} </span></h4> : ""}
           {renderDays()}
           {renderDayTripItinerary()}
         </div>
