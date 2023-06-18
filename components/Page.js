@@ -1,9 +1,9 @@
-import styles from "./index.module.css";
+import styles from "./page.module.css";
 
 export default function Page({header, subheader, children}) {
     return (
         <div>
-          <div className={styles.itineraryPage}>
+          <div className={styles.page}>
             <div className={styles.header}>
             <div className={styles.tag}>
               <div className={styles.tagHeader}>{header}</div>

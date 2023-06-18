@@ -5,8 +5,8 @@ import {
   createParser,
 } from "eventsource-parser";
 
-import Page from "./Page";
-import Itinerary from "./Itinerary";
+import Page from "../components/Page";
+import Itinerary from "../components/Itinerary";
 
 export default function Home() {
   const [cityInput, setCityInput] = useState("");

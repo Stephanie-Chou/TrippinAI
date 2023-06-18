@@ -86,50 +86,6 @@
   text-align: left;
 }
 
-.main .itineraryPage {
-  height: 100vh;
-  min-width: 320px;
-  width: 600px;
-  margin-bottom: 10px;
-  margin-left: auto;
-  margin-right: auto;
-  background-color: #F9F5F0;
-}
-
-.itineraryPage .container {
-  margin: 20px;
-}
-
-.main .itineraryPage .header {
-  height: 20vh;
-  padding-top: 20px;
-}
-
-.itineraryPage .longDescription {
-  text-align: justify;
-  margin: 24px 0;
-}
-
-.tag {
-  height: 40px;
-  width: 120px;
-  margin: 24px 0;
-  background-color: #2D2D2D;
-  color: #F9F5F0;
-  padding: 4px;
-}
-
-.tag .tagHeader {
-  font-size: 18px;
-  text-transform: uppercase;
-}
-
-.tag .tagSubheader {
-  font-size: 12px;
-  text-transform: uppercase;
-}
-
-
 /** loading spinner */
 .stream {
   font-size: 4px;
