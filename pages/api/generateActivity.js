@@ -60,7 +60,7 @@ function generateActivityPrompt(city) {
           "neighborhood": "Ancient Rome",
           "site": "Colosseum",
           "short_desc": "Iconic amphitheater of Ancient Rome, known for gladiatorial contests.",
-          "long_desc": "Step into the grandeur of Ancient Rome at the Colosseum, the largest amphitheater ever built. Discover the history of gladiators, explore the vast arena, and marvel at the architectural masterpiece that has stood for centuries.",
+          "long_desc": "",
           "walking_tour": [
             {
               "name": "Roman Forum",
@@ -91,7 +91,7 @@ function generateActivityPrompt(city) {
           "neighborhood": "Vatican City",
           "site": "Vatican Museums",
           "short_desc": "World-renowned art collection, including the Sistine Chapel.",
-          "long_desc": "Explore the vast art collection of the Vatican Museums, housing masterpieces from different periods and cultures. Marvel at the stunning frescoes in the Sistine Chapel painted by Michelangelo and admire works by renowned artists like Raphael and Leonardo da Vinci.",
+          "long_desc": "",
           "walking_tour": [
             {
               "name": "St. Peter's Basilica",
@@ -122,7 +122,7 @@ function generateActivityPrompt(city) {
           "neighborhood": "Trastevere",
           "site": "Piazza Santa Maria in Trastevere",
           "short_desc": "Lively square in the charming Trastevere neighborhood.",
-          "long_desc": "Immerse yourself in the vibrant atmosphere of Trastevere at Piazza Santa Maria in Trastevere. Admire the beautiful Basilica of Santa Maria in Trastevere, relax at a café while people-watching, and soak up the lively energy of this picturesque square.",
+          "long_desc": "",
           "walking_tour": [
             {
               "name": "Villa Farnesina",
@@ -157,7 +157,7 @@ function generateActivityPrompt(city) {
         "neighborhood": "Pike Place Market",
         "site": "Pike Place Market",
         "short_desc": " Historic farmers' market known for fresh produce, seafood, and eclectic shops.",
-        "long_desc": "Established in 1907, Pike Place Market is one of the oldest continuously operated public farmers' markets in the U.S. It offers an exciting blend of local produce, fresh seafood, specialty foods, artisan crafts, and lively atmosphere.",
+        "long_desc": "",
         "walking_tour": [
           {"name": "Seattle Waterfront", "desc" :""},
           {"name": "Post Alley", "desc" :""},
@@ -173,7 +173,7 @@ function generateActivityPrompt(city) {
         "neighborhood": "Fremont",
         "site": "Fremont Troll",
         "short_desc":"Seattle's iconic under-bridge troll sculpture.",
-        "long_desc": " A quirky public art installation in Seattle's Fremont neighborhood, featuring a massive troll sculpture clutching a real-life Volkswagen Beetle under a bridge. It's a must-see for visitors seeking unique and playful attractions.",
+        "long_desc": "",
         "walking_tour": [
           {"name": "Fremont Sunday Market", "desc": ""},
           {"name": "Gas Works Park", "desc": ""},
@@ -189,7 +189,7 @@ function generateActivityPrompt(city) {
         "neighborhood": "Capitol Hill",
         "site": "Volunteer Park",
         "short_desc":"Serene urban park with water tower viewpoint.",
-        "long_desc":"Seattle's Volunteer Park is a peaceful urban escape, where visitors can enjoy the beauty of a Victorian-style conservatory, walk along scenic paths, and admire panoramic views from the historic water tower. It's a perfect spot to unwind and connect with nature in the heart of the city.",
+        "long_desc":"",
         "walking_tour": [
           {"name": "Broadway Avenue", "desc": ""},
           {"name": "Volunteer Park Conservatory", "desc": ""},

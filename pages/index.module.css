@@ -131,6 +131,12 @@
 
 
 /** loading spinner */
+.stream {
+  font-size: 4px;
+  display: inline-block;
+}
+
+/** loading spinner */
 .ldsellipsis {
   position: relative;
   width: 80px;
