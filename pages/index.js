@@ -248,16 +248,18 @@ export default function Home() {
   }
 
   async function getStreamResponse(data) {
-    let streamResponse = "";
+    let streamResponse = ""; // for the data to serve
+    let streamResponseRender = ""; // for the rendering. this gets cut off
     const onParse = (event) => {
       if (event.type === "event") {
         const data = event.data;
         try {
           const text = JSON.parse(data).text ?? "";
           streamResponse+= text;
-          setStream(streamResponse);
-          if (streamResponse.length > 300) {
-            streamResponse="";
+          streamResponseRender+= text;
+          setStream(streamResponseRender);
+          if (streamResponseRender.length > 300) {
+            streamResponseRender="";
           }
         } catch (e) {
           console.error(e);
