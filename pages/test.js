@@ -1,7 +1,99 @@
 import Head from "next/head";
 import { useState } from "react";
+import styles from "./index.module.css";
 
 export default function Test() {
+  const interests = ["Food", "Off the beaten path", "Adventure", "History"];
+
+  const [testInput, setTestInput] = useState("");
+  const [result, setResult] = useState();
+  const [checkedState, setCheckedState] = useState(
+    interests.map((interest) => ({name: interest, isChecked: false}))
+);
+
+
+
+async function onSubmit(event) {
+    event.preventDefault();
+
+    const interests = checkedState.map((item) => item.isChecked? item.name : "").filter((n)=>n).join()
+    try {
+      const response = await fetch("/api/generateTest", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ input: testInput, interests: interests }),
+      });
+
+      const data = await response.json();
+      if (response.status !== 200) {
+        throw data.error || new Error(`Request failed with status ${response.status}`);
+      }
+
+      setResult(data.result);
+      setTestInput("");
+    } catch(error) {
+      // Consider implementing your own error handling logic here
+      console.error(error);
+      alert(error.message);
+    }
+  }
+
+  const handleOnChange = (position) => {
+    const updatedCheckedState = checkedState.map((item, index) =>
+      index === position ? {name: item.name, isChecked: !item.isChecked} : item
+    );
+
+    setCheckedState(updatedCheckedState)
+  }
+
+  return (
+    <div>
+      <Head>
+        <title>OpenAI Quickstart</title>
+      </Head>
+
+      <main className={styles.main}>
+        <h3>Test Prompts</h3>
+        <form onSubmit={onSubmit}>
+          <input
+            type="text"
+            name="city"
+            placeholder="Enter a city"
+            value={testInput}
+            onChange={(e) => setTestInput(e.target.value)}
+          />
+
+          Interests
+
+          {
+            interests.map((interest, index) => {
+              return (
+                <div key={index}>
+                  <input
+                    type="checkbox"
+                    id={`interest-checkbox-${index}`}
+                    name={interest}
+                    value={interest}
+                    checked={checkedState[index].isChecked}
+                    onChange={() => handleOnChange(index)
+                  }/>
+                  <label htmlFor={`interest-checkbox-${index}`}>{interest}</label>
+                </div>
+                
+              )
+            })
+          }
+          <input type="submit" value="Generate Result" />
+        </form>
+        <div className={styles.result}>{result}</div>
+      </main>
+    </div>
+  );
+}
+
+
 	        /**
     * let sample_response ={
       "activities":[{
@@ -202,7 +294,3 @@ June 17 15:00
       }];
 
     setActivities(sampleResponse);*/
-	return (
-		<div> hello world</div>
-	);
-}

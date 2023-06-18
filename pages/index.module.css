@@ -791,7 +791,6 @@
   padding: 12px 16px;
   border: 1px solid #7EC7B2;
   border-radius: 4px;
-  margin-bottom: 24px;
   outline-color: #7EC7B2;
 }
 .main ::placeholder {
@@ -806,6 +805,13 @@
   border-radius: 4px;
   text-align: center;
   cursor: pointer;
+}
+
+.main .checkboxes {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 24px;
 }
 .main .result {
   font-weight: thin;

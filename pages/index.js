@@ -10,11 +10,16 @@ import Page from "../components/Page";
 import Itinerary from "../components/Itinerary";
 
 export default function Home() {
+  const interests = ["Food", "Off the beaten path", "Adventure", "History"];
+
   const [cityInput, setCityInput] = useState("");
   const [locationName, setLocationName] = useState("");
   const [dayTrips, setDayTrips] = useState([]);
   const [activities, setActivities] = useState([]);
   const [stream, setStream] = useState("");
+  const [checkedState, setCheckedState] = useState(
+    interests.map((interest) => ({name: interest, isChecked: false}))
+);
   const [loading, setLoading] = useState({
     activities: false,
     dayTrips: false,
@@ -84,11 +89,12 @@ export default function Home() {
   function renderDayTripItinerary() {
     if (!dayTrips) return;
 
-    return dayTrips.map((trip) => {
+    return dayTrips.map((trip, index) => {
       return (
         <Page
           header={locationName}
           subheader="Day Trip"
+          id={index}
         >
           <h1>{trip.name}</h1>
             <div className={styles.longDescription}>{trip.long_desc}</div>
@@ -164,6 +170,7 @@ export default function Home() {
       return;
     }
     getStreamResponse(data).then((streamResponse) => {
+      console.log('activities ', streamResponse)
       setActivities(JSON.parse(streamResponse).activities);
       setLoading((prev) => ({
         activities: false,
@@ -174,8 +181,10 @@ export default function Home() {
   }
 
   async function fetchSiteDescriptions(activities) {
+    const interests = checkedState.map((item) => item.isChecked? item.name : "").filter((n)=>n).join()
+
     for (let i = 0; i< activities.length; i++) {
-      fetchSiteDescription(activities[i])
+      fetchSiteDescription(activities[i], interests)
     }
   }
   function fetchWalkingTours(activities) {    
@@ -184,13 +193,13 @@ export default function Home() {
     }
   }
 
-  async function fetchSiteDescription(activity) {
+  async function fetchSiteDescription(activity, interests) {
     const response = await fetch("/api/generateSiteDescription", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ location: activity.site }),
+      body: JSON.stringify({ location: activity.site, interests: interests }),
     });
 
     if (!response.ok) {
@@ -205,7 +214,8 @@ export default function Home() {
 
     getStreamResponse(data).then((streamResponse) => {
       let updatedActivities = activities;
-      updatedActivities[activity.day-1].long_desc = JSON.parse(streamResponse);
+      console.log('description ', streamResponse);
+      updatedActivities[activity.day-1].long_desc = streamResponse;
       setActivities(updatedActivities);
     });
   }
@@ -283,6 +293,13 @@ export default function Home() {
     return streamResponse;
   }
 
+  const handleOnChange = (position) => {
+    const updatedCheckedState = checkedState.map((item, index) =>
+      index === position ? {name: item.name, isChecked: !item.isChecked} : item
+    );
+
+    setCheckedState(updatedCheckedState)
+  }
   return (
     <div>
       <Head>
@@ -307,6 +324,27 @@ export default function Home() {
                   setLocationName(e.target.value);
                 }}
               />
+              <p>Any particular Interests?</p>
+              <div className={styles.checkboxes}> 
+                {
+                  interests.map((interest, index) => {
+                    return (
+                      <div key={index}>
+                        <input
+                          type="checkbox"
+                          id={`interest-checkbox-${index}`}
+                          name={interest}
+                          value={interest}
+                          checked={checkedState[index].isChecked}
+                          onChange={() => handleOnChange(index)
+                        }/>
+                        <label htmlFor={`interest-checkbox-${index}`}>{interest}</label>
+                      </div>
+                      
+                    )
+                  })
+                }
+              </div>
               <input type="submit" value="Plan it for Me" />
             </form>
             {renderLoader()}
