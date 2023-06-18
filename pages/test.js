@@ -11,8 +11,6 @@ export default function Test() {
     interests.map((interest) => ({name: interest, isChecked: false}))
 );
 
-
-
 async function onSubmit(event) {
     event.preventDefault();
 

@@ -26,9 +26,12 @@ export default function Home() {
   });
 
   useEffect(() => {
+    console.log('use effect fetch activities');
     fetchActivities(dayTrips)
   }, [dayTrips]);
   useEffect(() => {
+    console.log('use effect fetch post activities');
+
     fetchWalkingTours(activities);
     fetchSiteDescriptions(activities);
   }, [activities]);
@@ -345,7 +348,7 @@ export default function Home() {
                   })
                 }
               </div>
-              <input type="submit" value="Plan it for Me" />
+              <input type="submit" value="Plan It" />
             </form>
             {renderLoader()}
           </div>
