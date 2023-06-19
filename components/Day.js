@@ -1,5 +1,6 @@
 import Page from "./Page";
 import Itinerary from "./Itinerary";
+import styles from "./day.module.css";
 
 function renderWalkingTourLong(tour) {
     if (!tour) return null;
@@ -10,6 +11,8 @@ function renderWalkingTourLong(tour) {
     );
   }
 export default function Day({activity, food, neighborhood, subheader, locationName}) {
+    const {walking_tour, image} = neighborhood;
+    let urls = !image ? '' : image.urls;
     return (
         <>
           <Page
@@ -36,7 +39,10 @@ export default function Day({activity, food, neighborhood, subheader, locationNa
             subheader={subheader}
           >
             <h3> {neighborhood.name} Walking Tour</h3>
-            {renderWalkingTourLong(neighborhood.walking_tour)}
+            {renderWalkingTourLong(walking_tour)}
+
+            {urls ? <img className={styles.image} src={urls.regular} /> : null}
+            
           </Page>
         </>
     );

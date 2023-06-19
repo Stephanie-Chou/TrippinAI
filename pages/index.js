@@ -19,7 +19,7 @@ export default function Home() {
 
   // Itinerary Model State
   const [dayTrips, setDayTrips] = useState([]);
-  const [meta, setMeta] = useState();
+  const [meta, setMeta] = useState(); // array of activities and array of neighborhood names
   const [activities, setActivities] = useState([]);
   const [neighborhoods, setNeighborhoods] = useState([]);
   const [food, setFood] = useState([]);
@@ -42,12 +42,12 @@ export default function Home() {
   }, [meta]);
 
   useEffect(() => {
-    renderDays(activities, neighborhoods, food, tripLength)
+    renderDays(activities, neighborhoods, food, tripLength);
   }, [activities, neighborhoods, food, tripLength])
 
   useEffect(() => {
   }, [errorMessages])
-  
+
   /***********************
   * RENDER FUNCTIONS
   ************************/
@@ -74,6 +74,7 @@ export default function Home() {
           food={food[i]}
           subheader={subheader}
           locationName={locationName}
+          key={i}
         />
       )
     })
@@ -120,6 +121,7 @@ export default function Home() {
   async function fetchActivities() {
     if (!cityInput) return;
     const selectedInterests = checkedState.map((item) => item.isChecked? item.name : "").filter((n)=>n).join()
+    console.log(`fetching with inputs  ${cityInput} days: ${tripLength}` )
 
     const response = await fetch("/api/generateActivity", {
       method: "POST",
@@ -277,6 +279,7 @@ export default function Home() {
      ]
    */
   async function fetchWalkingTour(neighborhood, index) {
+    console.log(`fetch walking tour for ${neighborhood.name}`);
     const response = await fetch("/api/generateWalkingTour", {
       method: "POST",
       headers: {
@@ -294,6 +297,7 @@ export default function Home() {
       return;
     }
 
+    fetchImage(neighborhood, index);
     getStreamResponse(data).then((streamResponse) => {
       const json = jsonParse(streamResponse);
       if (!json) return;
@@ -304,16 +308,44 @@ export default function Home() {
     });
   }
 
+  async function fetchImage(neighborhood, index) {
+    if (!neighborhoods || neighborhoods.length === 0) return;
+    console.log(`fetch image for ${neighborhood.name}`);
+    try {
+      const response = await fetch("/api/fetchUnsplashImage", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ locationName, neighborhood: neighborhood.name })
+    });
+
+      const data = await response.json();
+      if (response.status !== 200) {
+        throw data.error || new Error(`Request failed with status ${response.status}`);
+      }
+
+      let updatedNeighborhoods = neighborhoods;
+      updatedNeighborhoods[index].image = data.images[0];
+      setNeighborhoods(updatedNeighborhoods);
+    } catch(error) {
+      // Consider implementing your own error handling logic here
+      console.error(error);
+      alert(error.message);
+    }
+  }
   function initializeItineraryStates() {
     const initActivities = Array.from({length: tripLength}, () => ({
       name:"",
       short_desc:"",
-      long_desc:""
+      long_desc:"",
+      image: {}
     }));
 
     const initNeighborhoods = Array.from({length: tripLength}, () => ({
       name: "",
-      walking_tour: []
+      walking_tour: [],
+      image: {}
     }));
 
     const initFood = Array.from({length: tripLength}, () => ({
@@ -404,7 +436,7 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>JourneyGenie - The AI Powered Travel Planner</title>
+        <title>Trippin - The AI Powered Travel Planner</title>
         <link rel="icon" href="/JourneyGenieLogo_thick.png" />
       </Head>
 
@@ -412,7 +444,7 @@ export default function Home() {
         <div className={styles.hero}>
           <div className={styles.input}>
             <img src="/JourneyGenieLogo_thick.png" className={styles.icon} />
-            <h2>JourneyGenie</h2>
+            <h2>Trippin</h2>
             <h4> The AI Powered Travel Planner </h4>
             <form onSubmit={onSubmit}>
               <input

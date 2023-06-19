@@ -1,37 +1,52 @@
 import Head from "next/head";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import styles from "./index.module.css";
 
 export default function Test() {
   const interests = ["Food", "Off the beaten path", "Adventure", "History"];
 
   const [testInput, setTestInput] = useState("");
-  const [result, setResult] = useState();
+  const [result, setResult] = useState([]);
   const [checkedState, setCheckedState] = useState(
     interests.map((interest) => ({name: interest, isChecked: false}))
   );
 
   const [selectState, setSelectState] = useState(3);
-
+  const PhotoComp = ({ photo }) => {
+    const { user, urls } = photo;
+  
+    return (
+      <Fragment>
+        <img src={urls.regular} />
+        <a
+          target="_blank"
+          href={`https://unsplash.com/@${user.username}`}
+        >
+          {user.name}
+        </a>
+      </Fragment>
+    );
+  };
 async function onSubmit(event) {
     event.preventDefault();
 
     const interests = checkedState.map((item) => item.isChecked? item.name : "").filter((n)=>n).join()
     try {
-      const response = await fetch("/api/generateTest", {
+      const response = await fetch("/api/fetchUnsplashImage", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ input: testInput, interests: interests, tripLength: selectState }),
-      });
+        body: JSON.stringify({ input: testInput, interests: interests, tripLength: selectState })
+    });
 
       const data = await response.json();
       if (response.status !== 200) {
         throw data.error || new Error(`Request failed with status ${response.status}`);
       }
 
-      setResult(data.result);
+      console.log('return data ', data);
+      setResult(data.images);
       setTestInput("");
     } catch(error) {
       // Consider implementing your own error handling logic here
@@ -95,7 +110,15 @@ async function onSubmit(event) {
           }
           <input type="submit" value="Generate Result" />
         </form>
-        <div className={styles.result}>{result}</div>
+        <div className={styles.result}>
+          <ul>
+            {result.map(photo => (
+              <li key={photo.id}>
+                <PhotoComp photo={photo} />
+              </li>
+            ))}
+          </ul>
+        </div>
       </main>
     </div>
   );
