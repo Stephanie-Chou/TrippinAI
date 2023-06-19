@@ -9,10 +9,10 @@ export const config = {
 };
 
 export default async function (req) {
-  const { city, interests } = (await req.json()) 
-  console.log(city, interests);
+  const { city, interests, tripLength } = (await req.json());
+  console.log(city, interests, tripLength);
 
-  const prompt = generateActivityPrompt(city, interests);
+  const prompt = generateActivityPrompt(city, interests, tripLength);
 
   if (!prompt) {
     return new Response("No prompt in the request", { status: 400 });
@@ -47,15 +47,16 @@ export default async function (req) {
 };
 
 // generate a list of activities in a city
-function generateActivityPrompt(city, interests) {
+function generateActivityPrompt(city, interests, tripLength) {
   if (!interests) {
     interests = "general"
   }
   const capitalizedCity =
     city[0].toUpperCase() + city.slice(1).toLowerCase();
-    return `I am a tourist visiting a location. I want a list of 3 activities to do in that location that are relevant to my interests. My interests are ${interests}. each activity should include the neighborhood where it is located. Return valid JSON containing the activities and the neighborhoods
+    return `I am a tourist visiting a location. I want a list of ${tripLength} activities to do in that location that are relevant to my interests. My interests are ${interests}. each activity should include the neighborhood where it is located. Return valid JSON containing the activities and the neighborhoods
     City: Seattle
     interests: History
+    tripLength: 3
     return: {
       "activities": ["Underground Tour", "Museum of History & Industry (MOHAI)", "Klondike Gold Rush National Historical Park"],
       "neighborhoods": ["Pioneer Square", "South Lake Union (SLU)", "Downtown Seattle"]
@@ -63,20 +64,23 @@ function generateActivityPrompt(city, interests) {
   
     City: Seattle
     interests: Off the Beaten Path
+    tripLength: 2
     return: {
-      "activities": ["Georgetown Art Attack", "Waterfall Garden Park", "Fremont Sunday Market"],
-      "neighborhoods": ["Georgetown", "Pioneer Square", "Fremont"]
+      "activities": ["Georgetown Art Attack", "Fremont Sunday Market"],
+      "neighborhoods": ["Georgetown", "Fremont"]
     }
   
     City: Seattle
     interests: food
+    tripLength: 4
     return: {
-      "activities": ["Pike Place Market", "Food tour on Capitol Hill", "Ballard Farmers Market"],
-      "neighborhoods": ["Pike Place Market", "Capitol Hill", "Ballard"]
+      "activities": ["Pike Place Market", "Food tour on Capitol Hill", "Ballard Farmers Market", "Fremont Brewery Tour"],
+      "neighborhoods": ["Pike Place Market", "Capitol Hill", "Ballard", "Fremont"]
     }
   
     City: Seattle
     interests: culture
+    tripLength: 3
     return: {
       "activities": ["Seattle Art Museum (SAM)", "Chihuly Garden and Glass", "Wing Luke Museum of the Asian Pacific American Experience"],
       "neighborhoods": ["Downtown Seattle", "Seattle Center", "Industrial District"]
@@ -84,9 +88,10 @@ function generateActivityPrompt(city, interests) {
 
     City: Seattle
     interests: general
+    tripLength: 5
     return: {
-      "activities": ["Pike Place Market", "Underground Tour", "Chihuly Garden and Glass"],
-      "neighborhoods": ["Pike Place Market", "Pioneer Square", "Seattle Center"]
+      "activities": ["Pike Place Market", "Underground Tour", "Chihuly Garden and Glass", "Seattle Art Museum (SAM)", "Golden Gardens Park"],
+      "neighborhoods": ["Pike Place Market", "Pioneer Square", "Seattle Center", "Downtown Seattle", "Ballard"]
     }
   
     City: ${city}
@@ -94,75 +99,3 @@ function generateActivityPrompt(city, interests) {
     return:
   `;
 }
-
-
-/** 
- * {
-      "activities": [{
-        "day":"1",
-        "neighborhood": "Dinard",
-        "site": "Pointe du Moulinet",
-        "short_desc":"Iconic Dinard landmark known for its stunning views.",
-        "long_desc": "Pointe du Moulinet is one of Dinard's most popular attractions, offering stunning views of the Emerald Coast and a dramatic promontory that stretches out into the sea. Take a stroll along the boardwalk and admire the picturesque landscape with its white-sand beaches and crystal-clear waters.",
-        "walking_tour":[
-          {"name": "Les Planches Promenade", "desc": ""},
-          {"name": "Dinard Casino", "desc": ""},
-          {"name": "Villa Maria", "desc": ""}
-        ],
-        "food": {
-          "lunch": {
-            "name":  "Le Grand Bleu",
-            "desc": "Taste fresh seafood specialties, such as moules marinières, in an elegant setting with stunning views."
-          },
-          "dinner": {
-            "name":  "La Verrière",
-            "desc": "Enjoy classic French cuisine with a twist in a cozy atmosphere."
-          }
-        }
-      },
-      {
-        "day":"2",
-        "neighborhood": "St Malo",
-        "site": "St Malo Old Town",
-        "short_desc": "Dramatic fortified city with cobblestone streets and picturesque views.",
-        "long_desc": "Explore the historic streets of St Malo's old town, a walled city filled with cobblestone lanes and picturesque views of the sea. Visit the iconic Grand Bé, an ancient fortress with a rich history, and marvel at the impressive ramparts that encircle the old town.",
-        "walking_tour": [
-          {"name": "Château de St Malo", "desc": ""},
-          {"name": "Cathedral of St Vincent", "desc": ""},
-          {"name": "Grand Bé", "desc": ""}
-        ],
-        "food": {
-          "lunch": {
-            "name":  "La Table de Marius",
-            "desc": "Treat yourself to a delicious seafood meal in a cozy atmosphere in the heart of St Malo."
-          },
-          "dinner": {
-            "name":  "La Boucanerie",
-            "desc": "Indulge in traditional Breton cuisine, including buckwheat pancakes and seafood dishes."
-          }
-        }
-      },
-      {
-        "day":"3",
-        "neighborhood": "Dinan",
-        "site": "Dinan Old Town",
-        "short_desc": "Charming medieval town with cobblestone streets and half-timbered houses.",
-        "long_desc": "Dinan is a picturesque medieval town located on the banks of the Rance River. Explore the cobblestone streets and admire the half-timbered houses, as well as the many churches and monuments that dot the landscape. Discover unique boutiques and soak up the atmosphere of this charming town.",
-        "walking_tour": [
-          {"name": "Porte St-Malo", "desc": ""},
-          {"name": "Place des Merciers", "desc": ""},
-          {"name": "Tourelles du Château", "desc": ""}
-        ],
-        "food": {
-          "lunch": {
-            "name":  "Le Vieux Logis",
-            "desc": "Enjoy a delightful meal in a charming setting, featuring traditional French cuisine with a modern twist."
-          },
-          "dinner": {
-            "name":  "La Petite Maison du Vieux Dinan",
-            "desc": "Indulge in delicious Breton dishes, such as cotriade, while admiring the beautiful views of Dinan."
-          }
-        }
-      }]
-    }
- */

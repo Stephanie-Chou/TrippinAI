@@ -18,6 +18,9 @@ export default async function (req, res) {
 
   const input = req.body.input || '';
   const interests = req.body.interests || 'General';
+  const tripLength = req.body.tripLength || 3;
+
+  console.log(tripLength, " days long..." )
 
   if (input.trim().length === 0) {
     res.status(400).json({
@@ -31,7 +34,7 @@ export default async function (req, res) {
   try {
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: generatePrompt(input, interests),
+      prompt: generatePrompt(input, interests, tripLength),
       temperature: 0.6,
       max_tokens: 200
     });
@@ -52,94 +55,51 @@ export default async function (req, res) {
   }
 }
 
-/** array of activity objects
-activity object:
-neighborhood
-{
-  name:
-  walking_tour:
-}
-
-food
-{
-  lunch
-  dinner
-}
-
-activity
-  {
-    name:
-    short_desc
-    long_desc
-    neighborhood
+function generatePrompt(city, interests, tripLength) {
+  return `I am a tourist visiting a location. I want a list of ${tripLength} activities to do in that location that are relevant to my interests. My interests are ${interests}. each activity should include the neighborhood where it is located. Return valid JSON containing the activities and the neighborhoods
+  City: Seattle
+  tripLength: 3
+  interests: History
+  return: {
+    "activities": ["Underground Tour", "Museum of History & Industry (MOHAI)", "Klondike Gold Rush National Historical Park"],
+    "neighborhoods": ["Pioneer Square", "South Lake Union (SLU)", "Downtown Seattle"]
   }
 
-
-the number of activities is going to equal the number of days. make an array. the indexes will correlate the day and the activity.
-given the number of days, initialize 3 sets
-
-
-1. activities
-2. foods
-3. neighborhoods
-
-// given a location and parameters, generate a list of activities and their corresponding neighhorhoods.
-
-
-// given a neighborhood, generate a walking tour
-
-// given a neighborhood, generate the lunch and dinner opctions
-
-
-*/ 
-
-
-function generatePrompt(city, interests) {
-
-  return `Given a neighborhood, recommend a lunch and dinner place to eat with description. Should return valid JSON.
-
-  Neighborhood: Pike Place Market
-  food: {
-      "lunch": {"name": "Pike Place Chowder", "desc": "Indulge in delicious and hearty chowders featuring fresh local ingredients."},
-      "dinner": {"name": "Matt's in the Market", "desc": "Enjoy seasonal and locally sourced dishes in a cozy setting above Pike Place Market."}
+  City: Seattle
+  interests: Off the Beaten Path
+  tripLength: 2
+  return: {
+    "activities": ["Georgetown Art Attack", "Fremont Sunday Market"],
+    "neighborhoods": ["Georgetown", "Fremont"]
   }
-  Neighborhood: Fremont
-  food: {
-      "lunch": {"name": "Paseo Caribbean Food", "desc": "Savor mouthwatering Caribbean sandwiches filled with flavorful marinated meats and spices."},
-      "dinner": {"name": "Revel", "desc": "Experience innovative Korean-inspired cuisine in a trendy setting."}
+
+  City: Seattle
+  interests: food
+  tripLength: 4
+  return: {
+    "activities": ["Pike Place Market", "Food tour on Capitol Hill", "Ballard Farmers Market", "Fremont Brewery Tour"],
+    "neighborhoods": ["Pike Place Market", "Capitol Hill", "Ballard", "Fremont"]
   }
-  Neighborhood: Capitol Hill
-  food: {
-      "lunch": {"name": "Stateside", "desc": "Enjoy a fusion of French and Vietnamese flavors, with dishes like banh mi and crispy duck rolls."},
-      "dinner": {"name": "Canon", "desc": "Delight in craft cocktails and an extensive whiskey selection at this award-winning bar and restaurant."}
+
+  City: Seattle
+  interests: culture
+  tripLength: 3
+  return: {
+    "activities": ["Seattle Art Museum (SAM)", "Chihuly Garden and Glass", "Wing Luke Museum of the Asian Pacific American Experience"],
+    "neighborhoods": ["Downtown Seattle", "Seattle Center", "Industrial District"]
   }
-  Neighborhood: Ancient Rome
-  food: {
-      "lunch": { "name":  "Trattoria da Lucia", "desc":"Indulge in traditional Roman cuisine, including pasta, pizza, and classic Roman dishes."},
-      "dinner": { "name":  "Osteria Barberini", "desc":"Experience authentic Roman flavors in a cozy and welcoming atmosphere."}
+
+  City: Seattle
+  interests: general
+  tripLength: 5
+  return: {
+    "activities": ["Pike Place Market", "Underground Tour", "Chihuly Garden and Glass", "Seattle Art Museum (SAM)", "Golden Gardens Park"],
+    "neighborhoods": ["Pike Place Market", "Pioneer Square", "Seattle Center", "Downtown Seattle", "Ballard"]
   }
-  Neighborhood: ${city}
-  food:
+
+  City: ${city}
+  interests: ${interests}
+  return:
+
 `;
 }
-
-
-// City: Rome
-// interests: Adventure
-// Blurb: Rome, a city of adventure, offers thrilling experiences like witnessing the fascinating remnants of early Christian and pagan burial practices in the catacombs, biking along the Appian Way, and discovering hidden gems in its vibrant neighborhoods. Embark on thrilling adventures by exploring ancient ruins, such as the Colosseum and Roman Forum, where you can imagine the epic battles that once took place. 
-// City: Rome
-// interests: History
-// Blurb: Rome, the Eternal City, is a captivating blend of ancient wonders and modern vibrancy, where history comes alive at every turn. From the Colosseum to the Roman Forum, immerse yourself in the rich tapestry of Rome's iconic landmarks and archaeological treasures. The Romans built over 50,000 miles of roads, connecting their vast empire and facilitating trade, communication, and military movements. 
-// City: Rome
-// interests: Off the Beaten Path
-// Blurb: Discover Rome's offbeat activities: explore street art in Ostiense, visit the non-Catholic Cemetery, or take a bike tour along the ancient Appian Way.
-// City: Rome
-// interests: food
-// Blurb: Rome, a gastronomic paradise, tempts food lovers with its mouthwatering pizza, pasta, gelato, and world-class culinary scene. One interesting fact about Roman food is the use of "garum," a fermented fish sauce, as a popular condiment in ancient Roman cuisine. Garum was made by fermenting fish guts and salt and was used to enhance the flavors of various dishes
-// City: Rome
-// interests: general
-// Blurb: 
-// Rome, the Eternal City, home to the Colosseum and Vatican City, offers a blend of ancient wonders and religious treasures, captivating visitors with its 2,500-year-old history.
-// City: ${city}
-// interests: ${interests}
-// Blurb:

@@ -47,8 +47,8 @@ export default function Home() {
   }, [meta]);
 
   useEffect(() => {
-    renderDays(activities, neighborhoods, food)
-  }, [activities, neighborhoods, food])
+    renderDays(activities, neighborhoods, food, tripLength)
+  }, [activities, neighborhoods, food, tripLength])
 
   useEffect(() => {
   }, [errorMessages])
@@ -57,9 +57,9 @@ export default function Home() {
     const {activities, dayTrips} = loading;
     return (activities || dayTrips) ? 
       <div>
-        <div className={styles.ldsellipsis}><div></div><div></div><div></div><div></div></div>
         {activities ? "...Loading Activities" : null}
         {dayTrips ? " ...Loading Day Trips" : null}
+        <div className={styles.ldsellipsis}><div></div><div></div><div></div><div></div></div>
       </div>: null;
   }
 
@@ -193,7 +193,7 @@ export default function Home() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ city: cityInput, interests: selectedInterests }),
+      body: JSON.stringify({ city: cityInput, interests: selectedInterests, tripLength: tripLength }),
     });
     if (!response.ok) {
       throw new Error(`Request failed with status ${response.statusText}`);
@@ -240,6 +240,17 @@ export default function Home() {
       fetchOneFoods(neighborhoods[i], i)
     }
   }
+
+  /**
+   * 
+   * @param {*} neighborhood 
+   * @param {*} index 
+   * @returns 
+   *   food: {
+      "lunch": {"name": "Pike Place Chowder", "desc": "Indulge in delicious and hearty chowders featuring fresh local ingredients."},
+      "dinner": {"name": "Matt's in the Market", "desc": "Enjoy seasonal and locally sourced dishes in a cozy setting above Pike Place Market."}
+  }
+   */
 
   async function fetchOneFoods(neighborhood, index) {
     const response = await fetch("/api/generateFood", {
@@ -516,7 +527,6 @@ export default function Home() {
     // setActivities(activities);
     // setDayTrips(dayTrips);
     fetchDayTrips();
-    fetchActivities();
   }
 
   async function getStreamResponse(data) {
@@ -586,7 +596,25 @@ export default function Home() {
                   setLocationName(e.target.value);
                 }}
               />
-              <p>Any particular Interests?</p>
+
+              <div className={styles.select}>
+                <label forHtml="tripLength">How long are you there?</label>
+                <select 
+                  name="tripLength" 
+                  id="tripLength"
+                  defaultValue={tripLength}
+                  onChange={(e) => setTripLength(parseInt(e.target.value))}
+                >
+                  <option value="1">1 Day</option>
+                  <option value="2">2 Days</option>
+                  <option value="3">3 Days</option>
+                  <option value="4">4 Days</option>
+                  <option value="5">5 Days</option>
+                </select>
+              </div>
+
+
+              <p>Why are you traveling?</p>
               <div className={styles.checkboxes}> 
                 {
                   DEFAULT_INTERESTS.map((interest, index) => {
@@ -609,8 +637,8 @@ export default function Home() {
               </div>
               <input type="submit" value="Plan It" />
             </form>
-            {renderLoader()}
             {errorMessages.join(', ')}
+            {renderLoader()}
           </div>
         </div>
                 
