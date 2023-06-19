@@ -10,14 +10,14 @@ import Page from "../components/Page";
 import Itinerary from "../components/Itinerary";
 
 export default function Home() {
-  const interests = ["Food", "Off the beaten path", "Adventure", "History"];
+  const DEFAULT_INTERESTS = ["Food", "Off the beaten path", "Adventure", "History"];
 
   //Form State
   const [cityInput, setCityInput] = useState("");
   const [locationName, setLocationName] = useState("");
   const [stream, setStream] = useState("");
   const [checkedState, setCheckedState] = useState(
-    interests.map((interest) => ({name: interest, isChecked: false}))
+    DEFAULT_INTERESTS.map((interest) => ({name: interest, isChecked: false}))
   );
   const [tripLength, setTripLength] = useState(3);
 
@@ -186,14 +186,14 @@ export default function Home() {
    */
   async function fetchActivities() {
     if (!cityInput) return;
-    const interests = checkedState.map((item) => item.isChecked? item.name : "").filter((n)=>n).join()
+    const selectedInterests = checkedState.map((item) => item.isChecked? item.name : "").filter((n)=>n).join()
 
     const response = await fetch("/api/generateActivity", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ city: cityInput, interests: interests }),
+      body: JSON.stringify({ city: cityInput, interests: selectedInterests }),
     });
     if (!response.ok) {
       throw new Error(`Request failed with status ${response.statusText}`);
@@ -273,20 +273,18 @@ export default function Home() {
   }
 
   async function fetchActivityDescriptions() {
-    const interests = checkedState.map((item) => item.isChecked? item.name : "").filter((n)=>n).join()
-
     for (let i = 0; i< activities.length; i++) {
-      fetchActivityDescription(activities[i], i, interests)
+      fetchActivityDescription(activities[i], i)
     }
   }
 
-  async function fetchActivityDescription(activity, index, interests) {
+  async function fetchActivityDescription(activity, index) {
     const response = await fetch("/api/generateActivityDescription", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ location: activity.name, interests: interests }),
+      body: JSON.stringify({ location: activity.name, city: cityInput}),
     });
 
     if (!response.ok) {
@@ -517,7 +515,7 @@ export default function Home() {
     // const dayTrips = sample_response.day_trips; // list of daytrip ojects
     // setActivities(activities);
     // setDayTrips(dayTrips);
-    // fetchDayTrips();
+    fetchDayTrips();
     fetchActivities();
   }
 
@@ -591,7 +589,7 @@ export default function Home() {
               <p>Any particular Interests?</p>
               <div className={styles.checkboxes}> 
                 {
-                  interests.map((interest, index) => {
+                  DEFAULT_INTERESTS.map((interest, index) => {
                     return (
                       <div key={index}>
                         <input

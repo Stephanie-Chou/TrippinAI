@@ -9,9 +9,9 @@ export const config = {
 };
 
 export default async function (req) {
-  const { location } = (await req.json()) 
-  console.log("generate site description for ", location);
-  const prompt = generateActivityDescriptionPrompt(location);
+  const { location, city } = (await req.json()) 
+  console.log("generate site description for ", location, city);
+  const prompt = generateActivityDescriptionPrompt(location, city);
 
   if (!prompt) {
     return new Response("No prompt in the request", { status: 400 });
@@ -47,31 +47,31 @@ export default async function (req) {
 
 
 
-function generateActivityDescriptionPrompt(location) {
+function generateActivityDescriptionPrompt(location, city) {
     
-    return `I am a tourist visiting a location. I want to learn something about the location. provide a long description- paragraph ofr 50-60 words describing the location. also provide a short description of 5-10 words.
+    return `I am a tourist visiting a location in a city. I want to learn something about the location. provide a long description- paragraph ofr 50-60 words describing the location. also provide a short description of 5-10 words.
 
-    Location: Colosseum
+    Location: Colosseum Rome
     description: {
       "short_desc": "Iconic amphitheater of Ancient Rome, known for gladiatorial contests.",
       "long_desc": "Step into the grandeur of Ancient Rome at the Colosseum, the largest amphitheater ever built. Discover the history of gladiators, explore the vast arena, and marvel at the architectural masterpiece that has stood for centuries."
     }
-    Location: Vatican Museums
+    Location: Vatican Museums Rome
     description: {
       "short_desc": "World-renowned art collection, including the Sistine Chapel.",
       "long_desc": "Explore the vast art collection of the Vatican Museums, housing masterpieces from different periods and cultures. Marvel at the stunning frescoes in the Sistine Chapel painted by Michelangelo and admire works by renowned artists like Raphael and Leonardo da Vinci."
     }
-    Location: Pike Place Market
+    Location: Pike Place Market Seattle
     description: {
       "short_desc": " Historic farmers' market known for fresh produce, seafood, and eclectic shops.",
       "long_desc": "Established in 1907, Pike Place Market is one of the oldest continuously operated public farmers' markets in the U.S. It offers an exciting blend of local produce, fresh seafood, specialty foods, artisan crafts, and lively atmosphere."
     }
-    Location: Fremont Troll
+    Location: Fremont Troll Seattle
     description: {
       "short_desc":"Seattle's iconic under-bridge troll sculpture.",
       "long_desc": " A quirky public art installation in Seattle's Fremont neighborhood, featuring a massive troll sculpture clutching a real-life Volkswagen Beetle under a bridge. It's a must-see for visitors seeking unique and playful attractions."
     }
-    Location: ${location}
+    Location: ${location} ${city}
     description:
   `
 }
