@@ -9,9 +9,9 @@ export const config = {
 };
 
 export default async function (req) {
-  const { neighborhood, tourStops } = (await req.json()) 
-    console.log(neighborhood, tourStops)
-  const prompt = generateWalkingTourPrompt(neighborhood, tourStops);
+  const { neighborhood } = (await req.json()) 
+    console.log(neighborhood)
+  const prompt = generateWalkingTourPrompt(neighborhood);
 
   if (!prompt) {
     return new Response("No prompt in the request", { status: 400 });
@@ -47,23 +47,23 @@ export default async function (req) {
 
 
 
-function generateWalkingTourPrompt(neighborhood, tourStops) {
+function generateWalkingTourPrompt(neighborhood) {
     
-    return `Given an array of tour stops and the associated neighborhood, return a JSON string with the name of the stop and a short description of the stop.
+    return `Given a neighborhood, return a suggeseted walking tour with 3 stops. return a JSON string with the name of stop and a short description of the stop.
   
-    tourStops: Vatican City [St. Peter's Basilica, Vatican Gardens, Castel Sant'Angelo]
+    tourStops: Vatican City
     walking_tour: [
         {"name": "St. Peter's Basilica", "desc":"Discover the largest church in the world, known for its breathtaking architecture and religious significance."},
         {"name": "Vatican Gardens", "desc":"Stroll through the beautifully landscaped gardens, filled with lush greenery, fountains, and sculptures."},
         {"name": "Castel Sant'Angelo", "desc":"Visit this ancient fortress and former papal residence, offering panoramic views of Rome from its terrace."}
     ]
-    tourStops: Fremont [Fremont Sunday Market, Gas Works Park, Theo Chocolate Factory]
+    tourStops: Fremont
     walking_tour: [ 
         {"name": "Fremont Sunday Market", "desc": "Browse the eclectic mix of crafts, vintage items, and local produce at this vibrant open-air market."},
         {"name": "Gas Works Park", "desc": "Enjoy panoramic views of the Seattle skyline and explore the unique industrial remnants of a gasification plant turned park."},
         {"name": "Theo Chocolate Factory", "desc": "Take a guided tour of the organic and fair-trade chocolate factory, and indulge in delicious samples."}
       ]
-    tourStops: ${neighborhood} ${tourStops},
+    tourStops: ${neighborhood}
     walking_tour:
     `
 }

@@ -12,29 +12,46 @@ import Itinerary from "../components/Itinerary";
 export default function Home() {
   const interests = ["Food", "Off the beaten path", "Adventure", "History"];
 
+  //Form State
   const [cityInput, setCityInput] = useState("");
   const [locationName, setLocationName] = useState("");
-  const [dayTrips, setDayTrips] = useState([]);
-  const [activities, setActivities] = useState([]);
   const [stream, setStream] = useState("");
   const [checkedState, setCheckedState] = useState(
     interests.map((interest) => ({name: interest, isChecked: false}))
-);
+  );
+  const [tripLength, setTripLength] = useState(3);
+
+  // Itinerary Model State
+  const [dayTrips, setDayTrips] = useState([]);
+  const [meta, setMeta] = useState();
+  const [activities, setActivities] = useState([]);
+  const [neighborhoods, setNeighborhoods] = useState([]);
+  const [food, setFood] = useState([]);
+
+
+  // States
   const [loading, setLoading] = useState({
     activities: false,
     dayTrips: false,
   });
+  const [errorMessages, setErrorMessages] = useState([]);
 
   useEffect(() => {
-    console.log('use effect fetch activities');
     fetchActivities(dayTrips)
   }, [dayTrips]);
+  
   useEffect(() => {
-    console.log('use effect fetch post activities');
+    fetchActivityDescriptions(meta);
+    fetchWalkingTours(meta);
+    fetchFood(meta)
+  }, [meta]);
 
-    fetchWalkingTours(activities);
-    fetchSiteDescriptions(activities);
-  }, [activities]);
+  useEffect(() => {
+    renderDays(activities, neighborhoods, food)
+  }, [activities, neighborhoods, food])
+
+  useEffect(() => {
+  }, [errorMessages])
   
   function renderLoader() {
     const {activities, dayTrips} = loading;
@@ -56,37 +73,42 @@ export default function Home() {
   }
 
   function renderDays() {
-    if (!activities) return;
+    if (activities.length === 0) return;
     let subheader;
-    return activities.map((day) => {
-      subheader = "Day " + day.day;
+    let days = new Array(tripLength).fill(0);
+    return days.map((day, i) => {
+      subheader = "Day " + (i + 1);
       return (
         <>
           <Page
             header={locationName}
             subheader={subheader}
           >
-            <Itinerary day={day}/>
+            <Itinerary
+              activity={activities[i]}
+              food={food[i]}
+              neighborhood={neighborhoods[i]}
+            />
           </Page>
           
           <Page
             header={locationName}
             subheader={subheader}
           >
-            <h3> {day.site}</h3>
-            {day.long_desc}
+            <h3> {activities[i].name}</h3>
+            {activities[i].long_desc}
           </Page>
 
           <Page
             header={locationName}
             subheader={subheader}
           >
-            <h3> {day.neighborhood} Walking Tour</h3>
-            {renderWalkingTourLong(day.walking_tour)}
+            <h3> {neighborhoods[i].name} Walking Tour</h3>
+            {renderWalkingTourLong(neighborhoods[i].walking_tour)}
           </Page>
         </>
       )
-    });
+    })
   }
 
   function renderDayTripItinerary() {
@@ -154,14 +176,24 @@ export default function Home() {
       });
   }
 
+  /**
+   * 
+   * @returns Activities and Neighborhoods list.
+   * {
+      "activities": ["La Jolla Kayak Tour", "San Diego Zoo Safari Park", "USS Midway Museum"],
+      "neighborhoods": ["La Jolla", "San Pasqual Valley", "Downtown San Diego"]
+    }
+   */
   async function fetchActivities() {
     if (!cityInput) return;
+    const interests = checkedState.map((item) => item.isChecked? item.name : "").filter((n)=>n).join()
+
     const response = await fetch("/api/generateActivity", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ city: cityInput }),
+      body: JSON.stringify({ city: cityInput, interests: interests }),
     });
     if (!response.ok) {
       throw new Error(`Request failed with status ${response.statusText}`);
@@ -173,8 +205,28 @@ export default function Home() {
       return;
     }
     getStreamResponse(data).then((streamResponse) => {
-      console.log('activities ', streamResponse)
-      setActivities(JSON.parse(streamResponse).activities);
+      const json = JSON.parse(streamResponse);
+
+      if (json.error) {
+        setErrorMessages(errorMessages.push(json.error));
+        return;
+      }
+
+      setMeta(json);
+      setActivities(json.activities.map((activity) => {
+        return {
+          name: activity,
+          short_desc: "",
+          long_desc: "",
+        }
+      }));
+
+      setNeighborhoods(json.neighborhoods.map((neighborhood) => {
+        return {
+          name: neighborhood,
+          walking_tour: []
+        }
+      }));
       setLoading((prev) => ({
         activities: false,
         dayTrips: prev.dayTrips,
@@ -183,26 +235,58 @@ export default function Home() {
     });
   }
 
-  async function fetchSiteDescriptions(activities) {
-    const interests = checkedState.map((item) => item.isChecked? item.name : "").filter((n)=>n).join()
-
-    for (let i = 0; i< activities.length; i++) {
-      fetchSiteDescription(activities[i], interests)
-    }
-  }
-  function fetchWalkingTours(activities) {    
-    for (let i = 0; i< activities.length; i++) {
-      fetchWalkingTour(activities[i])
+  async function fetchFood() {
+    for (let i = 0; i< neighborhoods.length; i++) {
+      fetchOneFoods(neighborhoods[i], i)
     }
   }
 
-  async function fetchSiteDescription(activity, interests) {
-    const response = await fetch("/api/generateSiteDescription", {
+  async function fetchOneFoods(neighborhood, index) {
+    const response = await fetch("/api/generateFood", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ location: activity.site, interests: interests }),
+      body: JSON.stringify({ location: neighborhood.name}),
+    });
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.statusText}`);
+    }
+
+    // This data is a ReadableStream
+    const data = response.body;
+    if (!data) {
+      return;
+    }
+
+    getStreamResponse(data).then((streamResponse) => {
+      const json = JSON.parse(streamResponse);
+
+      if (json.error) {
+        setErrorMessages(errorMessages.push(json.error));
+        return;
+      }
+      let updatedFood = food;
+      updatedFood[index] = json;
+      setFood(updatedFood);
+    });
+  }
+
+  async function fetchActivityDescriptions() {
+    const interests = checkedState.map((item) => item.isChecked? item.name : "").filter((n)=>n).join()
+
+    for (let i = 0; i< activities.length; i++) {
+      fetchActivityDescription(activities[i], i, interests)
+    }
+  }
+
+  async function fetchActivityDescription(activity, index, interests) {
+    const response = await fetch("/api/generateActivityDescription", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ location: activity.name, interests: interests }),
     });
 
     if (!response.ok) {
@@ -217,22 +301,47 @@ export default function Home() {
 
     getStreamResponse(data).then((streamResponse) => {
       let updatedActivities = activities;
-      console.log('description ', streamResponse);
-      updatedActivities[activity.day-1].long_desc = streamResponse;
+      const json = JSON.parse(streamResponse);
+
+      if (json.error) {
+        setErrorMessages(errorMessages.push(json.error));
+        return;
+      }
+
+      updatedActivities[index].long_desc = json.long_desc;
+      updatedActivities[index].short_desc = json.short_desc;
       setActivities(updatedActivities);
     });
   }
 
-  async function fetchWalkingTour(activity) {
-    let neighborhood = activity.neighborhood;
-    let tourStops = activity.walking_tour.map((stop) => stop.name);
+  /**
+   * 
+   * @param {*} neighborhoods 
+   */
+  function fetchWalkingTours() {    
+    for (let i = 0; i< neighborhoods.length; i++) {
+      fetchWalkingTour(neighborhoods[i], i)
+    }
+  }
 
+  /**
+   * 
+   * @param {*} neighborhood 
+   * @param {*} index 
+   * @returns 
+   *  [ 
+        {"name": "Flatiron Building", "desc": "Admire the iconic triangular building, a National Historic Landmark and a symbol of New York City."},
+        {"name": "Madison Square Park", "desc": "Relax in the park, surrounded by iconic skyscrapers, and enjoy the seasonal art installations."},
+        {"name": "Eataly Flatiron", "desc": "Explore this Italian food emporium, offering delicious gourmet food, coffee, and pastries."}
+     ]
+   */
+  async function fetchWalkingTour(neighborhood, index) {
     const response = await fetch("/api/generateWalkingTour", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ neighborhood, tourStops }),
+      body: JSON.stringify({ neighborhood: neighborhood.name}),
     });
     if (!response.ok) {
       throw new Error(`Request failed with status ${response.statusText}`);
@@ -245,10 +354,38 @@ export default function Home() {
     }
 
     getStreamResponse(data).then((streamResponse) => {
-      let updatedActivities = activities;
-      updatedActivities[activity.day-1].walking_tour = JSON.parse(streamResponse);
-      setActivities(updatedActivities);
+      const json = JSON.parse(streamResponse);
+
+      if (json.error) {
+        setErrorMessages(errorMessages.push(json.error));
+        return;
+      }
+
+      let updatedNeighborhoods = neighborhoods;
+      updatedNeighborhoods[index].walking_tour = json;
+      setNeighborhoods(updatedNeighborhoods);
     });
+  }
+
+  function initializeItineraryStates() {
+    const initActivities = Array.from({length: tripLength}, () => ({
+      name:"",
+      short_desc:"",
+      long_desc:""
+    }));
+
+    const initNeighborhoods = Array.from({length: tripLength}, () => ({
+      name: "",
+      walking_tour: []
+    }));
+
+    const initFood = Array.from({length: tripLength}, () => ({
+      lunch: {name:"", desc:""},
+      dinner: {name:"", desc:""}
+    }));
+    setActivities(initActivities);
+    setNeighborhoods(initNeighborhoods);
+    setFood(initFood)
   }
 
   async function onSubmit(event) {
@@ -257,7 +394,131 @@ export default function Home() {
       dayTrips: true,
     });
     event.preventDefault();
-    fetchDayTrips();
+
+    initializeItineraryStates();
+    
+    let sample_response ={
+      "activities":[{
+          "day": "1",
+          "neighborhood": "Ancient Rome",
+          "site": "Colosseum",
+          "short_desc": "Iconic amphitheater of Ancient Rome, known for gladiatorial contests.",
+          "long_desc": "Step into the grandeur of Ancient Rome at the Colosseum, the largest amphitheater ever built. Discover the history of gladiators, explore the vast arena, and marvel at the architectural masterpiece that has stood for centuries.",
+          "walking_tour": [
+            {
+              "name": "Roman Forum",
+              "desc":"Immerse yourself in the ruins of the political and social center of Ancient Rome, filled with temples, basilicas, and ancient buildings."
+            },
+            {
+              "name": "Palatine Hill",
+              "desc":"Explore the birthplace of Rome's civilization and enjoy panoramic views of the city from this historic hill."
+            },
+            {
+              "name": "Circus Maximus",
+              "desc":"Wander through the ancient chariot racing stadium and imagine the excitement of the games that once took place here."
+            }
+          ],
+          "food": {
+            "lunch": {
+              "name":  "Trattoria da Lucia",
+              "desc":"Indulge in traditional Roman cuisine, including pasta, pizza, and classic Roman dishes."
+            },
+            "dinner": {
+              "name": "Osteria Barberini",
+              "desc":"Experience authentic Roman flavors in a cozy and welcoming atmosphere."
+            }
+          }
+        },
+        {
+          "day": "2",
+          "neighborhood": "Vatican City",
+          "site": "Vatican Museums",
+          "short_desc": "World-renowned art collection, including the Sistine Chapel.",
+          "long_desc": "Explore the vast art collection of the Vatican Museums, housing masterpieces from different periods and cultures. Marvel at the stunning frescoes in the Sistine Chapel painted by Michelangelo and admire works by renowned artists like Raphael and Leonardo da Vinci.",
+          "walking_tour": [
+            {
+              "name": "St. Peter's Basilica",
+              "desc":"Discover the largest church in the world, known for its breathtaking architecture and religious significance."
+            },
+            {
+              "name": "Vatican Gardens",
+              "desc":"Stroll through the beautifully landscaped gardens, filled with lush greenery, fountains, and sculptures."
+            },
+            {
+              "name": "Castel Sant'Angelo",
+              "desc":"Visit this ancient fortress and former papal residence, offering panoramic views of Rome from its terrace."
+            }
+          ],
+          "food": {
+            "lunch": {
+              "name":  "Ristorante il Fico",
+              "desc":"Enjoy a delightful Italian meal with fresh ingredients and a charming ambiance near the Vatican."
+            },
+            "dinner":{
+              "name":  "Hostaria Romana",
+              "desc":"Indulge in classic Roman dishes, including cacio e pepe and saltimbocca alla romana."
+            }
+          }
+        },
+        {
+          "day":"3",
+          "neighborhood": "Trastevere",
+          "site": "Piazza Santa Maria in Trastevere",
+          "short_desc": "Lively square in the charming Trastevere neighborhood.",
+          "long_desc": "Immerse yourself in the vibrant atmosphere of Trastevere at Piazza Santa Maria in Trastevere. Admire the beautiful Basilica of Santa Maria in Trastevere, relax at a café while people-watching, and soak up the lively energy of this picturesque square.",
+          "walking_tour": [
+            {
+              "name": "Villa Farnesina",
+              "desc":"Explore this Renaissance villa adorned with exquisite frescoes by renowned artists like Raphael."
+            },
+            {
+              "name": "Gianicolo Hill",
+              "desc":"Climb to the top of this hill for stunning views of Rome's skyline and the opportunity to witness the traditional midday cannon firing."
+            },
+            {
+              "name": "Isola Tiberina",
+              "desc":"Cross the Tiber River to reach this charming island and take a leisurely stroll along its picturesque streets."
+            }
+          ],
+          "food": {
+            "lunch":{
+              "name":  "Da Enzo al 29",
+              "desc":"Taste authentic Roman cuisine with homemade pasta and traditional dishes in the heart"
+            },
+            "dinner": {
+              "name": "La Tavernaccia",
+              "desc": "known for its traditional Roman cuisine and warm ambiance."
+            }
+          }
+        }
+      ],
+      "day_trips": [{
+          "name": "Yosemite National Park",
+          "short_desc": "Experience the beauty of this world-famous park, with its towering cliffs and cascading waterfalls.",
+          "long_desc": "This day trip takes you to Yosemite National Park, one of the most stunning and iconic natural landmarks in the United States. Explore the majestic sequoia groves, towering cliffs, and cascading waterfalls, and don't miss the opportunity to take a hike or a scenic drive. ",
+          "food": {
+            "name": "The Ahwahnee",
+            "desc": "Located in Yosemite National Park, The Ahwahnee offers a unique dining experience. Enjoy the freshest ingredients and exquisite seasonal specialties. "
+          }
+        },
+        {
+          "name": "Muir Woods National Monument",
+          "short_desc": "Stroll through ancient redwood groves in this tranquil sanctuary near San Francisco.",
+          "long_desc": "This day trip takes you to Muir Woods National Monument, a tranquil sanctuary of ancient redwood groves. Enjoy the peace and quiet of this stunning natural wonder, and don't forget to explore nearby Mount Tamalpais for breathtaking views of the bay. ",
+          "food": {
+            "name": "The Counter",
+            "desc": "Stop by The Counter for a delicious and creative meal. Try one of their signature burgers, salads, or sandwiches."
+          }
+        }
+      ]
+    }
+
+    // const activities = sample_response.activities; // list of activity objects
+    // const dayTrips = sample_response.day_trips; // list of daytrip ojects
+    // setActivities(activities);
+    // setDayTrips(dayTrips);
+    // fetchDayTrips();
+    fetchActivities();
   }
 
   async function getStreamResponse(data) {
@@ -351,6 +612,7 @@ export default function Home() {
               <input type="submit" value="Plan It" />
             </form>
             {renderLoader()}
+            {errorMessages.join(', ')}
           </div>
         </div>
                 

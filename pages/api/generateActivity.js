@@ -9,10 +9,10 @@ export const config = {
 };
 
 export default async function (req) {
-  const { city } = (await req.json()) 
-  console.log(city);
+  const { city, interests } = (await req.json()) 
+  console.log(city, interests);
 
-  const prompt = generateActivityPrompt(city);
+  const prompt = generateActivityPrompt(city, interests);
 
   if (!prompt) {
     return new Response("No prompt in the request", { status: 400 });
@@ -47,162 +47,52 @@ export default async function (req) {
 };
 
 // generate a list of activities in a city
-function generateActivityPrompt(city) {
+function generateActivityPrompt(city, interests) {
+  if (!interests) {
+    interests = "general"
+  }
   const capitalizedCity =
     city[0].toUpperCase() + city.slice(1).toLowerCase();
-    return `A valid json string including the top 3 sites to see in a city. JSON object should contain activities, an array of activity objects.
-
-    City: Rome
-    itinerary: {
-      "activities":[
-        {
-          "day": "1",
-          "neighborhood": "Ancient Rome",
-          "site": "Colosseum",
-          "short_desc": "Iconic amphitheater of Ancient Rome, known for gladiatorial contests.",
-          "long_desc": "",
-          "walking_tour": [
-            {
-              "name": "Roman Forum",
-              "desc":""
-            },
-            {
-              "name": "Palatine Hill",
-              "desc":""
-            },
-            {
-              "name": "Circus Maximus",
-              "desc":""
-            }
-          ],
-          "food": {
-            "lunch": {
-              "name":  "Trattoria da Lucia",
-              "desc":"Indulge in traditional Roman cuisine, including pasta, pizza, and classic Roman dishes."
-            },
-            "dinner": {
-              "name":  "Osteria Barberini",
-              "desc":"Experience authentic Roman flavors in a cozy and welcoming atmosphere."
-            }
-          }
-        },
-        {
-          "day": "2",
-          "neighborhood": "Vatican City",
-          "site": "Vatican Museums",
-          "short_desc": "World-renowned art collection, including the Sistine Chapel.",
-          "long_desc": "",
-          "walking_tour": [
-            {
-              "name": "St. Peter's Basilica",
-              "desc":""
-            },
-            {
-              "name": "Vatican Gardens",
-              "desc":""
-            },
-            {
-              "name": "Castel Sant'Angelo",
-              "desc":""
-            }
-          ],
-          "food": {
-            "lunch": {
-              "name":  "Ristorante il Fico",
-              "desc":"Enjoy a delightful Italian meal with fresh ingredients and a charming ambiance near the Vatican."
-            },
-            "dinner":{
-              "name":  "Hostaria Romana",
-              "desc":"Indulge in classic Roman dishes, including cacio e pepe and saltimbocca alla romana."
-            }
-          }
-        },
-        {
-          "day":"3",
-          "neighborhood": "Trastevere",
-          "site": "Piazza Santa Maria in Trastevere",
-          "short_desc": "Lively square in the charming Trastevere neighborhood.",
-          "long_desc": "",
-          "walking_tour": [
-            {
-              "name": "Villa Farnesina",
-              "desc":""
-            },
-            {
-              "name": "Gianicolo Hill",
-              "desc":""
-            },
-            {
-              "name": "Isola Tiberina",
-              "desc":""
-            }
-          ],
-          "food": {
-            "lunch":{
-              "name":  "Da Enzo al 29",
-              "desc":"Taste authentic Roman cuisine with homemade pasta and traditional dishes in the heart"
-            },
-            "dinner": {
-              "name": "La Tavernaccia",
-              "desc": "known for its traditional Roman cuisine and warm ambiance."
-            }
-        }
-      }
-    ]
-    }
+    return `I am a tourist visiting a location. I want a list of 3 activities to do in that location that are relevant to my interests. My interests are ${interests}. each activity should include the neighborhood where it is located. Return valid JSON containing the activities and the neighborhoods
     City: Seattle
-    itinerary: {
-      "activities": [{
-        "day":"1",
-        "neighborhood": "Pike Place Market",
-        "site": "Pike Place Market",
-        "short_desc": " Historic farmers' market known for fresh produce, seafood, and eclectic shops.",
-        "long_desc": "",
-        "walking_tour": [
-          {"name": "Seattle Waterfront", "desc" :""},
-          {"name": "Post Alley", "desc" :""},
-          {"name": "Seattle Art Museum (SAM)","desc" :""}
-        ],
-        "food":{
-          "lunch": {"name": "Pike Place Chowder", "desc": "Indulge in delicious and hearty chowders featuring fresh local ingredients."},
-          "dinner": {"name": "Matt's in the Market", "desc": "Enjoy seasonal and locally sourced dishes in a cozy setting above Pike Place Market."}
-        }
-      },
-      {
-        "day":"2",
-        "neighborhood": "Fremont",
-        "site": "Fremont Troll",
-        "short_desc":"Seattle's iconic under-bridge troll sculpture.",
-        "long_desc": "",
-        "walking_tour": [
-          {"name": "Fremont Sunday Market", "desc": ""},
-          {"name": "Gas Works Park", "desc": ""},
-          {"name": "Theo Chocolate Factory", "desc": ""}
-        ],
-        "food":{
-          "lunch": {"name": "Paseo Caribbean Food", "desc": "Savor mouthwatering Caribbean sandwiches filled with flavorful marinated meats and spices."},
-          "dinner": {"name": "Revel", "desc": "Experience innovative Korean-inspired cuisine in a trendy setting."}
-        }
-      },
-      {
-        "day":"3",
-        "neighborhood": "Capitol Hill",
-        "site": "Volunteer Park",
-        "short_desc":"Serene urban park with water tower viewpoint.",
-        "long_desc":"",
-        "walking_tour": [
-          {"name": "Broadway Avenue", "desc": ""},
-          {"name": "Volunteer Park Conservatory", "desc": ""},
-          {"name": "Elliott Bay Book Company", "desc": ""}
-        ],
-        "food":{
-          "lunch": {"name": "Stateside", "desc": "Enjoy a fusion of French and Vietnamese flavors, with dishes like banh mi and crispy duck rolls."},
-          "dinner": {"name": "Canon", "desc": "Delight in craft cocktails and an extensive whiskey selection at this award-winning bar and restaurant."}
-        }
-      }]
+    interests: History
+    return: {
+      "activities": ["Underground Tour", "Museum of History & Industry (MOHAI)", "Klondike Gold Rush National Historical Park"],
+      "neighborhoods": ["Pioneer Square", "South Lake Union (SLU)", "Downtown Seattle"]
     }
-    City: ${capitalizedCity}
-    itinerary:`;
+  
+    City: Seattle
+    interests: Off the Beaten Path
+    return: {
+      "activities": ["Georgetown Art Attack", "Waterfall Garden Park", "Fremont Sunday Market"],
+      "neighborhoods": ["Georgetown", "Pioneer Square", "Fremont"]
+    }
+  
+    City: Seattle
+    interests: food
+    return: {
+      "activities": ["Pike Place Market", "Food tour on Capitol Hill", "Ballard Farmers Market"],
+      "neighborhoods": ["Pike Place Market", "Capitol Hill", "Ballard"]
+    }
+  
+    City: Seattle
+    interests: culture
+    return: {
+      "activities": ["Seattle Art Museum (SAM)", "Chihuly Garden and Glass", "Wing Luke Museum of the Asian Pacific American Experience"],
+      "neighborhoods": ["Downtown Seattle", "Seattle Center", "Industrial District"]
+    }
+
+    City: Seattle
+    interests: general
+    return: {
+      "activities": ["Pike Place Market", "Underground Tour", "Chihuly Garden and Glass"],
+      "neighborhoods": ["Pike Place Market", "Pioneer Square", "Seattle Center"]
+    }
+  
+    City: ${city}
+    interests: ${interests}
+    return:
+  `;
 }
 
 

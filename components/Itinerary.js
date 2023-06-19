@@ -6,31 +6,31 @@ function renderWalkingTourShort(tour) {
     });
 }
 
-export default function Itinerary({day}) {
+export default function Itinerary({activity, food, neighborhood}) {
     return (
         <table>
           <tbody>
             <tr>
-                <th> Date and Location </th>
+                <th> Activity </th>
                 <th> Description </th>
               </tr>
               <tr>
-                <td>{day.site}</td>
-                <td>{day.short_desc}</td>
+                <td>{activity.name}</td>
+                <td>{activity.short_desc}</td>
               </tr>
               <tr>
-                <td> <div>Lunch</div> {day.food.lunch.name}</td>
-                <td>{day.food.lunch.desc}</td>
+                <td> <div>Lunch</div> {food.lunch ? food.lunch.name : "" }</td>
+                <td>{food.lunch.desc}</td>
               </tr>
               <tr>
-                <td>Walking tour of {day.neighborhood}</td>
+                <td>Walking tour of {neighborhood.name}</td>
                 <td>
-                  <ol>{renderWalkingTourShort(day.walking_tour)}</ol>
+                  <ol>{renderWalkingTourShort(neighborhood.walking_tour)}</ol>
                 </td>
               </tr>
               <tr>
-                <td> <div>Dinner</div> {day.food.dinner.name}</td>
-                <td>{day.food.dinner.desc}</td>
+                <td> <div>Dinner</div> {food.dinner ? food.dinner.name : ""}</td>
+                <td>{food.dinner.desc}</td>
               </tr>
             </tbody>
           </table>

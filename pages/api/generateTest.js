@@ -14,7 +14,7 @@ export default async function (req, res) {
     });
     return;
   }
-  return;
+  
 
   const input = req.body.input || '';
   const interests = req.body.interests || 'General';
@@ -52,30 +52,75 @@ export default async function (req, res) {
   }
 }
 
+/** array of activity objects
+activity object:
+neighborhood
+{
+  name:
+  walking_tour:
+}
+
+food
+{
+  lunch
+  dinner
+}
+
+activity
+  {
+    name:
+    short_desc
+    long_desc
+    neighborhood
+  }
+
+
+the number of activities is going to equal the number of days. make an array. the indexes will correlate the day and the activity.
+given the number of days, initialize 3 sets
+
+
+1. activities
+2. foods
+3. neighborhoods
+
+// given a location and parameters, generate a list of activities and their corresponding neighhorhoods.
+
+
+// given a neighborhood, generate a walking tour
+
+// given a neighborhood, generate the lunch and dinner opctions
+
+
+*/ 
+
+
 function generatePrompt(city, interests) {
 
-  return `I am a tourist visiting a location. I want a list of 3 activities to do in that location that are relevant to my interests. My interests are ${interests}.
-    City: Seattle
-    interests: Adventure
-    Activities: 
-    City: Seattle
-    interests: History
-    Activities: 1. Underground Tour 2. Museum of History & Industry (MOHAI) 3. Klondike Gold Rush National Historical Park:
-    City: Seattle
-    interests: Off the Beaten Path
-    Activities: 1. Georgetown Art Attack 2. Waterfall Garden Park 3. Fremont Sunday Market
-    City: Seattle
-    interests: food
-    Activities: 1.Pike Place Market 2. food tour on Capitol Hill 3. Ballard Farmers Market
-    City: Seattle
-    interests: culture
-    Activities:  1. Seattle Art Museum (SAM) 2. Chihuly Garden and Glass 3. Wing Luke Museum of the Asian Pacific American Experience
-    Rome, the Eternal City, home to the Colosseum and Vatican City, offers a blend of ancient wonders and religious treasures, captivating visitors with its 2,500-year-old history.
-    City: ${city}
-    interests: ${interests}
-    Activities:
+  return `Given a neighborhood, recommend a lunch and dinner place to eat with description. Should return valid JSON.
 
-  `;
+  Neighborhood: Pike Place Market
+  food: {
+      "lunch": {"name": "Pike Place Chowder", "desc": "Indulge in delicious and hearty chowders featuring fresh local ingredients."},
+      "dinner": {"name": "Matt's in the Market", "desc": "Enjoy seasonal and locally sourced dishes in a cozy setting above Pike Place Market."}
+  }
+  Neighborhood: Fremont
+  food: {
+      "lunch": {"name": "Paseo Caribbean Food", "desc": "Savor mouthwatering Caribbean sandwiches filled with flavorful marinated meats and spices."},
+      "dinner": {"name": "Revel", "desc": "Experience innovative Korean-inspired cuisine in a trendy setting."}
+  }
+  Neighborhood: Capitol Hill
+  food: {
+      "lunch": {"name": "Stateside", "desc": "Enjoy a fusion of French and Vietnamese flavors, with dishes like banh mi and crispy duck rolls."},
+      "dinner": {"name": "Canon", "desc": "Delight in craft cocktails and an extensive whiskey selection at this award-winning bar and restaurant."}
+  }
+  Neighborhood: Ancient Rome
+  food: {
+      "lunch": { "name":  "Trattoria da Lucia", "desc":"Indulge in traditional Roman cuisine, including pasta, pizza, and classic Roman dishes."},
+      "dinner": { "name":  "Osteria Barberini", "desc":"Experience authentic Roman flavors in a cozy and welcoming atmosphere."}
+  }
+  Neighborhood: ${city}
+  food:
+`;
 }
 
 

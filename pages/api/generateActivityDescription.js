@@ -9,9 +9,9 @@ export const config = {
 };
 
 export default async function (req) {
-  const { location, interests } = (await req.json()) 
-  console.log("generate site description for ", location, interests);
-  const prompt = generateSiteDescriptionPrompt(location, interests);
+  const { location } = (await req.json()) 
+  console.log("generate site description for ", location);
+  const prompt = generateActivityDescriptionPrompt(location);
 
   if (!prompt) {
     return new Response("No prompt in the request", { status: 400 });
@@ -47,29 +47,33 @@ export default async function (req) {
 
 
 
-function generateSiteDescriptionPrompt(location, interests) {
+function generateActivityDescriptionPrompt(location) {
     
-    return `I am a tourist visiting a location. I want to learn something about the location that matches my interests. My interests are ${interests}. provide a paragraph ofr 50-60 words describing the location.
+    return `I am a tourist visiting a location. I want to learn something about the location. provide a long description- paragraph ofr 50-60 words describing the location. also provide a short description of 5-10 words.
 
-    City: Rome
-    interests: Adventure
-    description: Rome, a city of adventure, offers thrilling experiences like witnessing the fascinating remnants of early Christian and pagan burial practices in the catacombs, biking along the Appian Way, and discovering hidden gems in its vibrant neighborhoods. Embark on thrilling adventures by exploring ancient ruins, such as the Colosseum and Roman Forum, where you can imagine the epic battles that once took place. 
-    City: Rome
-    interests: History
-    description: Rome, the Eternal City, is a captivating blend of ancient wonders and modern vibrancy, where history comes alive at every turn. From the Colosseum to the Roman Forum, immerse yourself in the rich tapestry of Rome's iconic landmarks and archaeological treasures. The Romans built over 50,000 miles of roads, connecting their vast empire and facilitating trade, communication, and military movements. 
-    City: Rome
-    interests: Off the Beaten Path
-    description: Discover Rome's offbeat activities: explore street art in Ostiense, visit the non-Catholic Cemetery, or take a bike tour along the ancient Appian Way.
-    City: Rome
-    interests: food
-    description: Rome, a gastronomic paradise, tempts food lovers with its mouthwatering pizza, pasta, gelato, and world-class culinary scene. One interesting fact about Roman food is the use of "garum," a fermented fish sauce, as a popular condiment in ancient Roman cuisine. Garum was made by fermenting fish guts and salt and was used to enhance the flavors of various dishes
-    City: Rome
-    interests: general
-    description: 
-    Rome, the Eternal City, home to the Colosseum and Vatican City, offers a blend of ancient wonders and religious treasures, captivating visitors with its 2,500-year-old history.
-    City: ${location}
-    interests: ${interests}
-    description:`
+    Location: Colosseum
+    description: {
+      "short_desc": "Iconic amphitheater of Ancient Rome, known for gladiatorial contests.",
+      "long_desc": "Step into the grandeur of Ancient Rome at the Colosseum, the largest amphitheater ever built. Discover the history of gladiators, explore the vast arena, and marvel at the architectural masterpiece that has stood for centuries."
+    }
+    Location: Vatican Museums
+    description: {
+      "short_desc": "World-renowned art collection, including the Sistine Chapel.",
+      "long_desc": "Explore the vast art collection of the Vatican Museums, housing masterpieces from different periods and cultures. Marvel at the stunning frescoes in the Sistine Chapel painted by Michelangelo and admire works by renowned artists like Raphael and Leonardo da Vinci."
+    }
+    Location: Pike Place Market
+    description: {
+      "short_desc": " Historic farmers' market known for fresh produce, seafood, and eclectic shops.",
+      "long_desc": "Established in 1907, Pike Place Market is one of the oldest continuously operated public farmers' markets in the U.S. It offers an exciting blend of local produce, fresh seafood, specialty foods, artisan crafts, and lively atmosphere."
+    }
+    Location: Fremont Troll
+    description: {
+      "short_desc":"Seattle's iconic under-bridge troll sculpture.",
+      "long_desc": " A quirky public art installation in Seattle's Fremont neighborhood, featuring a massive troll sculpture clutching a real-life Volkswagen Beetle under a bridge. It's a must-see for visitors seeking unique and playful attractions."
+    }
+    Location: ${location}
+    description:
+  `
 }
 
 // "Step into the grandeur of Ancient Rome at the Colosseum, the largest amphitheater ever built. Discover the history of gladiators, explore the vast arena, and marvel at the architectural masterpiece that has stood for centuries.",
