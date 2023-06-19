@@ -10,7 +10,7 @@ export default function DayTrips({dayTrips, locationName}) {
           subheader="Day Trip"
           id={index}
         >
-          <h1>{trip.name}</h1>
+          <h3>{trip.name}</h3>
             <div>{trip.long_desc}</div>
             <table>
               <tbody>

@@ -444,7 +444,7 @@ export default function Home() {
         <div className={styles.hero}>
           <div className={styles.input}>
             <img src="/JourneyGenieLogo_thick.png" className={styles.icon} />
-            <h2>Trippin</h2>
+            <h1>TRIPPIN</h1>
             <h4> The AI Powered Travel Planner </h4>
             <form onSubmit={onSubmit}>
               <input

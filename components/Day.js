@@ -13,6 +13,8 @@ function renderWalkingTourLong(tour) {
 export default function Day({activity, food, neighborhood, subheader, locationName}) {
     const {walking_tour, image} = neighborhood;
     let urls = !image ? '' : image.urls;
+    let user = !image ? {username: ''} : image.user;
+    let username = !user ? '' : user.username
     return (
         <>
           <Page
@@ -42,7 +44,13 @@ export default function Day({activity, food, neighborhood, subheader, locationNa
             {renderWalkingTourLong(walking_tour)}
 
             {urls ? <img className={styles.image} src={urls.regular} /> : null}
-            
+            <a
+              className={styles.credit}
+              target="_blank"
+              href={`https://unsplash.com/@${username}`}
+            >
+              { user ? user.name : ''}
+            </a>
           </Page>
         </>
     );
