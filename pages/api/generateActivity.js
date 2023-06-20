@@ -51,8 +51,6 @@ function generateActivityPrompt(city, interests, tripLength) {
   if (!interests) {
     interests = "general"
   }
-  const capitalizedCity =
-    city[0].toUpperCase() + city.slice(1).toLowerCase();
     return `I am a tourist visiting a location. I want a list of ${tripLength} activities to do in that location that are relevant to my interests. My interests are ${interests}. each activity should include the neighborhood where it is located. Return valid JSON containing the activities and the neighborhoods
     City: Seattle
     interests: History

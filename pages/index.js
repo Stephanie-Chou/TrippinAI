@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useState, useEffect } from "react";
+import { useState, useEffect, cache } from "react";
 import { createParser } from "eventsource-parser";
 import Day from "../components/Day";
 import DayTrips from "../components/DayTrips";
@@ -83,12 +83,12 @@ export default function Home() {
   /***********************
   * DATA FETCH FUNCTIONS
   ************************/
-  async function fetchDayTrips() {
+  const fetchDayTrips = cache(async () => {
       if (!cityInput) return;
       const response = await fetch("/api/generateDayTrip", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({ city: cityInput }),
       });
@@ -102,13 +102,14 @@ export default function Home() {
         return;
       }
       getStreamResponse(data).then((streamResponse) => {
+        console.log(streamResponse);
         setDayTrips(JSON.parse(streamResponse).day_trips);
         setLoading((prev) => ({
           activities: prev.activities,
           dayTrips: false,
         }));
       });
-  }
+  })
 
   /**
    * 
@@ -118,7 +119,7 @@ export default function Home() {
       "neighborhoods": ["La Jolla", "San Pasqual Valley", "Downtown San Diego"]
     }
    */
-  async function fetchActivities() {
+    async function fetchActivities() {
     if (!cityInput) return;
     const selectedInterests = checkedState.map((item) => item.isChecked? item.name : "").filter((n)=>n).join()
     console.log(`fetching with inputs  ${cityInput} days: ${tripLength}` )
@@ -141,6 +142,8 @@ export default function Home() {
     }
     getStreamResponse(data).then((streamResponse) => {
       const json = jsonParse(streamResponse);
+
+      console.log(streamResponse);
       if (!json) return;
 
       if (json.error) {

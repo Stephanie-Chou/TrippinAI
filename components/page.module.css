@@ -1,5 +1,6 @@
 .page {
-    height: 100vh;
+    min-height: 100vh;
+    max-height: fit-content;
     width: clamp(320px, 100vw, 600px);
     margin-bottom: 10px;
     margin-left: auto;
@@ -23,7 +24,7 @@
   
   .tag {
     height: 40px;
-    width: 120px;
+    width: fit-content;
     margin: 24px 0;
     background-color: #2D2D2D;
     color: #F9F5F0;
