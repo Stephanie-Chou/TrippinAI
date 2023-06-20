@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useState, useEffect, cache } from "react";
+import { useState, useEffect} from "react";
 import { createParser } from "eventsource-parser";
 import Day from "../components/Day";
 import DayTrips from "../components/DayTrips";
@@ -48,6 +48,8 @@ export default function Home() {
   useEffect(() => {
   }, [errorMessages])
 
+
+
   /***********************
   * RENDER FUNCTIONS
   ************************/
@@ -83,7 +85,7 @@ export default function Home() {
   /***********************
   * DATA FETCH FUNCTIONS
   ************************/
-  const fetchDayTrips = cache(async () => {
+  const fetchDayTrips = (async () => {
       if (!cityInput) return;
       const response = await fetch("/api/generateDayTrip", {
         method: "POST",
