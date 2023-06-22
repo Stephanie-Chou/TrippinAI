@@ -52,12 +52,21 @@ function generateActivityPrompt(city, interests, tripLength) {
     interests = "general"
   }
     return `I am a tourist visiting a location. I want a list of ${tripLength} activities to do in that location that are relevant to my interests. My interests are ${interests}. each activity should include the neighborhood where it is located. Return valid JSON containing the activities and the neighborhoods
+
     City: Seattle
-    interests: History
-    tripLength: 3
+    interests: Off the Beaten Path
+    tripLength: 1
     return: {
-      "activities": ["Underground Tour", "Museum of History & Industry (MOHAI)", "Klondike Gold Rush National Historical Park"],
-      "neighborhoods": ["Pioneer Square", "South Lake Union (SLU)", "Downtown Seattle"]
+      "activities": ["Waterfall Garden Park"],
+      "neighborhoods": ["Pioneer Square"]
+    }
+
+    City: Rome
+    interests: Off the Beaten Path
+    tripLength: 1
+    return: {
+      "activities": ["The Oltrarno District"],
+      "neighborhoods": ["Oltrarno"]
     }
   
     City: Seattle
@@ -67,15 +76,15 @@ function generateActivityPrompt(city, interests, tripLength) {
       "activities": ["Georgetown Art Attack", "Fremont Sunday Market"],
       "neighborhoods": ["Georgetown", "Fremont"]
     }
-  
+
     City: Seattle
-    interests: food
-    tripLength: 4
+    interests: History
+    tripLength: 3
     return: {
-      "activities": ["Pike Place Market", "Food tour on Capitol Hill", "Ballard Farmers Market", "Fremont Brewery Tour"],
-      "neighborhoods": ["Pike Place Market", "Capitol Hill", "Ballard", "Fremont"]
+      "activities": ["Underground Tour", "Museum of History & Industry (MOHAI)", "Klondike Gold Rush National Historical Park"],
+      "neighborhoods": ["Pioneer Square", "South Lake Union (SLU)", "Downtown Seattle"]
     }
-  
+
     City: Seattle
     interests: culture
     tripLength: 3
@@ -84,6 +93,14 @@ function generateActivityPrompt(city, interests, tripLength) {
       "neighborhoods": ["Downtown Seattle", "Seattle Center", "Industrial District"]
     }
 
+    City: Seattle
+    interests: food
+    tripLength: 4
+    return: {
+      "activities": ["Pike Place Market", "Food tour on Capitol Hill", "Ballard Farmers Market", "Fremont Brewery Tour"],
+      "neighborhoods": ["Pike Place Market", "Capitol Hill", "Ballard", "Fremont"]
+    }
+  
     City: Seattle
     interests: general
     tripLength: 5
@@ -94,6 +111,7 @@ function generateActivityPrompt(city, interests, tripLength) {
   
     City: ${city}
     interests: ${interests}
+    tripLength: ${tripLength}
     return:
   `;
 }

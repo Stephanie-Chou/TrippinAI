@@ -15,6 +15,7 @@ export default function Day({activity, food, neighborhood, subheader, locationNa
     let urls = !image ? '' : image.urls;
     let user = !image ? {username: ''} : image.user;
     let username = !user ? '' : user.username
+
     return (
         <>
           <Page

@@ -1,16 +1,41 @@
+import { Configuration } from "openai";
 import { OpenAIStream} from "./OpenAIStream";
+import { Redis } from '@upstash/redis'
+import { getStreamResponse } from "../getStreamResponse";
 
-if (!process.env.OPENAI_API_KEY) {
-  throw new Error("Missing env var from OpenAI");
-}
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
-export const config = {
-  runtime: "edge",
-};
+export default async function (req, res) {
+  const { neighborhood, city } = req.body
 
-export default async function (req) {
-  const { neighborhood } = (await req.json()) 
-    console.log(neighborhood)
+  console.log("generate walking tour for ", neighborhood, city);
+
+  /** Check cache */
+  const client = new Redis({
+      url: process.env.UPSTASH_REDIS_REST_URL,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN,
+  })
+
+  const key = `walkingTour:neighborhood:${neighborhood.toLowerCase()}:city:${city.toLowerCase()}`;
+  const cached = await client.get(key);
+
+  if (cached) {
+    console.log('CACHE HIT', JSON.stringify(cached));
+    return res.status(200).json(JSON.stringify(cached));
+  }
+
+  /** Cache Miss */
+  if (!configuration.apiKey) {
+    res.status(500).json({
+      error: {
+        message: "OpenAI API key not configured, please follow instructions in README.md",
+      }
+    });
+    return;
+  }
+
   const prompt = generateWalkingTourPrompt(neighborhood);
 
   if (!prompt) {
@@ -30,25 +55,31 @@ export default async function (req) {
   };
 
   const stream = await OpenAIStream(payload);
-  // return stream response (SSE)
-  return new Response(
+  let response = new Response(
     stream, {
       headers: new Headers({
-        // since we don't use browser's EventSource interface, specifying content-type is optional.
-        // the eventsource-parser library can handle the stream response as SSE, as long as the data format complies with SSE:
-        // https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#sending_events_from_the_server
-        
         // 'Content-Type': 'text/event-stream',
         'Cache-Control': 'no-cache',
       })
     }
   );
-};
 
+  const data = response.body;
+  if (!data) {
+    console.log('no data')
+    return;
+  }
 
+  return getStreamResponse(data).then((streamResponse) => {
+    console.log('CACHE MISS', JSON.stringify({result: streamResponse}))
+
+    client.set(key, JSON.stringify({result: streamResponse}));
+    return res.status(200).json(JSON.stringify({result: streamResponse}));
+  });
+}
 
 function generateWalkingTourPrompt(neighborhood) {
-    
+  
     return `Given a neighborhood, return a suggeseted walking tour with 3 stops. return a JSON string with the name of stop and a short description of the stop.
   
     tourStops: Vatican City
@@ -65,5 +96,5 @@ function generateWalkingTourPrompt(neighborhood) {
       ]
     tourStops: ${neighborhood}
     walking_tour:
-    `
+    `;
 }

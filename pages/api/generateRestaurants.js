@@ -1,24 +1,46 @@
+import { Configuration } from "openai";
 import { OpenAIStream} from "./OpenAIStream";
+import { Redis } from '@upstash/redis'
+import { getStreamResponse } from "../getStreamResponse";
 
-if (!process.env.OPENAI_API_KEY) {
-  throw new Error("Missing env var from OpenAI");
-}
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
-export const config = {
-  runtime: "edge",
-};
+export default async function (req, res) {
+  const { neighborhood, city } = req.body
+  console.log("generate food for ", neighborhood);
 
-export default async function (req) {
-  const { location } = (await req.json()) 
-  console.log("generate food for ", location);
-  const prompt = generateFoodPrompt(location);
+  
+  /** Check cache */
+  const client = new Redis({
+      url: process.env.UPSTASH_REDIS_REST_URL,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN,
+  })
+
+  const key = `food:location:${neighborhood.toLowerCase()}:city:${city.toLowerCase()}`;  
+  const cached = await client.get(key);
+
+  if (cached) {
+    console.log('CACHE HIT', JSON.stringify(cached));
+    return res.status(200).json(JSON.stringify(cached));
+  }
+
+  /** Cache Miss */
+  if (!configuration.apiKey) {
+    res.status(500).json({
+      error: {
+        message: "OpenAI API key not configured, please follow instructions in README.md",
+      }
+    });
+    return;
+  }
+
+  const prompt = generateFoodPrompt(neighborhood, city);
+
 
   if (!prompt) {
     return new Response("No prompt in the request", { status: 400 });
-  }
-
-  if (!location ) {
-    return new Response("No location provided", { status: 400});
   }
 
   const payload = {
@@ -28,31 +50,37 @@ export default async function (req) {
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0,
-    max_tokens: 400,
+    max_tokens: 200,
     stream: true,
     n: 1,
   };
 
   const stream = await OpenAIStream(payload);
-  // return stream response (SSE)
-  return new Response(
+  let response = new Response(
     stream, {
       headers: new Headers({
-        // since we don't use browser's EventSource interface, specifying content-type is optional.
-        // the eventsource-parser library can handle the stream response as SSE, as long as the data format complies with SSE:
-        // https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#sending_events_from_the_server
-        
         // 'Content-Type': 'text/event-stream',
         'Cache-Control': 'no-cache',
       })
     }
   );
-};
 
+  const data = response.body;
+  if (!data) {
+    console.log('no data')
+    return;
+  }
 
+  return getStreamResponse(data).then((streamResponse) => {
+    console.log('CACHE MISS', JSON.stringify({result: streamResponse}))
 
-function generateFoodPrompt(location) {
-    
+    client.set(key, JSON.stringify({result: streamResponse}));
+    return res.status(200).json(JSON.stringify({result: streamResponse}));
+  });
+}
+
+function generateFoodPrompt(neighborhood) {
+  
     return `Given a neighborhood, recommend a lunch and dinner place to eat with description. Should return valid JSON.
 
     Neighborhood: Pike Place Market
@@ -75,7 +103,7 @@ function generateFoodPrompt(location) {
         "lunch": { "name":  "Trattoria da Lucia", "desc":"Indulge in traditional Roman cuisine, including pasta, pizza, and classic Roman dishes."},
         "dinner": { "name":  "Osteria Barberini", "desc":"Experience authentic Roman flavors in a cozy and welcoming atmosphere."}
     }
-    Neighborhood: ${location}
+    Neighborhood: ${neighborhood}
     food:
-  `
+  `;
 }
