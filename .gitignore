@@ -11,6 +11,8 @@
 # files for development only
 /pages/api/generateTest.js
 /pages/test.js
+/pages/api/generate.js
+/pages/cache.js
 
 # next.js
 /.next/

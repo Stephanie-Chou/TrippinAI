@@ -1,20 +1,45 @@
+import { Configuration } from "openai";
 import { OpenAIStream} from "./OpenAIStream";
+import { Redis } from '@upstash/redis'
+import { getStreamResponse } from "../../utils/getStreamResponse";
 
-if (!process.env.OPENAI_API_KEY) {
-  throw new Error("Missing env var from OpenAI");
-}
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
-export const config = {
-  runtime: "edge",
-};
-
-export default async function (req) {
-  const { location, city } = (await req.json()) 
+export default async function (req, res) {
+    const { location, city } = req.body
   console.log("generate site description for ", location, city);
+  
+  /** Check cache */
+  const client = new Redis({
+      url: process.env.UPSTASH_REDIS_REST_URL,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN,
+  })
+
+  const key = `activityDescriptions:location:${location.toLowerCase()}:city:${city.toLowerCase()}`;  
+  const cached = await client.get(key);
+
+  if (cached) {
+    console.log('CACHE HIT', JSON.stringify(cached));
+    return res.status(200).json(JSON.stringify(cached));
+  }
+
+  /** Cache Miss */
+  if (!configuration.apiKey) {
+    res.status(500).json({
+      error: {
+        message: "OpenAI API key not configured, please follow instructions in README.md",
+      }
+    });
+    return;
+  }
+
   const prompt = generateActivityDescriptionPrompt(location, city);
 
+
   if (!prompt) {
-    return new Response("No prompt in the request", { status: 400 });
+    return res.status(400).json({message: "No prompt in the request"});
   }
 
   const payload = {
@@ -24,31 +49,37 @@ export default async function (req) {
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0,
-    max_tokens: 400,
+    max_tokens: 100,
     stream: true,
     n: 1,
   };
 
   const stream = await OpenAIStream(payload);
-  // return stream response (SSE)
-  return new Response(
+  let response = new Response(
     stream, {
       headers: new Headers({
-        // since we don't use browser's EventSource interface, specifying content-type is optional.
-        // the eventsource-parser library can handle the stream response as SSE, as long as the data format complies with SSE:
-        // https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#sending_events_from_the_server
-        
         // 'Content-Type': 'text/event-stream',
         'Cache-Control': 'no-cache',
       })
     }
   );
-};
 
+  const data = response.body;
+  if (!data) {
+    console.log('no data')
+    return;
+  }
 
+  return getStreamResponse(data).then((streamResponse) => {
+    console.log('CACHE MISS', JSON.stringify({result: streamResponse}))
+
+    client.set(key, JSON.stringify({result: streamResponse}));
+    return res.status(200).json(JSON.stringify({result: streamResponse}));
+  });
+}
 
 function generateActivityDescriptionPrompt(location, city) {
-    
+  
     return `I am a tourist visiting a location in a city. I want to learn something about the location. provide a long description- paragraph ofr 50-60 words describing the location. also provide a short description of 5-10 words.
 
     Location: Colosseum Rome
@@ -73,11 +104,5 @@ function generateActivityDescriptionPrompt(location, city) {
     }
     Location: ${location} ${city}
     description:
-  `
+  `;
 }
-
-// "Step into the grandeur of Ancient Rome at the Colosseum, the largest amphitheater ever built. Discover the history of gladiators, explore the vast arena, and marvel at the architectural masterpiece that has stood for centuries.",
-// "Immerse yourself in the vibrant atmosphere of Trastevere at Piazza Santa Maria in Trastevere. Admire the beautiful Basilica of Santa Maria in Trastevere, relax at a café while people-watching, and soak up the lively energy of this picturesque square.",
-// "Established in 1907, Pike Place Market is one of the oldest continuously operated public farmers' markets in the U.S. It offers an exciting blend of local produce, fresh seafood, specialty foods, artisan crafts, and lively atmosphere.",
-// "Seattle's Volunteer Park is a peaceful urban escape, where visitors can enjoy the beauty of a Victorian-style conservatory, walk along scenic paths, and admire panoramic views from the historic water tower. It's a perfect spot to unwind and connect with nature in the heart of the city.",
-// "A quirky public art installation in Seattle's Fremont neighborhood, featuring a massive troll sculpture clutching a real-life Volkswagen Beetle under a bridge. It's a must-see for visitors seeking unique and playful attractions.",

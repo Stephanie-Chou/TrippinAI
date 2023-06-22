@@ -1,9 +1,9 @@
 import Head from "next/head";
 import { useState, useEffect} from "react";
-import { createParser } from "eventsource-parser";
 import Day from "../components/Day";
 import DayTrips from "../components/DayTrips";
 import styles from "./index.module.css";
+import { getStreamResponse } from "../utils/getStreamResponse";
 
 export default function Home() {
   const DEFAULT_INTERESTS = ["Food", "Off the Beaten Path", "Adventure", "History", "Culture"];
@@ -11,7 +11,6 @@ export default function Home() {
   //Form State
   const [cityInput, setCityInput] = useState("");
   const [locationName, setLocationName] = useState("");
-  const [stream, setStream] = useState("");
   const [checkedState, setCheckedState] = useState(
     DEFAULT_INTERESTS.map((interest) => ({name: interest, isChecked: false}))
   );
@@ -20,6 +19,7 @@ export default function Home() {
   // Itinerary Model State
   const [dayTrips, setDayTrips] = useState([]);
   const [meta, setMeta] = useState(); // array of activities and array of neighborhood names
+  const [stream, setStream] = useState();
   const [activities, setActivities] = useState([]);
   const [neighborhoods, setNeighborhoods] = useState([]);
   const [food, setFood] = useState([]);
@@ -30,24 +30,16 @@ export default function Home() {
     dayTrips: false,
   });
   const [errorMessages, setErrorMessages] = useState([]);
-
-  useEffect(() => {
-    fetchActivities(dayTrips)
-  }, [dayTrips]);
   
   useEffect(() => {
     fetchActivityDescriptions(meta);
     fetchWalkingTours(meta);
-    fetchFood(meta)
+    fetchFoods(meta)
   }, [meta]);
 
   useEffect(() => {
     renderDays(activities, neighborhoods, food, tripLength);
   }, [activities, neighborhoods, food, tripLength])
-
-  useEffect(() => {
-  }, [errorMessages])
-
 
 
   /***********************
@@ -104,7 +96,6 @@ export default function Home() {
         return;
       }
       getStreamResponse(data).then((streamResponse) => {
-        console.log(streamResponse);
         setDayTrips(JSON.parse(streamResponse).day_trips);
         setLoading((prev) => ({
           activities: prev.activities,
@@ -176,9 +167,9 @@ export default function Home() {
     });
   }
 
-  async function fetchFood() {
+  async function fetchFoods() {
     for (let i = 0; i< neighborhoods.length; i++) {
-      fetchOneFoods(neighborhoods[i], i)
+      fetchFood(neighborhoods[i], i)
     }
   }
 
@@ -193,35 +184,35 @@ export default function Home() {
   }
    */
 
-  async function fetchOneFoods(neighborhood, index) {
-    const response = await fetch("/api/generateFood", {
+  async function fetchFood(neighborhood, index) {
+    const response = await fetch("/api/generateRestaurants", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ location: neighborhood.name}),
+      body: JSON.stringify({ neighborhood: neighborhood.name, city: locationName}),
     });
-    if (!response.ok) {
-      throw new Error(`Request failed with status ${response.statusText}`);
+    const responseData = await response.json();
+    if (response.status !== 200) {
+      throw responseData.error || new Error(`Request failed with status ${response.status}`);
     }
 
-    // This data is a ReadableStream
-    const data = response.body;
-    if (!data) {
+    const jsonStr = JSON.parse(responseData).result;
+    const json = jsonParse(jsonStr); // parser with error handling for the ai generated json
+
+    console.log('food json' , json)
+
+    if (!json) return;
+
+    if (json.error) {
+      setErrorMessages(errorMessages.push(json.error));
       return;
     }
 
-    getStreamResponse(data).then((streamResponse) => {
-      const json = jsonParse(streamResponse);
-      if (!json) return;
-
-      if (json.error) {
-        setErrorMessages(errorMessages.push(json.error));
-        return;
-      }
-      let updatedFood = food;
+    setFood((prevState) => {
+      let updatedFood = [...prevState];
       updatedFood[index] = json;
-      setFood(updatedFood);
+      return updatedFood;
     });
   }
 
@@ -231,28 +222,35 @@ export default function Home() {
     }
   }
 
+  /**
+   * 
+   * @param {*} activity 
+   * @param {*} index 
+   * @returns 
+   * description: {
+      "short_desc": "World-renowned art collection, including the Sistine Chapel.",
+      "long_desc": "Explore the vast art collection of the Vatican Museums, housing masterpieces from different periods and cultures. Marvel at the stunning frescoes in the Sistine Chapel painted by Michelangelo and admire works by renowned artists like Raphael and Leonardo da Vinci."
+    }
+   */
   async function fetchActivityDescription(activity, index) {
-    const response = await fetch("/api/generateActivityDescription", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ location: activity.name, city: cityInput}),
-    });
+      const response = await fetch("/api/generateActivityDescription", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({location: activity.name, city: locationName})
+      });
+     
+      const responseData = await response.json();
+      if (response.status !== 200) {
+        throw responseData.error || new Error(`Request failed with status ${response.status}`);
+      }
 
-    if (!response.ok) {
-      throw new Error(`Request failed with status ${response.statusText}`);
-    }
+      const jsonStr = JSON.parse(responseData).result;
+      const json = jsonParse(jsonStr); // parser with error handling for the ai generated json
 
-    // This data is a ReadableStream
-    const data = response.body;
-    if (!data) {
-      return;
-    }
+      console.log('desc json', json);
 
-    getStreamResponse(data).then((streamResponse) => {
-      let updatedActivities = activities;
-      const json = jsonParse(streamResponse);
       if (!json) return;
 
       if (json.error) {
@@ -260,10 +258,12 @@ export default function Home() {
         return;
       }
 
-      updatedActivities[index].long_desc = json.long_desc;
-      updatedActivities[index].short_desc = json.short_desc;
-      setActivities(updatedActivities);
-    });
+      setActivities((prevState) => {
+        let updatedActivities = [...prevState];
+        updatedActivities[index].long_desc = json.long_desc;
+        updatedActivities[index].short_desc = json.short_desc;
+        return updatedActivities;
+      });
   }
 
   function fetchWalkingTours() {    
@@ -283,34 +283,36 @@ export default function Home() {
         {"name": "Eataly Flatiron", "desc": "Explore this Italian food emporium, offering delicious gourmet food, coffee, and pastries."}
      ]
    */
-  async function fetchWalkingTour(neighborhood, index) {
-    console.log(`fetch walking tour for ${neighborhood.name}`);
-    const response = await fetch("/api/generateWalkingTour", {
+  async function fetchWalkingTour(neighborhood, index) {    
+    fetchImage(neighborhood, index);
+    const response = await fetch("/api/generateTour", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ neighborhood: neighborhood.name}),
+      body: JSON.stringify({ neighborhood: neighborhood.name, city: locationName}),
     });
-    if (!response.ok) {
-      throw new Error(`Request failed with status ${response.statusText}`);
-    }
+    const responseData = await response.json();
+      console.log("response ", responseData);
+      if (response.status !== 200) {
+        throw responseData.error || new Error(`Request failed with status ${response.status}`);
+      }
 
-    // This data is a ReadableStream
-    const data = response.body;
-    if (!data) {
-      return;
-    }
+      const jsonStr = JSON.parse(responseData).result;
+      const json = jsonParse(jsonStr); // parser with error handling for the ai generated json
 
-    fetchImage(neighborhood, index);
-    getStreamResponse(data).then((streamResponse) => {
-      const json = jsonParse(streamResponse);
       if (!json) return;
-      
-      let updatedNeighborhoods = neighborhoods;
-      updatedNeighborhoods[index].walking_tour = json;
-      setNeighborhoods(updatedNeighborhoods);
-    });
+
+      if (json.error) {
+        setErrorMessages(errorMessages.push(json.error));
+        return;
+      }
+
+      setNeighborhoods((prevState) => {
+        let updatedNeighborhoods = [...prevState];
+        updatedNeighborhoods[index].walking_tour = json;
+        return updatedNeighborhoods;
+      });
   }
 
   async function fetchImage(neighborhood, index) {
@@ -380,42 +382,6 @@ export default function Home() {
     }
   }
 
-  async function getStreamResponse(data) {
-    let streamResponse = ""; // for the data to serve
-    let streamResponseRender = ""; // for the rendering. this gets cut off
-    const onParse = (event) => {
-      if (event.type === "event") {
-        const data = event.data;
-        try {
-          const text = JSON.parse(data).text ?? "";
-          streamResponse+= text;
-          streamResponseRender+= text;
-          setStream(streamResponseRender);
-          if (streamResponseRender.length > 300) {
-            streamResponseRender="";
-          }
-        } catch (e) {
-          console.error(e);
-        }
-      }
-    }
-
-    // https://web.dev/streams/#the-getreader-and-read-methods
-    const reader = data.getReader();
-    const decoder = new TextDecoder();
-    const parser = createParser(onParse);
-    let done = false;
-    while (!done) {
-      const { value, done: doneReading } = await reader.read();
-      done = doneReading;
-      const chunkValue = decoder.decode(value);
-      parser.feed(chunkValue);
-    }
-
-    setStream("");
-    return streamResponse;
-  }
-
   /*****************
   * FORM FUNCTIONS
   ******************/
@@ -428,6 +394,7 @@ export default function Home() {
     event.preventDefault();
 
     initializeItineraryStates();
+    fetchActivities();
     fetchDayTrips();
   }
 
@@ -503,7 +470,7 @@ export default function Home() {
               </div>
               <input type="submit" value="Plan It" />
             </form>
-            {errorMessages.join(', ')}
+            {errorMessages}
             {renderLoader()}
           </div>
         </div>
