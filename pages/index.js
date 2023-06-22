@@ -3,7 +3,7 @@ import { useState, useEffect} from "react";
 import Day from "../components/Day";
 import DayTrips from "../components/DayTrips";
 import styles from "./index.module.css";
-import { getStreamResponse } from "./utils/getStreamResponse";
+import { getStreamResponse } from "../utils/getStreamResponse";
 
 export default function Home() {
   const DEFAULT_INTERESTS = ["Food", "Off the Beaten Path", "Adventure", "History", "Culture"];

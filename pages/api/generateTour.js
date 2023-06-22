@@ -1,7 +1,7 @@
 import { Configuration } from "openai";
 import { OpenAIStream} from "./OpenAIStream";
 import { Redis } from '@upstash/redis'
-import { getStreamResponse } from "../utils/getStreamResponse";
+import { getStreamResponse } from "../../utils/getStreamResponse";
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
