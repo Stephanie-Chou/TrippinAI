@@ -2,6 +2,7 @@ import { Configuration } from "openai";
 import { OpenAIStream} from "./OpenAIStream";
 import { Redis } from '@upstash/redis'
 import { getStreamResponse } from "../../utils/getStreamResponse";
+import isJsonString from "../../utils/isJsonString";
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -49,7 +50,7 @@ export default async function (req, res) {
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0,
-    max_tokens: 100,
+    max_tokens: 200,
     stream: true,
     n: 1,
   };
@@ -72,9 +73,11 @@ export default async function (req, res) {
 
   return getStreamResponse(data).then((streamResponse) => {
     console.log('CACHE MISS', JSON.stringify({result: streamResponse}))
+    if (isJsonString(streamResponse)) {
+      client.set(key, JSON.stringify({result: streamResponse}));
+      return res.status(200).json(JSON.stringify({result: streamResponse}));
+    }
 
-    client.set(key, JSON.stringify({result: streamResponse}));
-    return res.status(200).json(JSON.stringify({result: streamResponse}));
   });
 }
 

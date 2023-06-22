@@ -4,6 +4,7 @@ import Day from "../components/Day";
 import DayTrips from "../components/DayTrips";
 import styles from "./index.module.css";
 import { getStreamResponse } from "../utils/getStreamResponse";
+import isJsonString from "../utils/isJsonString";
 
 export default function Home() {
   const DEFAULT_INTERESTS = ["Food", "Off the Beaten Path", "Adventure", "History", "Culture"];
@@ -26,7 +27,7 @@ export default function Home() {
 
   // States
   const [loading, setLoading] = useState({
-    activities: false,
+    days: false,
     dayTrips: false,
   });
   const [errorMessages, setErrorMessages] = useState([]);
@@ -39,6 +40,10 @@ export default function Home() {
 
   useEffect(() => {
     renderDays(activities, neighborhoods, food, tripLength);
+    setLoading((prev) => ({
+      days: false,
+      dayTrips: prev.dayTrips,
+    }));
   }, [activities, neighborhoods, food, tripLength])
 
 
@@ -46,11 +51,9 @@ export default function Home() {
   * RENDER FUNCTIONS
   ************************/
   function renderLoader() {
-    const {activities, dayTrips} = loading;
-    return (activities || dayTrips) ? 
+    const {days, dayTrips} = loading;
+    return (days || dayTrips) ? 
       <div>
-        {activities ? "...Loading Activities" : null}
-        {dayTrips ? " ...Loading Day Trips" : null}
         <div className={styles.ldsellipsis}><div></div><div></div><div></div><div></div></div>
       </div>: null;
   }
@@ -98,7 +101,7 @@ export default function Home() {
       getStreamResponse(data).then((streamResponse) => {
         setDayTrips(JSON.parse(streamResponse).day_trips);
         setLoading((prev) => ({
-          activities: prev.activities,
+          days: prev.days,
           dayTrips: false,
         }));
       });
@@ -128,21 +131,19 @@ export default function Home() {
       throw new Error(`Request failed with status ${response.statusText}`);
     }
 
-    // This data is a ReadableStream
     const data = response.body;
     if (!data) {
       return;
     }
     getStreamResponse(data).then((streamResponse) => {
-      const json = jsonParse(streamResponse);
-
-      console.log(streamResponse);
-      if (!json) return;
-
+      if (!isJsonString(streamResponse)) return;
+      const json = JSON.parse(streamResponse);
       if (json.error) {
-        setErrorMessages(errorMessages.push(json.error));
-        return;
+        setErrorMessages((prevState) => {
+          return nextState = [...prevState, json.error]
+        })
       }
+      console.log(streamResponse);
 
       setMeta(json);
       setActivities(json.activities.map((activity) => {
@@ -158,10 +159,6 @@ export default function Home() {
           name: neighborhood,
           walking_tour: []
         }
-      }));
-      setLoading((prev) => ({
-        activities: false,
-        dayTrips: prev.dayTrips,
       }));
       setCityInput(""); // clear it so it rerenders don't refetch activities.
     });
@@ -185,6 +182,10 @@ export default function Home() {
    */
 
   async function fetchFood(neighborhood, index) {
+    setLoading((prev) => ({
+      days: true,
+      dayTrips: prev.dayTrips,
+    }));
     const response = await fetch("/api/generateRestaurants", {
       method: "POST",
       headers: {
@@ -198,16 +199,16 @@ export default function Home() {
     }
 
     const jsonStr = JSON.parse(responseData).result;
-    const json = jsonParse(jsonStr); // parser with error handling for the ai generated json
-
-    console.log('food json' , json)
-
-    if (!json) return;
-
-    if (json.error) {
-      setErrorMessages(errorMessages.push(json.error));
+    if (!isJsonString(jsonStr)) {
+      console.log('error');
       return;
     }
+    const json = JSON.parse(jsonStr);
+      if (json.error) {
+        setErrorMessages((prevState) => {
+          return nextState = [...prevState, json.error]
+        })
+      }
 
     setFood((prevState) => {
       let updatedFood = [...prevState];
@@ -233,6 +234,10 @@ export default function Home() {
     }
    */
   async function fetchActivityDescription(activity, index) {
+    setLoading((prev) => ({
+      days: true,
+      dayTrips: prev.dayTrips,
+    }));
       const response = await fetch("/api/generateActivityDescription", {
         method: "POST",
         headers: {
@@ -246,24 +251,24 @@ export default function Home() {
         throw responseData.error || new Error(`Request failed with status ${response.status}`);
       }
 
-      const jsonStr = JSON.parse(responseData).result;
-      const json = jsonParse(jsonStr); // parser with error handling for the ai generated json
+    const jsonStr = JSON.parse(responseData).result;
+    if (!isJsonString(jsonStr)) {
+      console.log('desc error');
+      return;
+    }
+    const json = JSON.parse(jsonStr);
+    if (json.error) {
+      setErrorMessages((prevState) => {
+        return nextState = [...prevState, json.error]
+      })
+    }
 
-      console.log('desc json', json);
-
-      if (!json) return;
-
-      if (json.error) {
-        setErrorMessages(errorMessages.push(json.error));
-        return;
-      }
-
-      setActivities((prevState) => {
-        let updatedActivities = [...prevState];
-        updatedActivities[index].long_desc = json.long_desc;
-        updatedActivities[index].short_desc = json.short_desc;
-        return updatedActivities;
-      });
+    setActivities((prevState) => {
+      let updatedActivities = [...prevState];
+      updatedActivities[index].long_desc = json.long_desc;
+      updatedActivities[index].short_desc = json.short_desc;
+      return updatedActivities;
+    });
   }
 
   function fetchWalkingTours() {    
@@ -283,7 +288,11 @@ export default function Home() {
         {"name": "Eataly Flatiron", "desc": "Explore this Italian food emporium, offering delicious gourmet food, coffee, and pastries."}
      ]
    */
-  async function fetchWalkingTour(neighborhood, index) {    
+  async function fetchWalkingTour(neighborhood, index) {   
+    setLoading((prev) => ({
+      days: true,
+      dayTrips: prev.dayTrips,
+    })); 
     fetchImage(neighborhood, index);
     const response = await fetch("/api/generateTour", {
       method: "POST",
@@ -299,15 +308,16 @@ export default function Home() {
       }
 
       const jsonStr = JSON.parse(responseData).result;
-      const json = jsonParse(jsonStr); // parser with error handling for the ai generated json
-
-      if (!json) return;
-
-      if (json.error) {
-        setErrorMessages(errorMessages.push(json.error));
+      if (!isJsonString(jsonStr)) {
+        console.log('tour error');
         return;
+      } 
+      const json = JSON.parse(jsonStr);
+      if (json.error) {
+        setErrorMessages((prevState) => {
+          return nextState = [...prevState, json.error]
+        })
       }
-
       setNeighborhoods((prevState) => {
         let updatedNeighborhoods = [...prevState];
         updatedNeighborhoods[index].walking_tour = json;
@@ -338,7 +348,6 @@ export default function Home() {
     } catch(error) {
       // Consider implementing your own error handling logic here
       console.error(error);
-      alert(error.message);
     }
   }
   function initializeItineraryStates() {
