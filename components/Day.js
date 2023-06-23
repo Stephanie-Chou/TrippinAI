@@ -51,7 +51,7 @@ export default function Day({activity, food, neighborhood, subheader, locationNa
               href={`https://unsplash.com/@${username}`}
             >
               { user ? user.name : ''}
-            </a> on <a href="https://unsplash.com/?utm_source=your_app_name&utm_medium=referral">Unsplash</a>
+            </a> on <a className={styles.credit} href="https://unsplash.com/?utm_source=your_app_name&utm_medium=referral">Unsplash</a>
           </Page>
         </>
     );

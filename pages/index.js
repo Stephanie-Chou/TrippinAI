@@ -419,7 +419,7 @@ export default function Home() {
       <Head>
         <title>Trippin - The AI Powered Travel Planner</title>
         <link rel="icon" href="/JourneyGenieLogo_thick.png" />
-        <meta property="og:image" content="/JourneyGenieLogo_thick.png"></meta>
+        <meta property="og:image" content="https://stephaniechou.com/assets/images/trippinspo_logo.png"></meta>
         <meta name="description" content="Artificial Intelligence powered travel planner. Creates a one to five day itinerary, Recommends Day Trips and Food options. Get inspired for your next vacation."/>
       </Head>
 
