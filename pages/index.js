@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useState, useEffect} from "react";
+import { useState, useEffect, useRef} from "react";
 import Day from "../components/Day";
 import DayTrips from "../components/DayTrips";
 import styles from "./index.module.css";
@@ -20,7 +20,6 @@ export default function Home() {
   // Itinerary Model State
   const [dayTrips, setDayTrips] = useState([]);
   const [meta, setMeta] = useState(); // array of activities and array of neighborhood names
-  const [stream, setStream] = useState();
   const [activities, setActivities] = useState([]);
   const [neighborhoods, setNeighborhoods] = useState([]);
   const [food, setFood] = useState([]);
@@ -46,15 +45,22 @@ export default function Home() {
     }));
   }, [activities, neighborhoods, food, tripLength])
 
+  const myRef = useRef(null)
+  function scrollTo(ref) {
+    if (!ref.current) return;
+    ref.current.scrollIntoView({behavior: 'smooth'});
+  }
 
   /***********************
   * RENDER FUNCTIONS
   ************************/
   function renderLoader() {
     const {days, dayTrips} = loading;
+    console.log('render loader', days, dayTrips)
     return (days || dayTrips) ? 
-      <div>
+      <div className={styles.loader}>
         <div className={styles.ldsellipsis}><div></div><div></div><div></div><div></div></div>
+       
       </div>: null;
   }
 
@@ -372,24 +378,6 @@ export default function Home() {
     setNeighborhoods(initNeighborhoods);
     setFood(initFood)
   }
-  /*****************
-  * UTIL FUNCTIONS
-  ******************/
-
-  function jsonParse(jsonString) {
-    try {
-      const json = JSON.parse(jsonString);
-
-      if (json.error) {
-        setErrorMessages(errorMessages.push(json.error));
-        return;
-      }
-
-      return json;
-    } catch (e){
-      throw new Error(`${e} Tried to Parse: ${jsonString}`);
-    }
-  }
 
   /*****************
   * FORM FUNCTIONS
@@ -405,6 +393,8 @@ export default function Home() {
     initializeItineraryStates();
     fetchActivities();
     fetchDayTrips();
+
+    scrollTo(myRef);
   }
 
   const handleOnChange = (position) => {
@@ -480,14 +470,13 @@ export default function Home() {
                 }
               </div>
               <input type="submit" value="Plan It" />
+              {renderLoader()}
             </form>
             {errorMessages}
-            {renderLoader()}
           </div>
         </div>
                 
-        <div className={styles.result}>
-          <div className={styles.stream}>{stream}</div>
+        <div className={styles.result} ref={myRef}>
           {locationName ? <h4>Travel Plan for <span className={styles.cityName}> {locationName} </span></h4> : ""}
           {renderDays()}
           <DayTrips
