@@ -56,33 +56,90 @@ export default function Home() {
   ************************/
   function renderLoader() {
     const {days, dayTrips} = loading;
-    console.log('render loader', days, dayTrips)
     return (days || dayTrips) ? 
       <div className={styles.loader}>
         <div className={styles.ldsellipsis}><div></div><div></div><div></div><div></div></div>
-       
       </div>: null;
   }
 
   function renderDays() {
     if (activities.length === 0) return;
-    let subheader;
     let days = new Array(tripLength).fill(0);
     return days.map((day, i) => {
-      subheader = "Day " + (i + 1);
       return (
         <Day
           activity={activities[i]}
           neighborhood={neighborhoods[i]}
           food={food[i]}
-          subheader={subheader}
+          index={i}
           locationName={locationName}
           key={i}
+          retry={retryDay}
         />
       )
     })
   }
 
+  async function retryDay(index) {
+    const selectedInterests = checkedState.map((item) => item.isChecked? item.name : "").filter((n)=>n).join()
+    console.log(`Retried ${locationName}`, index )
+
+    const response = await fetch("/api/generateRetryActivity", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ city: locationName, interests: selectedInterests, tripLength: 1 }),
+    });
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.statusText}`);
+    }
+
+    const data = response.body;
+    if (!data) {
+      return;
+    }
+
+    getStreamResponse(data).then((streamResponse) => {
+      if (!isJsonString(streamResponse)) return;
+      const json = JSON.parse(streamResponse);
+
+      if (json.error) {
+        setErrorMessages((prevState) => {
+          return nextState = [...prevState, json.error]
+        })
+      }
+
+      setMeta((prevState) => {
+        console.log('set meta', prevState, index)
+        const nextState = {...prevState};
+        nextState.activities[index] = json.activity;
+        nextState.neighborhoods[index] = json.neighborhood;
+
+        console.log(nextState)
+        return nextState;
+      })
+
+      setActivities((prevState) => {
+        const nextState = [...prevState];
+        nextState[index] = {
+          name: json.activity,
+          short_desc: "",
+          long_desc: "", 
+        };
+        return nextState;
+      });
+
+      setNeighborhoods((prevState) => {
+        const nextState = [...prevState];
+        nextState[index] = {
+          name: json.neighborhood,
+          walking_tour: []
+        }
+        return nextState;
+      });
+    });
+  }
   /***********************
   * DATA FETCH FUNCTIONS
   ************************/
@@ -392,7 +449,7 @@ export default function Home() {
 
     initializeItineraryStates();
     fetchActivities();
-    fetchDayTrips();
+    // fetchDayTrips();
 
     scrollTo(myRef);
   }
