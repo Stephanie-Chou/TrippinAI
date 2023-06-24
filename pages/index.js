@@ -405,6 +405,7 @@ export default function Home() {
     initializeItineraryStates();
     fetchActivities();
     fetchDayTrips();
+    scrollTo(myRef);
   }
 
   const handleOnChange = (position) => {
