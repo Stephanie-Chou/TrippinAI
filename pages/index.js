@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useState, useEffect} from "react";
+import { useState, useEffect, useRef} from "react";
 import Day from "../components/Day";
 import DayTrips from "../components/DayTrips";
 import styles from "./index.module.css";
@@ -20,7 +20,6 @@ export default function Home() {
   // Itinerary Model State
   const [dayTrips, setDayTrips] = useState([]);
   const [meta, setMeta] = useState(); // array of activities and array of neighborhood names
-  const [stream, setStream] = useState();
   const [activities, setActivities] = useState([]);
   const [neighborhoods, setNeighborhoods] = useState([]);
   const [food, setFood] = useState([]);
@@ -46,6 +45,11 @@ export default function Home() {
     }));
   }, [activities, neighborhoods, food, tripLength])
 
+  const myRef = useRef(null)
+  function scrollTo(ref) {
+    if (!ref.current) return;
+    ref.current.scrollIntoView({behavior: 'smooth'});
+  }
 
   /***********************
   * RENDER FUNCTIONS
@@ -53,30 +57,89 @@ export default function Home() {
   function renderLoader() {
     const {days, dayTrips} = loading;
     return (days || dayTrips) ? 
-      <div>
+      <div className={styles.loader}>
         <div className={styles.ldsellipsis}><div></div><div></div><div></div><div></div></div>
       </div>: null;
   }
 
   function renderDays() {
     if (activities.length === 0) return;
-    let subheader;
     let days = new Array(tripLength).fill(0);
     return days.map((day, i) => {
-      subheader = "Day " + (i + 1);
       return (
         <Day
           activity={activities[i]}
           neighborhood={neighborhoods[i]}
           food={food[i]}
-          subheader={subheader}
+          index={i}
           locationName={locationName}
           key={i}
+          retry={retryDay}
         />
       )
     })
   }
 
+  async function retryDay(index) {
+    const selectedInterests = checkedState.map((item) => item.isChecked? item.name : "").filter((n)=>n).join()
+    console.log(`Retried ${locationName}`, index )
+
+    const response = await fetch("/api/generateRetryActivity", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ city: locationName, interests: selectedInterests, tripLength: 1 }),
+    });
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.statusText}`);
+    }
+
+    const data = response.body;
+    if (!data) {
+      return;
+    }
+
+    getStreamResponse(data).then((streamResponse) => {
+      if (!isJsonString(streamResponse)) return;
+      const json = JSON.parse(streamResponse);
+
+      if (json.error) {
+        setErrorMessages((prevState) => {
+          return nextState = [...prevState, json.error]
+        })
+      }
+
+      setMeta((prevState) => {
+        console.log('set meta', prevState, index)
+        const nextState = {...prevState};
+        nextState.activities[index] = json.activity;
+        nextState.neighborhoods[index] = json.neighborhood;
+
+        console.log(nextState)
+        return nextState;
+      })
+
+      setActivities((prevState) => {
+        const nextState = [...prevState];
+        nextState[index] = {
+          name: json.activity,
+          short_desc: "",
+          long_desc: "", 
+        };
+        return nextState;
+      });
+
+      setNeighborhoods((prevState) => {
+        const nextState = [...prevState];
+        nextState[index] = {
+          name: json.neighborhood,
+          walking_tour: []
+        }
+        return nextState;
+      });
+    });
+  }
   /***********************
   * DATA FETCH FUNCTIONS
   ************************/
@@ -372,24 +435,6 @@ export default function Home() {
     setNeighborhoods(initNeighborhoods);
     setFood(initFood)
   }
-  /*****************
-  * UTIL FUNCTIONS
-  ******************/
-
-  function jsonParse(jsonString) {
-    try {
-      const json = JSON.parse(jsonString);
-
-      if (json.error) {
-        setErrorMessages(errorMessages.push(json.error));
-        return;
-      }
-
-      return json;
-    } catch (e){
-      throw new Error(`${e} Tried to Parse: ${jsonString}`);
-    }
-  }
 
   /*****************
   * FORM FUNCTIONS
@@ -404,6 +449,7 @@ export default function Home() {
 
     initializeItineraryStates();
     fetchActivities();
+    fetchDayTrips();
     fetchDayTrips();
     scrollTo(myRef);
   }
@@ -420,6 +466,8 @@ export default function Home() {
       <Head>
         <title>Trippin - The AI Powered Travel Planner</title>
         <link rel="icon" href="/JourneyGenieLogo_thick.png" />
+        <meta property="og:image" content="https://stephaniechou.com/assets/images/trippinspo_logo.png"></meta>
+        <meta name="description" content="Artificial Intelligence powered travel planner. Creates a one to five day itinerary, Recommends Day Trips and Food options. Get inspired for your next vacation."/>
       </Head>
 
       <main className={styles.main}>
@@ -479,14 +527,13 @@ export default function Home() {
                 }
               </div>
               <input type="submit" value="Plan It" />
+              {renderLoader()}
             </form>
             {errorMessages}
-            {renderLoader()}
           </div>
         </div>
                 
-        <div className={styles.result}>
-          <div className={styles.stream}>{stream}</div>
+        <div className={styles.result} ref={myRef}>
           {locationName ? <h4>Travel Plan for <span className={styles.cityName}> {locationName} </span></h4> : ""}
           {renderDays()}
           <DayTrips
