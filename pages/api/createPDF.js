@@ -122,6 +122,10 @@ function generateStyles() {
     margin: 24px 0;
   }
 
+  .activity_long_desc {
+    margin-bottom: 18px;
+  }
+
   .main h3 {
     font-size: 32px;
     line-height: 40px;
@@ -209,6 +213,7 @@ function generateHtml(city, neighborhoods, activities, foods, dayTrips) {
     `</div></div>` +
     `<div class="container">` +
     `<h3> ${neighborhood.name}</h3>` +
+    `<div class="activity_long_desc">${activity.long_desc}</div>` +
     `<table>` +
     `<tbody>` +
     `<tr>` +
@@ -239,8 +244,6 @@ function generateHtml(city, neighborhoods, activities, foods, dayTrips) {
     `</tr>` +
     `</tbody>` +
     `</table>` +
-    `<h4>The Neighborhood</h4>` +
-    `<div>${activity.long_desc}</div>` +
     `</div >` +
     `</section>`;
   });
