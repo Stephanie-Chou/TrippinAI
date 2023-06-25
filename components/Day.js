@@ -24,13 +24,14 @@ export default function Day({activity, food, neighborhood, index, locationName, 
             subheader={subheader}
           >
             <h3>{activity.name}</h3>
+            <h4>In the {neighborhood.name} Neighborhood</h4> 
+            <div className={styles.neighboorhood_long_desc}>{activity.long_desc}</div>
             <Itinerary
               activity={activity}
               food={food}
               neighborhood={neighborhood}
             />
-            <h4>The Neighborhood</h4> 
-            {activity.long_desc}
+            
             <button className={styles.retryButton} onClick={() => retry(index)}>Regenerate</button>
           </Page>
 

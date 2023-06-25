@@ -10,7 +10,6 @@
     color: #b3b3b3;
   }
   
-
   .retryButton {
     color: #fff;
     background-color: #D99146;
@@ -19,8 +18,11 @@
     text-align: center;
     cursor: pointer;
     padding: 4px 12px;
-    display: block;
-    float: right;
-    margin: 12px;
+    margin: 12px 0;
     font-size: 12px;
+  }
+
+
+  .neighboorhood_long_desc {
+    margin-bottom: 18px;
   }
