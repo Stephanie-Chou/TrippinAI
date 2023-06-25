@@ -1,53 +1,5 @@
-/* for the pdf */
-@import url('https://fonts.googleapis.com/css2?family=Londrina+Outline&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Karla&family=Londrina+Outline&display=swap');
-
-@page {
-  size: portait;
+body {
+  margin: 0;
+  padding: 0;
 }
-
-
-
-@media print {
-  button {
-    display: none;
-  }
-
-  .tag {
-    width: fit-content;
-    background-color: #2D2D2D;
-    color: #F9F5F0;
-    padding: 4px;
-  }
-
-  body {
-    font-family: "Karla";
-    color: rgb(45, 45, 45);
-    background-color: rgb(249, 245, 240);
-    margin: 0;
-    padding: 0;
-  }
   
-  article {
-    width: 100%;
-  }
-  
-  section {
-    display: grid;
-    background-color: white;
-    margin-block-end: 1.5rem;
-    justify-items: center;
-    padding: 1rem;
-    page-break-after: always;
-    break-after: page;
-    print-color-adjust: exact;
-    -webkit-print-color-adjust: exact;
-  }
-  
-  section {
-    page-break-after: always;
-    break-after: page;
-  }
-  
-  table { page-break-inside: avoid; }
-}
