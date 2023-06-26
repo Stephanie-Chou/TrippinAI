@@ -24,10 +24,10 @@ export default function Home() {
 
   // Itinerary Model State
   const [dayTrips, setDayTrips] = useState([]);
-  const [meta, setMeta] = useState(stub.meta); // array of activities and array of neighborhood names
-  const [activities, setActivities] = useState(stub.sampleData.activities);
-  const [neighborhoods, setNeighborhoods] = useState(stub.sampleData.neighborhoods);
-  const [food, setFood] = useState(stub.sampleData.foods);
+  const [meta, setMeta] = useState({}); // array of activities and array of neighborhood names
+  const [activities, setActivities] = useState([]);
+  const [neighborhoods, setNeighborhoods] = useState([]);
+  const [food, setFood] = useState([]);
 
   // States
   const [loading, setLoading] = useState({
@@ -37,9 +37,9 @@ export default function Home() {
   const [errorMessages, setErrorMessages] = useState([]);
   
   useEffect(() => {
-    // fetchActivityDescriptions(meta);
-    // fetchWalkingTours(meta);
-    // fetchFoods(meta)
+    fetchActivityDescriptions(meta);
+    fetchWalkingTours(meta);
+    fetchFoods(meta)
   }, [meta]);
 
   useEffect(() => {
@@ -454,7 +454,7 @@ export default function Home() {
 
     initializeItineraryStates();
     fetchActivities();
-    // fetchDayTrips();
+    fetchDayTrips();
 
     scrollTo(myRef);
   }
