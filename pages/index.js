@@ -12,7 +12,8 @@ export default function Home() {
   const DEFAULT_INTERESTS = ["Food", "Off the Beaten Path", "Adventure", "History", "Culture"];
 
   // Modal State
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
+  const [showTipJar, setShowTipJar] = useState(false);
 
   //Form State
   const [cityInput, setCityInput] = useState("");
@@ -456,6 +457,7 @@ export default function Home() {
     fetchActivities();
     fetchDayTrips();
 
+    setShowTipJar(true);
     scrollTo(myRef);
   }
 
@@ -558,7 +560,7 @@ export default function Home() {
         </div>
         {isOpen && <DownloadModal onClose={onModalCloseClick}/>}
 
-        <div className={styles.download}>
+        {showTipJar && <div className={styles.download}>
           <button onClick={onModalOpenClick}>
             <span className={styles.left}>
                 Tip Trippin
@@ -567,7 +569,7 @@ export default function Home() {
                 <img src="/tipjar.png"/>
             </span>
           </button>
-        </div>
+        </div>}
       </main>
     </div>
   );
