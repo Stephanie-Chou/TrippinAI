@@ -1,0 +1,75 @@
+/** Download Modal */
+
+.modal {
+  background-color: #f2f2f2;
+  border-radius: 10px;
+  color: #202123;
+  height: 40vh;
+  border: 2px solid #D99146;
+  width: clamp(320px, 420px, 85%);
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  position: fixed;
+  right: 0;
+  bottom: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.heading {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px; 
+  text-align: center;
+  background-color:#D99146;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.heading p {
+  color: #f2f2f2;
+}
+
+.heading button {
+  background-color:#D99146;
+  border: none;
+  color: white;
+  padding: 15px 15px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.container {
+  margin-bottom: 40px;
+  margin-left: 32px;
+  margin-right: 32px;
+}
+
+.divider {
+  border-top: 10px solid #26A391;
+
+  width: 100%;
+}
+
+.images {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  max-width: 100%;
+  justify-content: space-between;
+}
+
+.formWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.modal .container form {
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 0px;
+  width: 164px;
+}

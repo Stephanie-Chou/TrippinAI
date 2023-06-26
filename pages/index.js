@@ -2,12 +2,17 @@ import Head from "next/head";
 import { useState, useEffect, useRef} from "react";
 import Day from "../components/Day";
 import DayTrips from "../components/DayTrips";
+import DownloadModal from "../components/DownloadModal";
 import styles from "./index.module.css";
 import { getStreamResponse } from "../utils/getStreamResponse";
 import isJsonString from "../utils/isJsonString";
+import * as stub from "../utils/stubData"
 
 export default function Home() {
   const DEFAULT_INTERESTS = ["Food", "Off the Beaten Path", "Adventure", "History", "Culture"];
+
+  // Modal State
+  const [isOpen, setIsOpen] = useState(false)
 
   //Form State
   const [cityInput, setCityInput] = useState("");
@@ -19,10 +24,10 @@ export default function Home() {
 
   // Itinerary Model State
   const [dayTrips, setDayTrips] = useState([]);
-  const [meta, setMeta] = useState(); // array of activities and array of neighborhood names
-  const [activities, setActivities] = useState([]);
-  const [neighborhoods, setNeighborhoods] = useState([]);
-  const [food, setFood] = useState([]);
+  const [meta, setMeta] = useState(stub.meta); // array of activities and array of neighborhood names
+  const [activities, setActivities] = useState(stub.sampleData.activities);
+  const [neighborhoods, setNeighborhoods] = useState(stub.sampleData.neighborhoods);
+  const [food, setFood] = useState(stub.sampleData.foods);
 
   // States
   const [loading, setLoading] = useState({
@@ -32,9 +37,9 @@ export default function Home() {
   const [errorMessages, setErrorMessages] = useState([]);
   
   useEffect(() => {
-    fetchActivityDescriptions(meta);
-    fetchWalkingTours(meta);
-    fetchFoods(meta)
+    // fetchActivityDescriptions(meta);
+    // fetchWalkingTours(meta);
+    // fetchFoods(meta)
   }, [meta]);
 
   useEffect(() => {
@@ -461,6 +466,16 @@ export default function Home() {
     setCheckedState(updatedCheckedState)
   }
 
+  function onModalOpenClick(event) {
+    event.preventDefault();
+    setIsOpen(true);
+  }
+
+  function onModalCloseClick(event) {
+    event.preventDefault();
+    setIsOpen(false);
+  }
+
   return (
     <div>
       <Head>
@@ -540,6 +555,18 @@ export default function Home() {
             dayTrips={dayTrips}
             locationName={locationName}
           />
+        </div>
+        {isOpen && <DownloadModal onClose={onModalCloseClick}/>}
+
+        <div className={styles.download}>
+          <button onClick={onModalOpenClick}>
+            <span className={styles.left}>
+                Tip Trippin
+            </span>
+            <span className={styles.right}>
+                <img src="/tipjar.png"/>
+            </span>
+          </button>
         </div>
       </main>
     </div>
