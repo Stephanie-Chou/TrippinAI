@@ -14,7 +14,7 @@ export default function DownloadModal(props){
         <p>OpenAI tokens are not free. Help Trippin keep the travel inspiration going by donating to the project.</p>
         <div className={styles.formWrapper}>
 
-          <form action="https://www.paypal.com/donate" method="post" target="_top">
+          <form action="https://www.paypal.com/donate" method="post" target="_blank">
           <input type="hidden" name="business" value="BBT5A3RU9SWZJ" />
           <input type="hidden" name="no_recurring" value="0" />
           <input type="hidden" name="item_name" value="Trippin - Spread the Travel Inspiration" />
