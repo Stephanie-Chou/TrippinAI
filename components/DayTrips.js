@@ -8,7 +8,7 @@ export default function DayTrips({dayTrips, locationName}) {
         <Page
           header={locationName}
           subheader="Day Trip"
-          id={index}
+          key={index}
         >
           <h3>{trip.name}</h3>
             <div>{trip.long_desc}</div>
