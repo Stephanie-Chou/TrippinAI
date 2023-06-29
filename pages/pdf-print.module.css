@@ -1,0 +1,21 @@
+/* for the pdf */
+@import url('https://fonts.googleapis.com/css2?family=Londrina+Outline&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Karla&family=Londrina+Outline&display=swap');
+@page {
+  min-height: 100vh;
+  max-height: fit-content;
+  width: clamp(320px, 100vw, 600px);
+  margin-bottom: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #F9F5F0;
+}
+@page { counter-increment: page }
+@page table, figure {
+    page-break-inside: avoid;
+}
+
+@page h2 {
+  text-align: center;
+  color: #24650b;
+}

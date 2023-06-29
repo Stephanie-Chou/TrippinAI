@@ -13,6 +13,8 @@
 /pages/test.js
 /pages/api/generate.js
 /pages/cache.js
+/pages/pdf_test.js
+/utils/stubData.js
 
 # next.js
 /.next/
