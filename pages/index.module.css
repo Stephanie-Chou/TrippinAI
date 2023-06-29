@@ -157,6 +157,57 @@
   height: 24px;
 }
 
+/** Download Button */
+.download {
+  z-index: 1;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  color: #fff;
+}
+
+.download button{
+  background: #D99146;
+  float: right;
+  height: 56px;
+  width: 56px;
+  border-radius: 56px;
+  border: none;
+  transition: width 1s ease-out 50ms
+} 
+
+.download button .left {
+  display: none;
+  color: #fff;
+}
+
+.download button img {
+  width: 44px;
+  height: 44px;
+}
+
+.download button:hover{
+  background: #D99146;
+  height: 56px;
+  width: 150px;
+  border-radius: 56px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  flex-direction: row;
+  vertical-align: middle;
+}
+
+.download button:hover .right{
+  padding: 8px;
+}
+.download button:hover .left{
+  display: inline;
+  margin: auto;
+  color: #f2f2f2;
+  font-size: 12px;
+}
+
 /** loading spinner */
 .loader {
   text-align: center;

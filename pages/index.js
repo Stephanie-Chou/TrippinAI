@@ -2,12 +2,18 @@ import Head from "next/head";
 import { useState, useEffect, useRef} from "react";
 import Day from "../components/Day";
 import DayTrips from "../components/DayTrips";
+import DownloadModal from "../components/DownloadModal";
 import styles from "./index.module.css";
 import { getStreamResponse } from "../utils/getStreamResponse";
 import isJsonString from "../utils/isJsonString";
+import * as stub from "../utils/stubData"
 
 export default function Home() {
   const DEFAULT_INTERESTS = ["Food", "Off the Beaten Path", "Adventure", "History", "Culture"];
+
+  // Modal State
+  const [isOpen, setIsOpen] = useState(false);
+  const [showTipJar, setShowTipJar] = useState(false);
 
   //Form State
   const [cityInput, setCityInput] = useState("");
@@ -19,7 +25,7 @@ export default function Home() {
 
   // Itinerary Model State
   const [dayTrips, setDayTrips] = useState([]);
-  const [meta, setMeta] = useState(); // array of activities and array of neighborhood names
+  const [meta, setMeta] = useState({}); // array of activities, array of neighborhood names, array of dayTrips
   const [activities, setActivities] = useState([]);
   const [neighborhoods, setNeighborhoods] = useState([]);
   const [food, setFood] = useState([]);
@@ -34,7 +40,8 @@ export default function Home() {
   useEffect(() => {
     fetchActivityDescriptions(meta);
     fetchWalkingTours(meta);
-    fetchFoods(meta)
+    fetchFoods(meta);
+    fetchDayTrips(meta);
   }, [meta]);
 
   useEffect(() => {
@@ -143,32 +150,49 @@ export default function Home() {
   /***********************
   * DATA FETCH FUNCTIONS
   ************************/
-  const fetchDayTrips = (async () => {
-      if (!cityInput) return;
-      const response = await fetch("/api/generateDayTrip", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ city: cityInput }),
-      });
+  async function fetchDayTrips() {
+    for (let i = 0; i < dayTrips.length; i++) {
+      fetchDayTrip(dayTrips[i], i);
+    }
+  }
 
-      if (!response.ok) {
-        throw new Error(`Request failed with status ${response.statusText}`);
-      }
+  async function fetchDayTrip(dayTrip, index) {
+    console.log('fetch day trip', dayTrip)
+    const response = await fetch("/api/generateDayTrip", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ city: locationName, location: dayTrip.name }),
+    });
 
-      const data = response.body;
-      if (!data) {
-        return;
-      }
-      getStreamResponse(data).then((streamResponse) => {
-        setDayTrips(JSON.parse(streamResponse).day_trips);
-        setLoading((prev) => ({
-          days: prev.days,
-          dayTrips: false,
-        }));
-      });
-  })
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.statusText}`);
+    }
+
+    const responseData = await response.json();
+    if (response.status !== 200) {
+      throw responseData.error || new Error(`Request failed with status ${response.status}`);
+    }
+
+    const jsonStr = JSON.parse(responseData).result;
+    if (!isJsonString(jsonStr)) {
+      console.log('desc error');
+      return;
+    }
+    const json = JSON.parse(jsonStr);
+
+    setDayTrips((prev) => {
+      let nextState = prev;
+      nextState[index] = json;
+      return nextState;
+    });
+    setLoading((prev) => ({
+      days: prev.days,
+      dayTrips: false,
+    }));
+  }
+
 
   /**
    * 
@@ -176,14 +200,15 @@ export default function Home() {
    * {
       "activities": ["La Jolla Kayak Tour", "San Diego Zoo Safari Park", "USS Midway Museum"],
       "neighborhoods": ["La Jolla", "San Pasqual Valley", "Downtown San Diego"]
+      "dayTrips": ["Mt. Rainier", "Snoqualmie Falls"]
     }
    */
-    async function fetchActivities() {
+    async function fetchMeta() {
     if (!cityInput) return;
     const selectedInterests = checkedState.map((item) => item.isChecked? item.name : "").filter((n)=>n).join()
     console.log(`fetching with inputs  ${cityInput} days: ${tripLength}` )
 
-    const response = await fetch("/api/generateActivity", {
+    const response = await fetch("/api/generateMeta", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -223,6 +248,16 @@ export default function Home() {
           walking_tour: []
         }
       }));
+
+      setDayTrips(json.dayTrips.map((dayTrip) => {
+        return {
+          name: dayTrip,
+          short_desc: "",
+          long_desc: "",
+          food: {}
+        }
+      }))
+
       setCityInput(""); // clear it so it rerenders don't refetch activities.
     });
   }
@@ -413,6 +448,7 @@ export default function Home() {
       console.error(error);
     }
   }
+
   function initializeItineraryStates() {
     const initActivities = Array.from({length: tripLength}, () => ({
       name:"",
@@ -431,6 +467,14 @@ export default function Home() {
       lunch: {name:"", desc:""},
       dinner: {name:"", desc:""}
     }));
+
+    const initDayTrips = Array.from({length: 2}, () =>  ({
+      name: "",
+      short_desc: "",
+      long_desc: "",
+      food: {}
+    }));
+    setDayTrips(initDayTrips);
     setActivities(initActivities);
     setNeighborhoods(initNeighborhoods);
     setFood(initFood)
@@ -448,9 +492,9 @@ export default function Home() {
     event.preventDefault();
 
     initializeItineraryStates();
-    fetchActivities();
-    fetchDayTrips();
-    fetchDayTrips();
+    fetchMeta();
+
+    setShowTipJar(true);
     scrollTo(myRef);
   }
 
@@ -459,6 +503,16 @@ export default function Home() {
       index === position ? {name: item.name, isChecked: !item.isChecked} : item
     );
     setCheckedState(updatedCheckedState)
+  }
+
+  function onModalOpenClick(event) {
+    event.preventDefault();
+    setIsOpen(true);
+  }
+
+  function onModalCloseClick(event) {
+    event.preventDefault();
+    setIsOpen(false);
   }
 
   return (
@@ -541,6 +595,18 @@ export default function Home() {
             locationName={locationName}
           />
         </div>
+        {isOpen && <DownloadModal onClose={onModalCloseClick}/>}
+
+        {showTipJar && <div className={styles.download}>
+          <button onClick={onModalOpenClick}>
+            <span className={styles.left}>
+                Tip Trippin
+            </span>
+            <span className={styles.right}>
+                <img src="/tipjar.png"/>
+            </span>
+          </button>
+        </div>}
       </main>
     </div>
   );

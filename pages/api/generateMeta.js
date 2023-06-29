@@ -35,10 +35,6 @@ export default async function (req) {
   return new Response(
     stream, {
       headers: new Headers({
-        // since we don't use browser's EventSource interface, specifying content-type is optional.
-        // the eventsource-parser library can handle the stream response as SSE, as long as the data format complies with SSE:
-        // https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#sending_events_from_the_server
-        
         // 'Content-Type': 'text/event-stream',
         'Cache-Control': 'no-cache',
       })
@@ -51,14 +47,24 @@ function generateActivityPrompt(city, interests, tripLength) {
   if (!interests) {
     interests = "general"
   }
-    return `I am a tourist visiting a location. I want a list of ${tripLength} activities to do in that location that are relevant to my interests. My interests are ${interests}. each activity should include the neighborhood where it is located. Return valid JSON containing the activities and the neighborhoods
+    return `I am a tourist visiting a location. I want a list of ${tripLength} activities to do in that location that are relevant to my interests. My interests are ${interests}. each activity should include the neighborhood where it is located. In addition, return 2 day trip location suggestions. Return valid JSON containing the activities and the neighborhoods and day trips
 
     City: Seattle
     interests: Off the Beaten Path
     tripLength: 1
     return: {
       "activities": ["Waterfall Garden Park"],
-      "neighborhoods": ["Pioneer Square"]
+      "neighborhoods": ["Pioneer Square"],
+      "dayTrips": ["Bainbridge Island", "Snoqualmie Falls"]
+    }
+
+    City: Seattle
+    interests: Adventure
+    tripLength: 1
+    return: {
+      "activities": ["Waterfall Garden Park"],
+      "neighborhoods": ["Pioneer Square"],
+      "dayTrips": ["Snoqualmie Peak", "Olympic National Park"]
     }
 
     City: Rome
@@ -66,7 +72,8 @@ function generateActivityPrompt(city, interests, tripLength) {
     tripLength: 1
     return: {
       "activities": ["The Oltrarno District"],
-      "neighborhoods": ["Oltrarno"]
+      "neighborhoods": ["Oltrarno"],
+      "dayTrips": ["Ostia Antica", "Tivoli"]
     }
   
     City: Seattle
@@ -74,7 +81,8 @@ function generateActivityPrompt(city, interests, tripLength) {
     tripLength: 2
     return: {
       "activities": ["Georgetown Art Attack", "Fremont Sunday Market"],
-      "neighborhoods": ["Georgetown", "Fremont"]
+      "neighborhoods": ["Georgetown", "Fremont"],
+      "dayTrips": ["Boeing Factory, Everett", "Hoh Rainforest, Olympic National Park"]
     }
 
     City: Seattle
@@ -82,7 +90,9 @@ function generateActivityPrompt(city, interests, tripLength) {
     tripLength: 3
     return: {
       "activities": ["Underground Tour", "Museum of History & Industry (MOHAI)", "Klondike Gold Rush National Historical Park"],
-      "neighborhoods": ["Pioneer Square", "South Lake Union (SLU)", "Downtown Seattle"]
+      "neighborhoods": ["Pioneer Square", "South Lake Union (SLU)", "Downtown Seattle"],
+      "dayTrips": ["Port Townsend", "Poulsbo"]
+
     }
 
     City: Seattle
@@ -90,7 +100,8 @@ function generateActivityPrompt(city, interests, tripLength) {
     tripLength: 3
     return: {
       "activities": ["Seattle Art Museum (SAM)", "Chihuly Garden and Glass", "Wing Luke Museum of the Asian Pacific American Experience"],
-      "neighborhoods": ["Downtown Seattle", "Seattle Center", "Industrial District"]
+      "neighborhoods": ["Downtown Seattle", "Seattle Center", "Industrial District"],
+      "dayTrips": ["Leavenworth" , "Bainbridge Island"]
     }
 
     City: Seattle
@@ -98,7 +109,8 @@ function generateActivityPrompt(city, interests, tripLength) {
     tripLength: 4
     return: {
       "activities": ["Pike Place Market", "Food tour on Capitol Hill", "Ballard Farmers Market", "Fremont Brewery Tour"],
-      "neighborhoods": ["Pike Place Market", "Capitol Hill", "Ballard", "Fremont"]
+      "neighborhoods": ["Pike Place Market", "Capitol Hill", "Ballard", "Fremont"],
+      "dayTrips": ["Leavenworth", "Woodinville Wine Country"]
     }
   
     City: Seattle
@@ -106,7 +118,8 @@ function generateActivityPrompt(city, interests, tripLength) {
     tripLength: 5
     return: {
       "activities": ["Pike Place Market", "Underground Tour", "Chihuly Garden and Glass", "Seattle Art Museum (SAM)", "Golden Gardens Park"],
-      "neighborhoods": ["Pike Place Market", "Pioneer Square", "Seattle Center", "Downtown Seattle", "Ballard"]
+      "neighborhoods": ["Pike Place Market", "Pioneer Square", "Seattle Center", "Downtown Seattle", "Ballard"],
+      "dayTrips": ["Mt. Rainier National Park", "San Juan Islands"]
     }
   
     City: ${city}
