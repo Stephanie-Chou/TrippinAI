@@ -67,7 +67,6 @@ export default async function (req, res) {
 
   const data = response.body;
   if (!data) {
-    console.log('no data')
     return;
   }
 

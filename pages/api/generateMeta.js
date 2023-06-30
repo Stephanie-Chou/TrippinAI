@@ -10,8 +10,6 @@ export const config = {
 
 export default async function (req) {
   const { city, interests, tripLength } = (await req.json());
-  console.log(city, interests, tripLength);
-
   const prompt = generateActivityPrompt(city, interests, tripLength);
 
   if (!prompt) {

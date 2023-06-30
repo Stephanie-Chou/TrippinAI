@@ -34,7 +34,7 @@ export default function DayTrips({dayTrips, locationName, retry}) {
               </tbody>
             </table>
 
-            <button className={styles.retryButton} onClick={() => retry(index)}>Regenerate</button>
+            
         </Page>     
       )
     })

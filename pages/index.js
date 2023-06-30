@@ -180,8 +180,9 @@ export default function Home() {
       setMeta((prevState) => {
         const nextState = {...prevState};
         nextState.dayTrips[index] = streamResponse;
+        console.log(nextState)
         return nextState;
-      })
+      });
 
       setDayTrips((prevState) => {
         const nextState = [...prevState];
@@ -191,6 +192,8 @@ export default function Home() {
           long_desc: "", 
           food: {}
         };
+
+        console.log(nextState)
         return nextState;
       });
     });
@@ -225,7 +228,6 @@ export default function Home() {
     const jsonStr = JSON.parse(responseData).result;
 
     if (!isJsonString(jsonStr)) {
-      console.log('bad json string');
       return;
     }
     const json = JSON.parse(jsonStr);
