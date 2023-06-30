@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useState, useEffect, useRef} from "react";
+import { useState, useEffect, useRef, use} from "react";
 import Day from "../components/Day";
 import DayTrips from "../components/DayTrips";
 import DownloadModal from "../components/DownloadModal";
@@ -52,11 +52,29 @@ export default function Home() {
     }));
   }, [activities, neighborhoods, food, tripLength])
 
+  useEffect(() => {
+    checkCanDownload(activities, neighborhoods, food, dayTrips);
+  }, [activities, neighborhoods, food, dayTrips]);
+
   const myRef = useRef(null)
   function scrollTo(ref) {
     if (!ref.current) return;
     ref.current.scrollIntoView({behavior: 'smooth'});
   }
+
+  const stickyHeader = useRef()
+  useLayoutEffect(() => {
+    const mainHeader = document.getElementById('mainHeader');
+    let fixedTop = stickyHeader.current.offsetTop
+    const fixedHeader = () => {
+      if (window.pageYOffset > fixedTop) {
+        setIsStickyHeader(true);
+      } else {
+        setIsStickyHeader(false);
+      }
+    }
+    window.addEventListener('scroll', fixedHeader)
+  }, [])
 
   /***********************
   * RENDER FUNCTIONS
@@ -89,8 +107,6 @@ export default function Home() {
 
   async function retryDay(index) {
     const selectedInterests = checkedState.map((item) => item.isChecked? item.name : "").filter((n)=>n).join()
-    console.log(`Retried ${locationName}`, index )
-
     const response = await fetch("/api/generateRetryActivity", {
       method: "POST",
       headers: {
@@ -118,12 +134,9 @@ export default function Home() {
       }
 
       setMeta((prevState) => {
-        console.log('set meta', prevState, index)
         const nextState = {...prevState};
         nextState.activities[index] = json.activity;
         nextState.neighborhoods[index] = json.neighborhood;
-
-        console.log(nextState)
         return nextState;
       })
 
@@ -157,7 +170,6 @@ export default function Home() {
   }
 
   async function fetchDayTrip(dayTrip, index) {
-    console.log('fetch day trip', dayTrip)
     const response = await fetch("/api/generateDayTrip", {
       method: "POST",
       headers: {
@@ -177,7 +189,6 @@ export default function Home() {
 
     const jsonStr = JSON.parse(responseData).result;
     if (!isJsonString(jsonStr)) {
-      console.log('desc error');
       return;
     }
     const json = JSON.parse(jsonStr);
@@ -192,7 +203,6 @@ export default function Home() {
       dayTrips: false,
     }));
   }
-
 
   /**
    * 
@@ -231,7 +241,6 @@ export default function Home() {
           return nextState = [...prevState, json.error]
         })
       }
-      console.log(streamResponse);
 
       setMeta(json);
       setActivities(json.activities.map((activity) => {
@@ -351,7 +360,6 @@ export default function Home() {
 
     const jsonStr = JSON.parse(responseData).result;
     if (!isJsonString(jsonStr)) {
-      console.log('desc error');
       return;
     }
     const json = JSON.parse(jsonStr);
@@ -400,14 +408,12 @@ export default function Home() {
       body: JSON.stringify({ neighborhood: neighborhood.name, city: locationName}),
     });
     const responseData = await response.json();
-      console.log("response ", responseData);
       if (response.status !== 200) {
         throw responseData.error || new Error(`Request failed with status ${response.status}`);
       }
 
       const jsonStr = JSON.parse(responseData).result;
       if (!isJsonString(jsonStr)) {
-        console.log('tour error');
         return;
       } 
       const json = JSON.parse(jsonStr);
@@ -425,7 +431,6 @@ export default function Home() {
 
   async function fetchImage(neighborhood, index) {
     if (!neighborhoods || neighborhoods.length === 0) return;
-    console.log(`fetch image for ${neighborhood.name}`);
     try {
       const response = await fetch("/api/fetchUnsplashImage", {
         method: "POST",
@@ -480,6 +485,10 @@ export default function Home() {
     setFood(initFood)
   }
 
+  function checkCanDownload() {
+    const shouldDownloadDisable = (locationName && (loading.days || loading.dayTrips)) || !locationName;
+    shouldDownloadDisable ? setIsDownloadButtonDisabled(true) : setIsDownloadButtonDisabled(false);
+  }
   /*****************
   * FORM FUNCTIONS
   ******************/
