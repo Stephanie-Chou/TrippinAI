@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useState, useEffect, useRef, use} from "react";
+import { useState, useEffect, useRef, useLayoutEffect} from "react";
 import Day from "../components/Day";
 import DayTrips from "../components/DayTrips";
 import DownloadModal from "../components/DownloadModal";
@@ -13,7 +13,9 @@ export default function Home() {
 
   // Modal State
   const [isOpen, setIsOpen] = useState(false);
-  const [showTipJar, setShowTipJar] = useState(false);
+  const [downloadButtonText, setDownloadButtonText] = useState('Download Plan as PDF');
+  const [isDownloadButtonDisabled, setIsDownloadButtonDisabled] = useState(true);
+  const [isStickyHeader, setIsStickyHeader] = useState(false);
 
   //Form State
   const [cityInput, setCityInput] = useState("");
@@ -50,6 +52,7 @@ export default function Home() {
       days: false,
       dayTrips: prev.dayTrips,
     }));
+    checkCanDownload();
   }, [activities, neighborhoods, food, tripLength])
 
   useEffect(() => {
@@ -202,6 +205,8 @@ export default function Home() {
       days: prev.days,
       dayTrips: false,
     }));
+
+    checkCanDownload();
   }
 
   /**
@@ -493,6 +498,55 @@ export default function Home() {
   * FORM FUNCTIONS
   ******************/
 
+  async function onDownload(event) {
+    event.preventDefault();
+    if (!locationName) {
+      setIsDownloadButtonDisabled(true)
+      return;
+    };
+
+    setDownloadButtonText('Downloading ...');
+    try {
+      const response = await fetch("/api/createPDF", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          city: locationName,
+          neighborhoods: neighborhoods,
+          activities: activities,
+          foods: food,
+          dayTrips: dayTrips
+        })
+    });
+
+      const responseData = await response.json();
+      if (response.status !== 200) {
+        throw responseData.error || new Error(`Request failed with status ${response.status}`);
+      }
+      let arr= new Uint8Array(responseData.result.data);
+      let buffer = arr.buffer
+
+      let blob=new Blob([buffer], {type: "application/pdf"});
+      const href = URL.createObjectURL(blob);
+
+      // Creating new object of PDF file
+      // Setting various property values
+      let alink = document.createElement('a');
+      document.body.appendChild(alink); // Required for this to work in FireFox
+      alink.href = href;
+      alink.download = "Trippin_Itinerary.pdf"
+      alink.target = "_blank";
+      alink.click();
+      setDownloadButtonText('Download Plan as PDF');
+    } catch(error) {
+      // Consider implementing your own error handling logic here
+      console.error(error);
+      setDownloadButtonText('Error on Download');
+    }
+  }
+
   async function onSubmit(event) {
     setLoading({
       activities:true,
@@ -503,7 +557,6 @@ export default function Home() {
     initializeItineraryStates();
     fetchMeta();
 
-    setShowTipJar(true);
     scrollTo(myRef);
   }
 
@@ -532,91 +585,96 @@ export default function Home() {
         <meta property="og:image" content="https://stephaniechou.com/assets/images/trippinspo_logo.png"></meta>
         <meta name="description" content="Artificial Intelligence powered travel planner. Creates a one to five day itinerary, Recommends Day Trips and Food options. Get inspired for your next vacation."/>
       </Head>
+        <main className={styles.main }>
+          <div className={styles.hero}>
+            <div className={styles.input}>
+              <img src="/JourneyGenieLogo_thick.png" className={styles.icon} />
+              <h1>TRIPPIN</h1>
+              <h4> The AI Powered Travel Planner </h4>
+              <form onSubmit={onSubmit}>
+                <input
+                  type="text"
+                  name="city"
+                  placeholder="Tell me where you are going (city)"
+                  value={cityInput}
+                  onChange={(e) => {
+                    setCityInput(e.target.value);
+                    setLocationName(e.target.value);
+                  }}
+                />
 
-      <main className={styles.main}>
-        <div className={styles.hero}>
-          <div className={styles.input}>
-            <img src="/JourneyGenieLogo_thick.png" className={styles.icon} />
-            <h1>TRIPPIN</h1>
-            <h4> The AI Powered Travel Planner </h4>
-            <form onSubmit={onSubmit}>
-              <input
-                type="text"
-                name="city"
-                placeholder="Tell me where you are going (city)"
-                value={cityInput}
-                onChange={(e) => {
-                  setCityInput(e.target.value);
-                  setLocationName(e.target.value);
-                }}
-              />
-
-              <div className={styles.select}>
-                <label forhtml="tripLength">How long are you there?</label>
-                <select 
-                  name="tripLength" 
-                  id="tripLength"
-                  defaultValue={tripLength}
-                  onChange={(e) => setTripLength(parseInt(e.target.value))}
-                >
-                  <option value="1">1 Day</option>
-                  <option value="2">2 Days</option>
-                  <option value="3">3 Days</option>
-                  <option value="4">4 Days</option>
-                  <option value="5">5 Days</option>
-                </select>
-              </div>
+                <div className={styles.select}>
+                  <label forhtml="tripLength">How long are you there?</label>
+                  <select 
+                    name="tripLength" 
+                    id="tripLength"
+                    defaultValue={tripLength}
+                    onChange={(e) => setTripLength(parseInt(e.target.value))}
+                  >
+                    <option value="1">1 Day</option>
+                    <option value="2">2 Days</option>
+                    <option value="3">3 Days</option>
+                    <option value="4">4 Days</option>
+                    <option value="5">5 Days</option>
+                  </select>
+                </div>
 
 
-              <p>Why are you traveling?</p>
-              <div className={styles.checkboxes}> 
-                {
-                  DEFAULT_INTERESTS.map((interest, index) => {
-                    return (
-                      <div key={index}>
-                        <input
-                          type="checkbox"
-                          id={`interest-checkbox-${index}`}
-                          name={interest}
-                          value={interest}
-                          checked={checkedState[index].isChecked}
-                          onChange={() => handleOnChange(index)
-                        }/>
-                        <label htmlFor={`interest-checkbox-${index}`}>{interest}</label>
-                      </div>
-                      
-                    )
-                  })
-                }
-              </div>
-              <input type="submit" value="Plan It" />
-              {renderLoader()}
-            </form>
-            {errorMessages}
+                <p>Why are you traveling?</p>
+                <div className={styles.checkboxes}> 
+                  {
+                    DEFAULT_INTERESTS.map((interest, index) => {
+                      return (
+                        <div key={index}>
+                          <input
+                            type="checkbox"
+                            id={`interest-checkbox-${index}`}
+                            name={interest}
+                            value={interest}
+                            checked={checkedState[index].isChecked}
+                            onChange={() => handleOnChange(index)
+                          }/>
+                          <label htmlFor={`interest-checkbox-${index}`}>{interest}</label>
+                        </div>
+                        
+                      )
+                    })
+                  }
+                </div>
+                <input type="submit" value="Plan It" />
+                {renderLoader()}
+              </form>
+              {errorMessages}
+            </div>
           </div>
-        </div>
-                
-        <div className={styles.result} ref={myRef}>
-          {locationName ? <h4>Travel Plan for <span className={styles.cityName}> {locationName} </span></h4> : ""}
-          {renderDays()}
-          <DayTrips
-            dayTrips={dayTrips}
-            locationName={locationName}
-          />
-        </div>
-        {isOpen && <DownloadModal onClose={onModalCloseClick}/>}
 
-        {showTipJar && <div className={styles.download}>
-          <button onClick={onModalOpenClick}>
-            <span className={styles.left}>
-                Tip Trippin
-            </span>
-            <span className={styles.right}>
+          <div className={isStickyHeader ? (styles.fixedTop) : styles.mainHeader } ref={stickyHeader} id="mainHeader">
+            <h4>Trippin</h4>
+            <button
+              onClick={onDownload}
+              className={styles.download}
+              disabled={isDownloadButtonDisabled}
+            >
+              {downloadButtonText}
+            </button>
+            <div className={styles.modal}>
+              <button onClick={onModalOpenClick}>
                 <img src="/tipjar.png"/>
-            </span>
-          </button>
-        </div>}
-      </main>
+              </button>
+            </div>
+          </div>    
+          <div className={styles.result} ref={myRef}>
+            {locationName ? <h4>Travel Plan for <span className={styles.cityName}> {locationName} </span></h4> : ""}
+            {renderDays()}
+            <DayTrips
+              dayTrips={dayTrips}
+              locationName={locationName}
+            />
+          </div>
+          {isOpen && <DownloadModal onClose={onModalCloseClick}/>}
+
+
+        </main>
     </div>
   );
 }

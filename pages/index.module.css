@@ -87,6 +87,7 @@
   display: flex;
   flex-direction: column;
   background-color: #FFFF;
+  flex-grow: 1;
 }
 
 .main .hero {
@@ -227,60 +228,31 @@
   height: 24px;
 }
 
-/** Download Button */
-.download {
-  z-index: 1;
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
+/** Modal Button */
+.modal {
   color: #fff;
   /* margin-right: 24px; */
   display: flex;
   justify-content: space-around;
   flex-direction: column;
+
 }
 
-.download button{
-  background: #D99146;
-  float: right;
+.modal button{
+  background: #2D2D2D;
   height: 56px;
-  width: 56px;
-  border-radius: 56px;
   border: none;
-  transition: width 1s ease-out 50ms
 } 
 
-.download button .left {
-  display: none;
-  color: #fff;
+.modal button img {
+  width: 36px;
+  height: 36px;
 }
 
-.download button img {
-  width: 44px;
-  height: 44px;
-}
-
-.download button:hover{
-  background: #D99146;
-  height: 56px;
-  width: 150px;
-  border-radius: 56px;
-  border: none;
+.modal button:hover{
   cursor: pointer;
-  display: inline-flex;
-  flex-direction: row;
-  vertical-align: middle;
 }
 
-.download button:hover .right{
-  padding: 8px;
-}
-.download button:hover .left{
-  display: inline;
-  margin: auto;
-  color: #f2f2f2;
-  font-size: 12px;
-}
 
 /** loading spinner */
 .loader {
