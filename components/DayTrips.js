@@ -1,6 +1,7 @@
 import Page from "./Page";
+import styles from "./day.module.css";
 
-export default function DayTrips({dayTrips, locationName}) {
+export default function DayTrips({dayTrips, locationName, retry}) {
     if (!dayTrips) return;
 
     return dayTrips.map((trip, index) => {
@@ -32,6 +33,8 @@ export default function DayTrips({dayTrips, locationName}) {
                 </tr>
               </tbody>
             </table>
+
+            <button className={styles.retryButton} onClick={() => retry(index)}>Regenerate</button>
         </Page>     
       )
     })

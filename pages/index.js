@@ -40,9 +40,9 @@ export default function Home() {
   const [errorMessages, setErrorMessages] = useState([]);
   
   useEffect(() => {
-    fetchActivityDescriptions(meta);
-    fetchWalkingTours(meta);
-    fetchFoods(meta);
+    // fetchActivityDescriptions(meta);
+    // fetchWalkingTours(meta);
+    // fetchFoods(meta);
     fetchDayTrips(meta);
   }, [meta]);
 
@@ -62,7 +62,6 @@ export default function Home() {
 
   const stickyHeader = useRef()
   useLayoutEffect(() => {
-    const mainHeader = document.getElementById('mainHeader');
     let fixedTop = stickyHeader.current.offsetTop
     const fixedHeader = () => {
       if (window.pageYOffset > fixedTop) {
@@ -110,7 +109,7 @@ export default function Home() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ city: locationName, interests: selectedInterests, tripLength: 1 }),
+      body: JSON.stringify({ city: locationName, interests: selectedInterests, currentActivities: meta.activities }),
     });
     if (!response.ok) {
       throw new Error(`Request failed with status ${response.statusText}`);
@@ -154,6 +153,44 @@ export default function Home() {
           name: json.neighborhood,
           walking_tour: []
         }
+        return nextState;
+      });
+    });
+  }
+
+  async function retryDayTrip(index) {
+    const selectedInterests = checkedState.map((item) => item.isChecked? item.name : "").filter((n)=>n).join()
+    const response = await fetch("/api/generateRetryDayTrip", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ city: locationName, interests: selectedInterests, currentTrips: meta.dayTrips }),
+    });
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.statusText}`);
+    }
+
+    const data = response.body;
+    if (!data) {
+      return;
+    }
+
+    getStreamResponse(data).then((streamResponse) => {
+      setMeta((prevState) => {
+        const nextState = {...prevState};
+        nextState.dayTrips[index] = streamResponse;
+        return nextState;
+      })
+
+      setDayTrips((prevState) => {
+        const nextState = [...prevState];
+        nextState[index] = {
+          name: streamResponse,
+          short_desc: "",
+          long_desc: "", 
+          food: {}
+        };
         return nextState;
       });
     });
@@ -661,6 +698,7 @@ export default function Home() {
             <DayTrips
               dayTrips={dayTrips}
               locationName={locationName}
+              retry={retryDayTrip}
             />
           </div>
           {isOpen && <DownloadModal onClose={onModalCloseClick}/>}
