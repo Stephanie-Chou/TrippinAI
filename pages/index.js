@@ -52,12 +52,7 @@ export default function Home() {
       days: false,
       dayTrips: prev.dayTrips,
     }));
-    checkCanDownload();
   }, [activities, neighborhoods, food, tripLength])
-
-  useEffect(() => {
-    checkCanDownload(activities, neighborhoods, food, dayTrips);
-  }, [activities, neighborhoods, food, dayTrips]);
 
   const myRef = useRef(null)
   function scrollTo(ref) {
@@ -191,22 +186,18 @@ export default function Home() {
     }
 
     const jsonStr = JSON.parse(responseData).result;
+
     if (!isJsonString(jsonStr)) {
+      console.log('bad json string');
       return;
     }
     const json = JSON.parse(jsonStr);
 
     setDayTrips((prev) => {
-      let nextState = prev;
+      const nextState = [...prev];
       nextState[index] = json;
       return nextState;
     });
-    setLoading((prev) => ({
-      days: prev.days,
-      dayTrips: false,
-    }));
-
-    checkCanDownload();
   }
 
   /**
@@ -491,7 +482,7 @@ export default function Home() {
   }
 
   function checkCanDownload() {
-    const shouldDownloadDisable = (locationName && (loading.days || loading.dayTrips)) || !locationName;
+    const shouldDownloadDisable = (locationName && loading.callCount === 0)
     shouldDownloadDisable ? setIsDownloadButtonDisabled(true) : setIsDownloadButtonDisabled(false);
   }
   /*****************
@@ -556,6 +547,7 @@ export default function Home() {
 
     initializeItineraryStates();
     fetchMeta();
+    setIsDownloadButtonDisabled(false);
 
     scrollTo(myRef);
   }

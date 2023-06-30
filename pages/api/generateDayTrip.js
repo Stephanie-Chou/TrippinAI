@@ -48,7 +48,7 @@ if (!configuration.apiKey) {
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0,
-    max_tokens: 1659,
+    max_tokens: 400,
     stream: true,
     n: 1,
   };
