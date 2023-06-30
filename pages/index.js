@@ -40,9 +40,9 @@ export default function Home() {
   const [errorMessages, setErrorMessages] = useState([]);
   
   useEffect(() => {
-    // fetchActivityDescriptions(meta);
-    // fetchWalkingTours(meta);
-    // fetchFoods(meta);
+    fetchActivityDescriptions(meta);
+    fetchWalkingTours(meta);
+    fetchFoods(meta);
     fetchDayTrips(meta);
   }, [meta]);
 
