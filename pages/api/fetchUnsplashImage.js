@@ -12,10 +12,10 @@ export default async function (req, res) {
     return;
   }
 
-  const locationName = req.body.locationName || '';
+  const city = req.body.city || '';
   const site = req.body.site || '';
-  console.log('fetching image for ' , site, locationName);
-  const query = site+ ' ' + locationName;
+  console.log('fetching image for ' , site, city);
+  const query = site+ ' ' + city;
     try{
       const images = await api.search.getPhotos({
         query: query,
