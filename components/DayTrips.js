@@ -1,7 +1,7 @@
 import Page from "./Page";
 import styles from "./day.module.css";
 
-export default function DayTrips({dayTrips, locationName, ret}) {
+export default function DayTrips({dayTrips, locationName, retry}) {
     if (!dayTrips) return;
 
     return dayTrips.map((trip, index) => {
