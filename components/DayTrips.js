@@ -28,7 +28,7 @@ export default function DayTrips({dayTrips, locationName, ret}) {
                   <td>{trip.short_desc}</td>
                 </tr>
                 <tr>
-                  <td>Eat at {trip.food.name}</td>
+                  <td>Food: Look for {trip.food.name}</td>
                   <td>{trip.food.desc}</td>
                 </tr>
               </tbody>

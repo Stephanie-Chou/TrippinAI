@@ -19,7 +19,7 @@ export default function Home() {
 
   //Form State
   const [cityInput, setCityInput] = useState("");
-  const [locationName, setLocationName] = useState("");
+  const [city, setCity] = useState("");
   const [checkedState, setCheckedState] = useState(
     DEFAULT_INTERESTS.map((interest) => ({name: interest, isChecked: false}))
   );
@@ -95,7 +95,7 @@ export default function Home() {
           neighborhood={neighborhoods[i]}
           food={food[i]}
           index={i}
-          locationName={locationName}
+          locationName={city}
           key={i}
           retry={retryDay}
         />
@@ -110,7 +110,7 @@ export default function Home() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ city: locationName, interests: selectedInterests, currentActivities: meta.activities }),
+      body: JSON.stringify({ city: city, interests: selectedInterests, currentActivities: meta.activities }),
     });
     if (!response.ok) {
       throw new Error(`Request failed with status ${response.statusText}`);
@@ -166,7 +166,7 @@ export default function Home() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ city: locationName, interests: selectedInterests, currentTrips: meta.dayTrips }),
+      body: JSON.stringify({ city: city, interests: selectedInterests, currentTrips: meta.dayTrips }),
     });
     if (!response.ok) {
       throw new Error(`Request failed with status ${response.statusText}`);
@@ -193,7 +193,6 @@ export default function Home() {
           food: {}
         };
 
-        console.log(nextState)
         return nextState;
       });
     });
@@ -208,12 +207,12 @@ export default function Home() {
   }
 
   async function fetchDayTripFood(dayTrip, index) {
-    const response = await fetch("/api/generateRestaurants", {
+    const response = await fetch("/api/generateFoods", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ city: locationName, location: dayTrip.name }),
+      body: JSON.stringify({ location: dayTrip.name, city: city }),
     });
 
     if (!response.ok) {
@@ -328,12 +327,12 @@ export default function Home() {
       days: true,
       dayTrips: prev.dayTrips,
     }));
-    const response = await fetch("/api/generateRestaurants", {
+    const response = await fetch("/api/generateFoods", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ location: location.name, city: locationName}),
+      body: JSON.stringify({ location: location.name +' ' + city, city: city}),
     });
     const responseData = await response.json();
     if (response.status !== 200) {
@@ -391,7 +390,7 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({location: location.name, city: locationName})
+        body: JSON.stringify({location: location.name, city: city})
       });
      
       const responseData = await response.json();
@@ -424,7 +423,7 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({location: location.name, city: locationName})
+        body: JSON.stringify({location: location.name, city: city})
       });
      
       const responseData = await response.json();
@@ -478,13 +477,12 @@ export default function Home() {
       days: true,
       dayTrips: prev.dayTrips,
     })); 
-    fetchImage(neighborhood, index);
     const response = await fetch("/api/generateTour", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ neighborhood: neighborhood.name, city: locationName}),
+      body: JSON.stringify({ neighborhood: neighborhood.name, city: city}),
     });
     const responseData = await response.json();
       if (response.status !== 200) {
@@ -501,6 +499,9 @@ export default function Home() {
           return nextState = [...prevState, json.error]
         })
       }
+      const site = json[0].name;
+      fetchImage(site, index);
+
       setNeighborhoods((prevState) => {
         let updatedNeighborhoods = [...prevState];
         updatedNeighborhoods[index].walking_tour = json;
@@ -508,7 +509,7 @@ export default function Home() {
       });
   }
 
-  async function fetchImage(neighborhood, index) {
+  async function fetchImage(site, index) {
     if (!neighborhoods || neighborhoods.length === 0) return;
     try {
       const response = await fetch("/api/fetchUnsplashImage", {
@@ -516,9 +517,10 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ locationName, neighborhood: neighborhood.name })
+        body: JSON.stringify({ city, site})
     });
 
+    
       const data = await response.json();
       if (response.status !== 200) {
         throw data.error || new Error(`Request failed with status ${response.status}`);
@@ -565,7 +567,7 @@ export default function Home() {
   }
 
   function checkCanDownload() {
-    const shouldDownloadDisable = (locationName && loading.callCount === 0)
+    const shouldDownloadDisable = (city && loading.callCount === 0)
     shouldDownloadDisable ? setIsDownloadButtonDisabled(true) : setIsDownloadButtonDisabled(false);
   }
   /*****************
@@ -574,7 +576,7 @@ export default function Home() {
 
   async function onDownload(event) {
     event.preventDefault();
-    if (!locationName) {
+    if (!city) {
       setIsDownloadButtonDisabled(true)
       return;
     };
@@ -587,7 +589,7 @@ export default function Home() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          city: locationName,
+          city: city,
           neighborhoods: neighborhoods,
           activities: activities,
           foods: food,
@@ -674,7 +676,7 @@ export default function Home() {
                   value={cityInput}
                   onChange={(e) => {
                     setCityInput(e.target.value);
-                    setLocationName(e.target.value);
+                    setCity(e.target.value);
                   }}
                 />
 
@@ -739,11 +741,11 @@ export default function Home() {
             </div>
           </div>    
           <div className={styles.result} ref={myRef}>
-            {locationName ? <h4>Travel Plan for <span className={styles.cityName}> {locationName} </span></h4> : ""}
+            {city ? <h4>Travel Plan for <span className={styles.city}> {city} </span></h4> : ""}
             {renderDays()}
             <DayTrips
               dayTrips={dayTrips}
-              locationName={locationName}
+              locationName={city}
               retry={retryDayTrip}
             />
           </div>

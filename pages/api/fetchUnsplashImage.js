@@ -13,14 +13,14 @@ export default async function (req, res) {
   }
 
   const locationName = req.body.locationName || '';
-      const neighborhood = req.body.neighborhood || '';
-      console.log('fetching image for ', locationName, neighborhood)
-
+  const site = req.body.site || '';
+  console.log('fetching image for ' , site, locationName);
+  const query = site+ ' ' + locationName;
     try{
       const images = await api.search.getPhotos({
-        query: locationName+ ' ' + neighborhood,
+        query: query,
         orientation: "landscape",
-        perPage: 5
+        perPage: 1
       });
       res.status(200).json({images: images.response.results});
     }catch(error){
