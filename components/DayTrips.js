@@ -1,7 +1,7 @@
 import Page from "./Page";
 import styles from "./day.module.css";
 
-export default function DayTrips({dayTrips, locationName, retry}) {
+export default function DayTrips({dayTrips, locationName, ret}) {
     if (!dayTrips) return;
 
     return dayTrips.map((trip, index) => {
@@ -26,6 +26,10 @@ export default function DayTrips({dayTrips, locationName, retry}) {
                 <tr>
                   <td>{trip.name}</td>
                   <td>{trip.short_desc}</td>
+                </tr>
+                <tr>
+                  <td>Eat at {trip.food.name}</td>
+                  <td>{trip.food.desc}</td>
                 </tr>
               </tbody>
             </table>

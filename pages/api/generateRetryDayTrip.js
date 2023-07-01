@@ -49,18 +49,18 @@ function generateDayTripPrompt(city, interests, currentTrips) {
     City: Rome
     interests: Off the Beaten Path
     current Trips: ["Ostia Antica", "Tivoli (Villa d'Este and Hadrian's Villa)"]
-    return: "Bomarzo's Sacred Grove"
+    return: Bomarzo's Sacred Grove
   
 
     City: Seattle
     interests: Adventure
     current Trips: ["San Juan Islands", "Hoh Rainforest in Olympic National Park"]
-    return: "Mount Rainier National Park"
+    return: Mount Rainier National Park
 
     City: Seattle
     interests: culture
     current Trips: ["Leavenworth", "Woodinville Wine Country"]
-    return: "Poulsbo"
+    return: Poulsbo
 
   
     City: ${city}

@@ -43,7 +43,7 @@ export default function Home() {
     fetchActivityDescriptions(meta);
     fetchWalkingTours(meta);
     fetchFoods(meta);
-    // fetchDayTripFoods(meta);
+    fetchDayTripFoods(meta);
     fetchDayTripDescriptions(meta);
   }, [meta]);
 
@@ -55,8 +55,6 @@ export default function Home() {
     }));
   }, [activities, neighborhoods, food, tripLength])
 
-
-  
   const myRef = useRef(null)
   function scrollTo(ref) {
     if (!ref.current) return;
@@ -183,7 +181,6 @@ export default function Home() {
       setMeta((prevState) => {
         const nextState = {...prevState};
         nextState.dayTrips[index] = streamResponse;
-        console.log(nextState)
         return nextState;
       });
 
@@ -234,11 +231,10 @@ export default function Home() {
       return;
     }
     const json = JSON.parse(jsonStr);
-    console.log('food day trip', json)
 
     setDayTrips((prev) => {
       const nextState = [...prev];
-      nextState[index].food = json;
+      nextState[index].food = json.lunch;
       return nextState;
     });
   }
