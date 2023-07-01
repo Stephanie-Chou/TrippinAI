@@ -1,22 +1,24 @@
 import Page from "./Page";
 import Itinerary from "./Itinerary";
 import styles from "./day.module.css";
+import { ReactElement } from "react";
+import { WalkingTour } from "../utils/types";
 
-function renderWalkingTourLong(tour) {
+function renderWalkingTourLong(tour : WalkingTour[]) : ReactElement {
     if (!tour) return null;
     return (
       <ol>
-        {tour.map((step) => <li key={step.name}>{step.name}: {step.desc}</li>)}
+        {tour.map((step:WalkingTour, index) => <li key={index}>{step.name}: {step.desc}</li>)}
       </ol>
     );
   }
-export default function Day({activity, food, neighborhood, index, locationName, retry}) {
+export default function Day({activity, food, neighborhood, index, locationName, retry}) : ReactElement {
     const {walking_tour, image} = neighborhood;
     let urls = !image ? '' : image.urls;
     let user = !image ? {username: ''} : image.user;
-    let username = !user ? '' : user.username
+    let username: string = !user ? '' : user.username
 
-    const subheader = "Day " + (index + 1);
+    const subheader: string = "Day " + (index + 1);
     return (
         <>
           <Page

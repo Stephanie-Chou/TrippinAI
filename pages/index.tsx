@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useState, useEffect, useRef, useLayoutEffect} from "react";
+import { useState, useEffect, useRef, useLayoutEffect, ReactElement} from "react";
 import Day from "../components/Day";
 import DayTrips from "../components/DayTrips";
 import DownloadModal from "../components/DownloadModal";
@@ -7,9 +7,10 @@ import styles from "./index.module.css";
 import { getStreamResponse } from "../utils/getStreamResponse";
 import isJsonString from "../utils/isJsonString";
 import * as stub from "../utils/stubData"
+import { Activity, DayTrip, Food, Meta, Neighborhood, Photo, RetryDay, WalkingTour } from "../utils/types";
 
-export default function Home() {
-  const DEFAULT_INTERESTS = ["Food", "Off the Beaten Path", "Adventure", "History", "Culture"];
+export default function Home() : ReactElement {
+  const DEFAULT_INTERESTS : Array<string> = ["Food", "Off the Beaten Path", "Adventure", "History", "Culture"];
 
   // Modal State
   const [isOpen, setIsOpen] = useState(false);
@@ -26,11 +27,11 @@ export default function Home() {
   const [tripLength, setTripLength] = useState(3);
 
   // Itinerary Model State
-  const [dayTrips, setDayTrips] = useState([]);
-  const [meta, setMeta] = useState({}); // array of activities, array of neighborhood names, array of dayTrips
-  const [activities, setActivities] = useState([]);
-  const [neighborhoods, setNeighborhoods] = useState([]);
-  const [food, setFood] = useState([]);
+  const [dayTrips, setDayTrips] = useState([] as DayTrip[]);
+  const [meta, setMeta] = useState({} as Meta);
+  const [activities, setActivities] = useState([] as Activity[]);
+  const [neighborhoods, setNeighborhoods] = useState([] as Neighborhood[]);
+  const [food, setFood] = useState([] as Food[]);
 
   // States
   const [loading, setLoading] = useState({
@@ -40,15 +41,15 @@ export default function Home() {
   const [errorMessages, setErrorMessages] = useState([]);
   
   useEffect(() => {
-    fetchActivityDescriptions(meta);
-    fetchWalkingTours(meta);
-    fetchFoods(meta);
-    fetchDayTripFoods(meta);
-    fetchDayTripDescriptions(meta);
+    fetchActivityDescriptions();
+    fetchWalkingTours();
+    fetchFoods();
+    fetchDayTripFoods();
+    fetchDayTripDescriptions();
   }, [meta]);
 
   useEffect(() => {
-    renderDays(activities, neighborhoods, food, tripLength);
+    renderDays();
     setLoading((prev) => ({
       days: false,
       dayTrips: prev.dayTrips,
@@ -61,8 +62,10 @@ export default function Home() {
     ref.current.scrollIntoView({behavior: 'smooth'});
   }
 
-  const stickyHeader = useRef()
+  const stickyHeader = useRef();
   useLayoutEffect(() => {
+    if (!stickyHeader.current) return;
+
     let fixedTop = stickyHeader.current.offsetTop
     const fixedHeader = () => {
       if (window.pageYOffset > fixedTop) {
@@ -77,7 +80,7 @@ export default function Home() {
   /***********************
   * RENDER FUNCTIONS
   ************************/
-  function renderLoader() {
+  function renderLoader() : ReactElement{
     const {days, dayTrips} = loading;
     return (days || dayTrips) ? 
       <div className={styles.loader}>
@@ -85,9 +88,9 @@ export default function Home() {
       </div>: null;
   }
 
-  function renderDays() {
+  function renderDays() : ReactElement[]{
     if (activities.length === 0) return;
-    let days = new Array(tripLength).fill(0);
+    let days : ReactElement[] = new Array(tripLength).fill(0);
     return days.map((day, i) => {
       return (
         <Day
@@ -103,8 +106,9 @@ export default function Home() {
     })
   }
 
-  async function retryDay(index) {
-    const selectedInterests = checkedState.map((item) => item.isChecked? item.name : "").filter((n)=>n).join()
+
+  async function retryDay(index: number): Promise<String> {
+    const selectedInterests: string = checkedState.map((item) => item.isChecked? item.name : "").filter((n)=>n).join()
     const response = await fetch("/api/generateRetryActivity", {
       method: "POST",
       headers: {
@@ -123,22 +127,16 @@ export default function Home() {
 
     getStreamResponse(data).then((streamResponse) => {
       if (!isJsonString(streamResponse)) return;
-      const json = JSON.parse(streamResponse);
+      const json : RetryDay = JSON.parse(streamResponse);
 
-      if (json.error) {
-        setErrorMessages((prevState) => {
-          return nextState = [...prevState, json.error]
-        })
-      }
-
-      setMeta((prevState) => {
-        const nextState = {...prevState};
+      setMeta((prevState: Meta): Meta => {
+        const nextState : Meta = {...prevState};
         nextState.activities[index] = json.activity;
         nextState.neighborhoods[index] = json.neighborhood;
         return nextState;
       })
 
-      setActivities((prevState) => {
+      setActivities((prevState: Activity[]): Activity[] => {
         const nextState = [...prevState];
         nextState[index] = {
           name: json.activity,
@@ -148,19 +146,20 @@ export default function Home() {
         return nextState;
       });
 
-      setNeighborhoods((prevState) => {
-        const nextState = [...prevState];
+      setNeighborhoods((prevState: Neighborhood[]): Neighborhood[] => {
+        const nextState: Neighborhood[] = [...prevState];
         nextState[index] = {
           name: json.neighborhood,
-          walking_tour: []
+          walking_tour: {} as WalkingTour,
+          image: {} as Photo
         }
         return nextState;
       });
     });
   }
 
-  async function retryDayTrip(index) {
-    const selectedInterests = checkedState.map((item) => item.isChecked? item.name : "").filter((n)=>n).join()
+  async function retryDayTrip(index: number): Promise<String>  {
+    const selectedInterests: string = checkedState.map((item) => item.isChecked? item.name : "").filter((n)=>n).join()
     const response = await fetch("/api/generateRetryDayTrip", {
       method: "POST",
       headers: {
@@ -178,19 +177,19 @@ export default function Home() {
     }
 
     getStreamResponse(data).then((streamResponse) => {
-      setMeta((prevState) => {
+      setMeta((prevState: Meta): Meta => {
         const nextState = {...prevState};
         nextState.dayTrips[index] = streamResponse;
         return nextState;
       });
 
-      setDayTrips((prevState) => {
+      setDayTrips((prevState: DayTrip[]): DayTrip[] => {
         const nextState = [...prevState];
         nextState[index] = {
           name: streamResponse,
           short_desc: "",
           long_desc: "", 
-          food: {}
+          food: {name: "", desc: ""}
         };
 
         return nextState;
@@ -200,13 +199,13 @@ export default function Home() {
   /***********************
   * DATA FETCH FUNCTIONS
   ************************/
-  async function fetchDayTripFoods() {
-    for (let i = 0; i < dayTrips.length; i++) {
+ function fetchDayTripFoods(): void {
+    for (let i: number = 0; i < dayTrips.length; i++) {
       fetchDayTripFood(dayTrips[i], i);
     }
   }
 
-  async function fetchDayTripFood(dayTrip, index) {
+  async function fetchDayTripFood(dayTrip: DayTrip, index: number) {
     const response = await fetch("/api/generateFoods", {
       method: "POST",
       headers: {
@@ -224,16 +223,16 @@ export default function Home() {
       throw responseData.error || new Error(`Request failed with status ${response.status}`);
     }
 
-    const jsonStr = JSON.parse(responseData).result;
+    const jsonStr: string = JSON.parse(responseData).result;
 
     if (!isJsonString(jsonStr)) {
       return;
     }
-    const json = JSON.parse(jsonStr);
+    const json: DayTrip = JSON.parse(jsonStr);
 
-    setDayTrips((prev) => {
-      const nextState = [...prev];
-      nextState[index].food = json.lunch;
+    setDayTrips((prevState: DayTrip[]): DayTrip[] => {
+      const nextState = [...prevState];
+      nextState[index].food = json.food;
       return nextState;
     });
   }
