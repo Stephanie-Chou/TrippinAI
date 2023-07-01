@@ -10,7 +10,6 @@ export  async function getStreamResponse(data) {
           const text = JSON.parse(data).text ?? "";
           streamResponse+= text;
           streamResponseRender+= text;
-        //   setStream(streamResponseRender);
           if (streamResponseRender.length > 300) {
             streamResponseRender="";
           }

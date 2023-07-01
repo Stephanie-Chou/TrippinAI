@@ -9,8 +9,8 @@ const configuration = new Configuration({
 });
 
 export default async function (req, res) {
-  const { neighborhood, city } = req.body
-  console.log("generate food for ", neighborhood);
+  const { location, city } = req.body
+  console.log("generate food for ", location);
 
   
   /** Check cache */
@@ -19,7 +19,7 @@ export default async function (req, res) {
       token: process.env.UPSTASH_REDIS_REST_TOKEN,
   })
 
-  const key = `food:location:${neighborhood.toLowerCase()}:city:${city.toLowerCase()}`;  
+  const key = `food:location:${location.toLowerCase()}:city:${city.toLowerCase()}`;  
   const cached = await client.get(key);
 
   if (cached) {
@@ -37,7 +37,7 @@ export default async function (req, res) {
     return;
   }
 
-  const prompt = generateFoodPrompt(neighborhood, city);
+  const prompt = generateFoodPrompt(location, city);
 
 
   if (!prompt) {
@@ -85,31 +85,31 @@ export default async function (req, res) {
   });
 }
 
-function generateFoodPrompt(neighborhood) {
+function generateFoodPrompt(location) {
   
-    return `Given a neighborhood, recommend a lunch and dinner place to eat with description. Should return valid JSON.
+    return `Given a location, recommend a lunch and dinner place in the area to eat with description. Should return valid JSON.
 
-    Neighborhood: Pike Place Market
+    location: Pike Place Market
     food: {
         "lunch": {"name": "Pike Place Chowder", "desc": "Indulge in delicious and hearty chowders featuring fresh local ingredients."},
         "dinner": {"name": "Matt's in the Market", "desc": "Enjoy seasonal and locally sourced dishes in a cozy setting above Pike Place Market."}
     }
-    Neighborhood: Fremont
+    location: Fremont
     food: {
         "lunch": {"name": "Paseo Caribbean Food", "desc": "Savor mouthwatering Caribbean sandwiches filled with flavorful marinated meats and spices."},
         "dinner": {"name": "Revel", "desc": "Experience innovative Korean-inspired cuisine in a trendy setting."}
     }
-    Neighborhood: Capitol Hill
+    location: Capitol Hill
     food: {
         "lunch": {"name": "Stateside", "desc": "Enjoy a fusion of French and Vietnamese flavors, with dishes like banh mi and crispy duck rolls."},
         "dinner": {"name": "Canon", "desc": "Delight in craft cocktails and an extensive whiskey selection at this award-winning bar and restaurant."}
     }
-    Neighborhood: Ancient Rome
+    location: Ancient Rome
     food: {
         "lunch": { "name":  "Trattoria da Lucia", "desc":"Indulge in traditional Roman cuisine, including pasta, pizza, and classic Roman dishes."},
         "dinner": { "name":  "Osteria Barberini", "desc":"Experience authentic Roman flavors in a cozy and welcoming atmosphere."}
     }
-    Neighborhood: ${neighborhood}
+    location: ${location}
     food:
   `;
 }

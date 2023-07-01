@@ -288,10 +288,6 @@ function generateHtml(city, neighborhoods, activities, foods, dayTrips) {
     `<td>${trip.name} </td>` +
     `<td>${trip.short_desc}</td>` +
     `</tr>` +
-    `<tr>` +
-    `<td>Eat at ${trip.food.name}  </td>` +
-    `<td>${trip.food.desc}</td>` +
-    `</tr>` +
     `</tbody>` +
     `</table>` +
     `</div>` +

@@ -43,7 +43,8 @@ export default function Home() {
     fetchActivityDescriptions(meta);
     fetchWalkingTours(meta);
     fetchFoods(meta);
-    fetchDayTrips(meta);
+    // fetchDayTripFoods(meta);
+    fetchDayTripDescriptions(meta);
   }, [meta]);
 
   useEffect(() => {
@@ -54,6 +55,8 @@ export default function Home() {
     }));
   }, [activities, neighborhoods, food, tripLength])
 
+
+  
   const myRef = useRef(null)
   function scrollTo(ref) {
     if (!ref.current) return;
@@ -201,14 +204,14 @@ export default function Home() {
   /***********************
   * DATA FETCH FUNCTIONS
   ************************/
-  async function fetchDayTrips() {
+  async function fetchDayTripFoods() {
     for (let i = 0; i < dayTrips.length; i++) {
-      fetchDayTrip(dayTrips[i], i);
+      fetchDayTripFood(dayTrips[i], i);
     }
   }
 
-  async function fetchDayTrip(dayTrip, index) {
-    const response = await fetch("/api/generateDayTrip", {
+  async function fetchDayTripFood(dayTrip, index) {
+    const response = await fetch("/api/generateRestaurants", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -231,10 +234,11 @@ export default function Home() {
       return;
     }
     const json = JSON.parse(jsonStr);
+    console.log('food day trip', json)
 
     setDayTrips((prev) => {
       const nextState = [...prev];
-      nextState[index] = json;
+      nextState[index].food = json;
       return nextState;
     });
   }
@@ -323,7 +327,7 @@ export default function Home() {
   }
    */
 
-  async function fetchFood(neighborhood, index) {
+  async function fetchFood(location, index) {
     setLoading((prev) => ({
       days: true,
       dayTrips: prev.dayTrips,
@@ -333,7 +337,7 @@ export default function Home() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ neighborhood: neighborhood.name, city: locationName}),
+      body: JSON.stringify({ location: location.name, city: locationName}),
     });
     const responseData = await response.json();
     if (response.status !== 200) {
@@ -365,6 +369,12 @@ export default function Home() {
     }
   }
 
+  async function fetchDayTripDescriptions() {
+    for (let i = 0; i< dayTrips.length; i++) {
+      fetchDayTripDescription(dayTrips[i], i)
+    }
+  }
+
   /**
    * 
    * @param {*} activity 
@@ -375,7 +385,7 @@ export default function Home() {
       "long_desc": "Explore the vast art collection of the Vatican Museums, housing masterpieces from different periods and cultures. Marvel at the stunning frescoes in the Sistine Chapel painted by Michelangelo and admire works by renowned artists like Raphael and Leonardo da Vinci."
     }
    */
-  async function fetchActivityDescription(activity, index) {
+  async function fetchActivityDescription(location, index) {
     setLoading((prev) => ({
       days: true,
       dayTrips: prev.dayTrips,
@@ -385,7 +395,7 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({location: activity.name, city: locationName})
+        body: JSON.stringify({location: location.name, city: locationName})
       });
      
       const responseData = await response.json();
@@ -410,6 +420,44 @@ export default function Home() {
       updatedActivities[index].short_desc = json.short_desc;
       return updatedActivities;
     });
+  }
+
+  async function fetchDayTripDescription(location, index) {
+      const response = await fetch("/api/generateActivityDescription", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({location: location.name, city: locationName})
+      });
+     
+      const responseData = await response.json();
+      if (response.status !== 200) {
+        throw responseData.error || new Error(`Request failed with status ${response.status}`);
+      }
+
+    const jsonStr = JSON.parse(responseData).result;
+    if (!isJsonString(jsonStr)) {
+      return;
+    }
+    const json = JSON.parse(jsonStr);
+    if (json.error) {
+      setErrorMessages((prevState) => {
+        return nextState = [...prevState, json.error]
+      })
+    }
+
+    setDayTrips((prevState) => {
+      let updatedDayTrips = [...prevState];
+      updatedDayTrips[index].long_desc = json.long_desc;
+      updatedDayTrips[index].short_desc = json.short_desc;
+      return updatedDayTrips;
+    });
+
+    setLoading((prev) => ({
+      days: prev.dayTrips,
+      dayTrips: false,
+    }));
   }
 
   function fetchWalkingTours() {    

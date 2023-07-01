@@ -27,14 +27,10 @@ export default function DayTrips({dayTrips, locationName, retry}) {
                   <td>{trip.name}</td>
                   <td>{trip.short_desc}</td>
                 </tr>
-                <tr>
-                  <td>Eat at {trip.food.name}</td>
-                  <td>{trip.food.desc}</td>
-                </tr>
               </tbody>
             </table>
 
-            
+            <button className={styles.retryButton} onClick={() => retry(index)}>Regenerate</button>
         </Page>     
       )
     })
