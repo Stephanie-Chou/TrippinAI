@@ -1,4 +1,4 @@
-import { OpenAIStream} from "./OpenAIStream";
+import { OpenAIStream, OpenAIStreamPayload} from "./OpenAIStream";
 
 if (!process.env.OPENAI_API_KEY) {
   throw new Error("Missing env var from OpenAI");
@@ -8,15 +8,15 @@ export const config = {
   runtime: "edge",
 };
 
-export default async function (req) {
+export default async function (req: Request): Promise<Response> {
   const { city, interests, tripLength } = (await req.json());
-  const prompt = generateActivityPrompt(city, interests, tripLength);
+  const prompt: string = generateActivityPrompt(city, interests, tripLength);
 
   if (!prompt) {
     return new Response("No prompt in the request", { status: 400 });
   }
 
-  const payload = {
+  const payload: OpenAIStreamPayload = {
     model: "text-davinci-003",
     prompt: prompt,
     temperature: 0.7,
@@ -41,7 +41,7 @@ export default async function (req) {
 };
 
 // generate a list of activities in a city
-function generateActivityPrompt(city, interests, tripLength) {
+function generateActivityPrompt(city: string, interests: string, tripLength: number): string {
   if (!interests) {
     interests = "general"
   }

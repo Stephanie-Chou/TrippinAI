@@ -1,18 +1,17 @@
-import { createParser } from "eventsource-parser";
+import {
+  createParser,
+  ParsedEvent,
+  ReconnectInterval,
+} from "eventsource-parser";
 
-export  async function getStreamResponse(data) {
-    let streamResponse = ""; // for the data to serve
-    let streamResponseRender = ""; // for the rendering. this gets cut off
-    const onParse = (event) => {
+export  async function getStreamResponse(data: ReadableStream): Promise<string> {
+    let streamResponse: string = ""; // for the data to serve
+    const onParse = (event: ParsedEvent | ReconnectInterval) => {
       if (event.type === "event") {
         const data = event.data;
         try {
           const text = JSON.parse(data).text ?? "";
           streamResponse+= text;
-          streamResponseRender+= text;
-          if (streamResponseRender.length > 300) {
-            streamResponseRender="";
-          }
         } catch (e) {
           console.error(e);
         }
@@ -30,6 +29,5 @@ export  async function getStreamResponse(data) {
       parser.feed(chunkValue);
     }
 
-    //setStream("");
     return streamResponse;
   }

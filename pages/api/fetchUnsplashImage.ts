@@ -1,8 +1,11 @@
+import { NextApiRequest, NextApiResponse } from "next";
 import { createApi } from "unsplash-js";
+import { ApiResponse } from "unsplash-js/dist/helpers/response";
+import { Photos } from "unsplash-js/dist/methods/search/types/response";
 const configuration = {accessKey: process.env.UNSPLASH_ACCESS_KEY}
 const api = createApi(configuration);
 
-export default async function (req, res) {
+export default async function (req: NextApiRequest, res: NextApiResponse): Promise<string> {
   if (!configuration.accessKey) {
     res.status(500).json({
       error: {
@@ -12,12 +15,12 @@ export default async function (req, res) {
     return;
   }
 
-  const city = req.body.city || '';
-  const site = req.body.site || '';
+  const city: string = req.body.city || '';
+  const site: string = req.body.site || '';
   console.log('fetching image for ' , site, city);
-  const query = site+ ' ' + city;
+  const query: string = site+ ' ' + city;
     try{
-      const images = await api.search.getPhotos({
+      const images: ApiResponse<Photos> = await api.search.getPhotos({
         query: query,
         orientation: "landscape",
         perPage: 1

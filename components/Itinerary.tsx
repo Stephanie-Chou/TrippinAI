@@ -1,12 +1,17 @@
-function renderWalkingTourShort(tour) {
+import { ReactElement } from "react";
+import { WalkingTourStep } from "../utils/types";
+
+function renderWalkingTourShort(tour: WalkingTourStep[]) : ReactElement {
     if (!tour) return null;
 
-    return tour.map((step) => {
-      return <li key={step.name}>{step.name}</li>
-    });
+    return (
+      <ol>
+        {tour.map((step: WalkingTourStep, index: number) => <li key={index}>{step.name}</li>)}
+      </ol>
+    );
 }
 
-export default function Itinerary({activity, food, neighborhood}) {
+export default function Itinerary({activity, food, neighborhood}) : ReactElement {
     return (
         <table>
           <tbody>
@@ -25,7 +30,7 @@ export default function Itinerary({activity, food, neighborhood}) {
               <tr>
                 <td>Walking tour of {neighborhood.name}</td>
                 <td>
-                  <ol>{renderWalkingTourShort(neighborhood.walking_tour)}</ol>
+                  {renderWalkingTourShort(neighborhood.walking_tour)}
                 </td>
               </tr>
               <tr>

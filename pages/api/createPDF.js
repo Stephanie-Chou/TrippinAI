@@ -1,4 +1,4 @@
-const axios = require("axios");
+import axios from "axios";
 
 export default async function (req, res) {
   const { city, neighborhoods, activities, foods, dayTrips } = req.body;
@@ -22,7 +22,7 @@ export default async function (req, res) {
   };
   return axios(config)
   .then(function(response) {
-    return res.status(200).json({result: response.data});
+    res.status(200).json({result: response.data});
   })
   .catch(function(error) {
     // DocRaptor error messages are contained in the response body

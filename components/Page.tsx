@@ -1,6 +1,7 @@
+import { ReactElement } from "react";
 import styles from "./page.module.css";
 
-export default function Page({header, subheader, children}) {
+export default function Page({header, subheader, children}) : ReactElement{
     return (
         <div>
           <div className={styles.page}>

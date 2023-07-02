@@ -1,10 +1,12 @@
+import { ReactElement } from "react";
 import Page from "./Page";
 import styles from "./day.module.css";
+import { DayTrip } from "../utils/types";
 
-export default function DayTrips({dayTrips, locationName, retry}) {
+export default function DayTrips({dayTrips, locationName, retry}) : ReactElement{
     if (!dayTrips) return;
 
-    return dayTrips.map((trip, index) => {
+    return dayTrips.map((trip: DayTrip, index: number) => {
       return (
         <Page
           header={locationName}
