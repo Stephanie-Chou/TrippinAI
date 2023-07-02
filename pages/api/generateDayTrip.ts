@@ -26,6 +26,7 @@ const cached = await client.get(key);
 if (cached) {
   console.log('CACHE HIT', JSON.stringify(cached));
   res.status(200).json(JSON.stringify(cached));
+  return;
 }
 
 /** Cache Miss */
@@ -75,6 +76,7 @@ if (!configuration.apiKey) {
       if (isJsonString(streamResponse)) {
         client.set(key, JSON.stringify({result: streamResponse}));
         res.status(200).json(JSON.stringify({result: streamResponse}));
+      return;
       }
       res.status(500).json(JSON.stringify({error: "Invalid JSON returned"}));
     });

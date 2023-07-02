@@ -2,13 +2,13 @@ import Page from "./Page";
 import Itinerary from "./Itinerary";
 import styles from "./day.module.css";
 import { ReactElement } from "react";
-import { WalkingTour } from "../utils/types";
+import { WalkingTourStep } from "../utils/types";
 
-function renderWalkingTourLong(tour: WalkingTour[]): ReactElement {
+function renderWalkingTourLong(tour: WalkingTourStep[]): ReactElement {
     if (!tour) return null;
     return (
       <ol>
-        {tour.map((step:WalkingTour, index) => <li key={index}>{step.name}: {step.desc}</li>)}
+        {tour.map((step:WalkingTourStep, index) => <li key={index}>{step.name}: {step.desc}</li>)}
       </ol>
     );
   }

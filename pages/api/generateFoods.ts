@@ -26,6 +26,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse): Promi
   if (cached) {
     console.log('CACHE HIT', JSON.stringify(cached));
     res.status(200).json(JSON.stringify(cached));
+    return;
   }
 
   /** Cache Miss */
@@ -82,6 +83,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse): Promi
     if (isJsonString(streamResponse)) {
       client.set(key, JSON.stringify({result: streamResponse}));
       res.status(200).json(JSON.stringify({result: streamResponse}));
+      return;
     }
     res.status(500).json(JSON.stringify({error: "Invalid JSON returned"}));
   });
