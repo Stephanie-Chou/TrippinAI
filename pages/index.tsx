@@ -646,7 +646,7 @@ export default function Home() : ReactElement {
           <div className={styles.hero}>
             <div className={styles.input}>
               <img src="/JourneyGenieLogo_thick.png" className={styles.icon} />
-              <h1>TRIPPIN</h1>
+              <h1>Trippin</h1>
               <h2> The AI Powered Travel Planner </h2>
               <form onSubmit={onSubmit}>
                 <input
@@ -720,7 +720,7 @@ export default function Home() : ReactElement {
             </div>
           </div>    
           <div className={styles.result} ref={itineraryRef}>
-            {city ? <h4>Travel Plan for <span className={styles.city}> {city} </span></h4> : ""}
+            {city ? <h4>Travel Plan for {city}</h4> : ""}
             {renderDays()}
             <DayTrips
               dayTrips={dayTrips}
