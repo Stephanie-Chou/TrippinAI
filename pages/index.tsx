@@ -647,7 +647,7 @@ export default function Home() : ReactElement {
             <div className={styles.input}>
               <img src="/JourneyGenieLogo_thick.png" className={styles.icon} />
               <h1>TRIPPIN</h1>
-              <h4> The AI Powered Travel Planner </h4>
+              <h2> The AI Powered Travel Planner </h2>
               <form onSubmit={onSubmit}>
                 <input
                   type="text"

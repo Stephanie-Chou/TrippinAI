@@ -75,19 +75,13 @@ export const sampleData = {
       name: 'Mt. Fuji',
       long_desc: 'Mt. Fuji is a symbol of Japan and an iconic sight in the country. Climb the mountain and experience breathtaking views of the surrounding landscape. Enjoy the unique atmosphere of the mountain and its remarkable views.',
       short_desc: "climb Japan's iconic mountain and enjoy stunning views of the surrounding landscape",
-      food: {
-        lunch: {name: "Pike Place Chowder", desc: "Indulge in delicious and hearty chowders featuring fresh local ingredients."},
-        dinner: {name: "Matt's in the Market", desc: "Enjoy seasonal and locally sourced dishes in a cozy setting above Pike Place Market."}
-      }
+      food: { name: "Pike Place Chowder", desc: "Indulge in delicious and hearty chowders featuring fresh local ingredients."}
     },
     {
       name: 'Mt. Fuji',
       long_desc: 'Mt. Fuji is a symbol of Japan and an iconic sight in the country. Climb the mountain and experience breathtaking views of the surrounding landscape. Enjoy the unique atmosphere of the mountain and its remarkable views.',
       short_desc: "climb Japan's iconic mountain and enjoy stunning views of the surrounding landscape",
-      food: {
-        lunch: {name: "Pike Place Chowder", desc: "Indulge in delicious and hearty chowders featuring fresh local ingredients."},
-        dinner: {name: "Matt's in the Market", desc: "Enjoy seasonal and locally sourced dishes in a cozy setting above Pike Place Market."}
-      }
+      food: { name: "Pike Place Chowder", desc: "Indulge in delicious and hearty chowders featuring fresh local ingredients."}
     }
   ]
 }
