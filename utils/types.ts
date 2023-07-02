@@ -1,4 +1,4 @@
-export interface WalkingTour {
+export interface WalkingTourStep {
   name: string,
   desc: string,
 };
@@ -21,7 +21,7 @@ export interface Activity {
 
 export interface Neighborhood {
   name: string,
-  walking_tour: WalkingTour,
+  walking_tour: WalkingTourStep[],
   image: Photo,
 }
 

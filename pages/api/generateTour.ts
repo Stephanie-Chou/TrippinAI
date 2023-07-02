@@ -1,5 +1,6 @@
 import { Configuration } from "openai";
-import { OpenAIStream} from "./OpenAIStream";
+import { NextApiRequest, NextApiResponse } from "next";
+import { OpenAIStream, OpenAIStreamPayload} from "./OpenAIStream";
 import { Redis } from '@upstash/redis'
 import { getStreamResponse } from "../../utils/getStreamResponse";
 import isJsonString from "../../utils/isJsonString";
@@ -7,7 +8,7 @@ const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-export default async function (req, res) {
+export default async function (req: NextApiRequest, res: NextApiResponse): Promise<string> {
   const { neighborhood, city } = req.body
 
   console.log("generate walking tour for ", neighborhood, city);
@@ -18,12 +19,12 @@ export default async function (req, res) {
       token: process.env.UPSTASH_REDIS_REST_TOKEN,
   })
 
-  const key = `walkingTour:neighborhood:${neighborhood.toLowerCase()}:city:${city.toLowerCase()}`;
+  const key: string = `walkingTour:neighborhood:${neighborhood.toLowerCase()}:city:${city.toLowerCase()}`;
   const cached = await client.get(key);
 
   if (cached) {
     console.log('CACHE HIT', JSON.stringify(cached));
-    return res.status(200).json(JSON.stringify(cached));
+    res.status(200).json(JSON.stringify(cached));
   }
 
   /** Cache Miss */
@@ -36,13 +37,17 @@ export default async function (req, res) {
     return;
   }
 
-  const prompt = generateWalkingTourPrompt(neighborhood);
+  const prompt: string = generateWalkingTourPrompt(neighborhood);
 
   if (!prompt) {
-    return new Response("No prompt in the request", { status: 400 });
+    res.status(400).json({
+      error: {
+        message: "No prompt in the request"
+      }
+    });
   }
 
-  const payload = {
+  const payload: OpenAIStreamPayload = {
     model: "text-davinci-003",
     prompt: prompt,
     temperature: 0.7,
@@ -70,18 +75,18 @@ export default async function (req, res) {
     return;
   }
 
-  return getStreamResponse(data).then((streamResponse) => {
+  getStreamResponse(data).then((streamResponse: string) => {
     console.log('CACHE MISS', JSON.stringify({result: streamResponse}))
 
     if (isJsonString(streamResponse)) {
       client.set(key, JSON.stringify({result: streamResponse}));
-      return res.status(200).json(JSON.stringify({result: streamResponse}));
+      res.status(200).json(JSON.stringify({result: streamResponse}));
     }
 
   });
 }
 
-function generateWalkingTourPrompt(neighborhood) {
+function generateWalkingTourPrompt(neighborhood: string) {
   
     return `Given a neighborhood, return a suggeseted walking tour with 3 stops. return a JSON string with the name of stop and a short description of the stop.
   

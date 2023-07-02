@@ -1,13 +1,13 @@
 import { ReactElement } from "react";
 import styles from "./downloadModal.module.css";
 
-export default function DownloadModal(props) : ReactElement{
+export default function DownloadModal({onClose}) : ReactElement{
   return (
     <div className={styles.modal}>
       <div className={styles.heading}>
         <div></div>
         <p>Tip Jar</p>
-        <div><button onClick={props.onClose}>X</button></div>
+        <div><button onClick={onClose}>X</button></div>
         
       </div>
       <div className={styles.container}>

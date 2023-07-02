@@ -1,5 +1,6 @@
 import { Configuration } from "openai";
-import { OpenAIStream} from "./OpenAIStream";
+import { NextApiRequest, NextApiResponse } from "next";
+import { OpenAIStream, OpenAIStreamPayload} from "./OpenAIStream";
 import { Redis } from '@upstash/redis'
 import { getStreamResponse } from "../../utils/getStreamResponse";
 import isJsonString from "../../utils/isJsonString";
@@ -8,7 +9,7 @@ const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-export default async function (req, res) {
+export default async function (req: NextApiRequest, res: NextApiResponse): Promise<string> {
   const { location, city } = req.body
   console.log("generate food for ", location);
 
@@ -19,12 +20,12 @@ export default async function (req, res) {
       token: process.env.UPSTASH_REDIS_REST_TOKEN,
   })
 
-  const key = `food:location:city:${city.toLowerCase()}:${location.toLowerCase()}`;  
+  const key: string = `food:location:city:${city.toLowerCase()}:${location.toLowerCase()}`;  
   const cached = await client.get(key);
 
   if (cached) {
     console.log('CACHE HIT', JSON.stringify(cached));
-    return res.status(200).json(JSON.stringify(cached));
+    res.status(200).json(JSON.stringify(cached));
   }
 
   /** Cache Miss */
@@ -37,14 +38,17 @@ export default async function (req, res) {
     return;
   }
 
-  const prompt = generateFoodPrompt(location, city);
-
+  const prompt: string = generateFoodPrompt(location, city);
 
   if (!prompt) {
-    return new Response("No prompt in the request", { status: 400 });
+    res.status(400).json({
+      error: {
+        message: "No prompt in the request"
+      }
+    });
   }
 
-  const payload = {
+  const payload: OpenAIStreamPayload = {
     model: "text-davinci-003",
     prompt: prompt,
     temperature: 0.7,
@@ -72,16 +76,14 @@ export default async function (req, res) {
     return;
   }
 
-  return getStreamResponse(data).then((streamResponse) => {
+  getStreamResponse(data).then((streamResponse: string) => {
     console.log('CACHE MISS', JSON.stringify({result: streamResponse}))
 
     if (isJsonString(streamResponse)) {
       client.set(key, JSON.stringify({result: streamResponse}));
-      return res.status(200).json(JSON.stringify({result: streamResponse}));
+      res.status(200).json(JSON.stringify({result: streamResponse}));
     }
-
-    return res.status(200).json(JSON.stringify({error: "Invalid JSON returned"}));
-
+    res.status(500).json(JSON.stringify({error: "Invalid JSON returned"}));
   });
 }
 

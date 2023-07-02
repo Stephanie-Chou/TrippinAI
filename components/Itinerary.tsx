@@ -1,12 +1,12 @@
 import { ReactElement } from "react";
-import { WalkingTour } from "../utils/types";
+import { WalkingTourStep } from "../utils/types";
 
-function renderWalkingTourShort(tour: WalkingTour[]) : ReactElement {
+function renderWalkingTourShort(tour: WalkingTourStep[]) : ReactElement {
     if (!tour) return null;
 
     return (
       <ol>
-        {tour.map((step: WalkingTour) => <li key={step.name}>{step.name}</li>)}
+        {tour.map((step: WalkingTourStep, index: number) => <li key={index}>{step.name}</li>)}
       </ol>
     );
 }

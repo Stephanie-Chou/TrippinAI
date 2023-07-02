@@ -1,5 +1,6 @@
 import { Configuration } from "openai";
-import { OpenAIStream} from "./OpenAIStream";
+import { NextApiRequest, NextApiResponse } from "next";
+import { OpenAIStream, OpenAIStreamPayload} from "./OpenAIStream";
 import { Redis } from '@upstash/redis'
 import { getStreamResponse } from "../../utils/getStreamResponse";
 import isJsonString from "../../utils/isJsonString";
@@ -8,8 +9,8 @@ const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-export default async function (req, res) {
-    const { location, city } = req.body
+export default async function (req: NextApiRequest, res: NextApiResponse): Promise<string> {
+  const { location, city } = req.body
   console.log("generate site description for ", location, city);
   
   /** Check cache */
@@ -18,12 +19,12 @@ export default async function (req, res) {
       token: process.env.UPSTASH_REDIS_REST_TOKEN,
   })
 
-  const key = `activityDescriptions:location:${location.toLowerCase()}:city:${city.toLowerCase()}`;  
+  const key: string = `activityDescriptions:location:${location.toLowerCase()}:city:${city.toLowerCase()}`;  
   const cached = await client.get(key);
 
   if (cached) {
     console.log('CACHE HIT', JSON.stringify(cached));
-    return res.status(200).json(JSON.stringify(cached));
+    res.status(200).json(JSON.stringify(cached));
   }
 
   /** Cache Miss */
@@ -36,14 +37,17 @@ export default async function (req, res) {
     return;
   }
 
-  const prompt = generateActivityDescriptionPrompt(location, city);
-
+  const prompt: string = generateActivityDescriptionPrompt(location, city);
 
   if (!prompt) {
-    return res.status(400).json({message: "No prompt in the request"});
+    res.status(400).json({
+      error: {
+        message: "No prompt in the request"
+      }
+    });
   }
 
-  const payload = {
+  const payload: OpenAIStreamPayload = {
     model: "text-davinci-003",
     prompt: prompt,
     temperature: 0.7,
@@ -70,17 +74,17 @@ export default async function (req, res) {
     return;
   }
 
-  return getStreamResponse(data).then((streamResponse) => {
+  getStreamResponse(data).then((streamResponse: string) => {
     console.log('CACHE MISS', JSON.stringify({result: streamResponse}))
     if (isJsonString(streamResponse)) {
       client.set(key, JSON.stringify({result: streamResponse}));
-      return res.status(200).json(JSON.stringify({result: streamResponse}));
+      res.status(200).json(JSON.stringify({result: streamResponse}));
     }
-
+    res.status(500).json(JSON.stringify({error: "Invalid JSON returned"}));
   });
 }
 
-function generateActivityDescriptionPrompt(location, city) {
+function generateActivityDescriptionPrompt(location: string, city: string): string {
   
     return `I am a tourist visiting a location in a city. I want to learn something about the location. provide a long description- paragraph ofr 50-60 words describing the location. also provide a short description of 5-10 words.
 

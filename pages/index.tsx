@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useState, useEffect, useRef, useLayoutEffect, ReactElement} from "react";
+import { useState, useEffect, useRef, useLayoutEffect, ReactElement, RefObject} from "react";
 import Day from "../components/Day";
 import DayTrips from "../components/DayTrips";
 import DownloadModal from "../components/DownloadModal";
@@ -7,7 +7,15 @@ import styles from "./index.module.css";
 import { getStreamResponse } from "../utils/getStreamResponse";
 import isJsonString from "../utils/isJsonString";
 import * as stub from "../utils/stubData"
-import { Activity, DayTrip, Food, Meta, Neighborhood, Photo, RetryDay, WalkingTour } from "../utils/types";
+import {
+  Activity,
+  DayTrip,
+  Food,
+  Meta,
+  Neighborhood,
+  Photo,
+  RetryDay,
+  WalkingTourStep } from "../utils/types";
 
 export default function Home() : ReactElement {
   const DEFAULT_INTERESTS : Array<string> = ["Food", "Off the Beaten Path", "Adventure", "History", "Culture"];
@@ -34,11 +42,15 @@ export default function Home() : ReactElement {
   const [food, setFood] = useState([] as Food[]);
 
   // States
+  interface LoadingState {
+    days: boolean,
+    dayTrips: boolean,
+  };
+
   const [loading, setLoading] = useState({
     days: false,
     dayTrips: false,
   });
-  const [errorMessages, setErrorMessages] = useState([]);
   
   useEffect(() => {
     fetchActivityDescriptions();
@@ -50,19 +62,20 @@ export default function Home() : ReactElement {
 
   useEffect(() => {
     renderDays();
-    setLoading((prev) => ({
+    setLoading((prev: LoadingState): LoadingState => ({
       days: false,
       dayTrips: prev.dayTrips,
     }));
   }, [activities, neighborhoods, food, tripLength])
 
-  const myRef = useRef(null)
-  function scrollTo(ref) {
+  const itineraryRef: RefObject<HTMLInputElement> = useRef<HTMLInputElement>(null)
+  
+  function scrollTo(ref: RefObject<HTMLInputElement>) {
     if (!ref.current) return;
     ref.current.scrollIntoView({behavior: 'smooth'});
   }
 
-  const stickyHeader = useRef();
+  const stickyHeader: RefObject<HTMLInputElement> = useRef<HTMLInputElement>();
   useLayoutEffect(() => {
     if (!stickyHeader.current) return;
 
@@ -91,7 +104,7 @@ export default function Home() : ReactElement {
   function renderDays() : ReactElement[]{
     if (activities.length === 0) return;
     let days : ReactElement[] = new Array(tripLength).fill(0);
-    return days.map((day, i) => {
+    return days.map((day, i:number) => {
       return (
         <Day
           activity={activities[i]}
@@ -107,7 +120,7 @@ export default function Home() : ReactElement {
   }
 
 
-  async function retryDay(index: number): Promise<String> {
+  async function retryDay(index: number): Promise<string> {
     const selectedInterests: string = checkedState.map((item) => item.isChecked? item.name : "").filter((n)=>n).join()
     const response = await fetch("/api/generateRetryActivity", {
       method: "POST",
@@ -125,7 +138,7 @@ export default function Home() : ReactElement {
       return;
     }
 
-    getStreamResponse(data).then((streamResponse) => {
+    getStreamResponse(data).then((streamResponse: string) => {
       if (!isJsonString(streamResponse)) return;
       const json : RetryDay = JSON.parse(streamResponse);
 
@@ -150,7 +163,7 @@ export default function Home() : ReactElement {
         const nextState: Neighborhood[] = [...prevState];
         nextState[index] = {
           name: json.neighborhood,
-          walking_tour: {} as WalkingTour,
+          walking_tour: [{} as WalkingTourStep],
           image: {} as Photo
         }
         return nextState;
@@ -158,7 +171,7 @@ export default function Home() : ReactElement {
     });
   }
 
-  async function retryDayTrip(index: number): Promise<String>  {
+  async function retryDayTrip(index: number): Promise<string>  {
     const selectedInterests: string = checkedState.map((item) => item.isChecked? item.name : "").filter((n)=>n).join()
     const response = await fetch("/api/generateRetryDayTrip", {
       method: "POST",
@@ -176,7 +189,7 @@ export default function Home() : ReactElement {
       return;
     }
 
-    getStreamResponse(data).then((streamResponse) => {
+    getStreamResponse(data).then((streamResponse: string) => {
       setMeta((prevState: Meta): Meta => {
         const nextState = {...prevState};
         nextState.dayTrips[index] = streamResponse;
@@ -205,7 +218,7 @@ export default function Home() : ReactElement {
     }
   }
 
-  async function fetchDayTripFood(dayTrip: DayTrip, index: number) {
+  async function fetchDayTripFood(dayTrip: DayTrip, index: number): Promise<string> {
     const response = await fetch("/api/generateFoods", {
       method: "POST",
       headers: {
@@ -228,11 +241,11 @@ export default function Home() : ReactElement {
     if (!isJsonString(jsonStr)) {
       return;
     }
-    const json: DayTrip = JSON.parse(jsonStr);
+    const json: Food = JSON.parse(jsonStr);
 
     setDayTrips((prevState: DayTrip[]): DayTrip[] => {
       const nextState = [...prevState];
-      nextState[index].food = json.food;
+      nextState[index].food = json.lunch;
       return nextState;
     });
   }
@@ -246,9 +259,9 @@ export default function Home() : ReactElement {
       "dayTrips": ["Mt. Rainier", "Snoqualmie Falls"]
     }
    */
-    async function fetchMeta() {
+    async function fetchMeta(): Promise<string> {
     if (!cityInput) return;
-    const selectedInterests = checkedState.map((item) => item.isChecked? item.name : "").filter((n)=>n).join()
+    const selectedInterests: string = checkedState.map((item) => item.isChecked? item.name : "").filter((n)=>n).join()
     console.log(`fetching with inputs  ${cityInput} days: ${tripLength}` )
 
     const response = await fetch("/api/generateMeta", {
@@ -266,17 +279,12 @@ export default function Home() : ReactElement {
     if (!data) {
       return;
     }
-    getStreamResponse(data).then((streamResponse) => {
+    getStreamResponse(data).then((streamResponse: string) => {
       if (!isJsonString(streamResponse)) return;
-      const json = JSON.parse(streamResponse);
-      if (json.error) {
-        setErrorMessages((prevState) => {
-          return nextState = [...prevState, json.error]
-        })
-      }
+      const json: Meta = JSON.parse(streamResponse);
 
       setMeta(json);
-      setActivities(json.activities.map((activity) => {
+      setActivities(json.activities.map((activity: string): Activity => {
         return {
           name: activity,
           short_desc: "",
@@ -284,19 +292,20 @@ export default function Home() : ReactElement {
         }
       }));
 
-      setNeighborhoods(json.neighborhoods.map((neighborhood) => {
+      setNeighborhoods(json.neighborhoods.map((neighborhood: string): Neighborhood => {
         return {
           name: neighborhood,
-          walking_tour: []
+          walking_tour: [{} as WalkingTourStep],
+          image: {} as Photo
         }
       }));
 
-      setDayTrips(json.dayTrips.map((dayTrip) => {
+      setDayTrips(json.dayTrips.map((dayTrip: string): DayTrip => {
         return {
           name: dayTrip,
           short_desc: "",
           long_desc: "",
-          food: {}
+          food: {name: "", desc: ""}
         }
       }))
 
@@ -304,8 +313,8 @@ export default function Home() : ReactElement {
     });
   }
 
-  async function fetchFoods() {
-    for (let i = 0; i< neighborhoods.length; i++) {
+  function fetchFoods(): void {
+    for (let i: number = 0; i< neighborhoods.length; i++) {
       fetchFood(neighborhoods[i], i)
     }
   }
@@ -321,8 +330,8 @@ export default function Home() : ReactElement {
   }
    */
 
-  async function fetchFood(location, index) {
-    setLoading((prev) => ({
+  async function fetchFood(location: Neighborhood, index: number): Promise<string> {
+    setLoading((prev: LoadingState): LoadingState => ({
       days: true,
       dayTrips: prev.dayTrips,
     }));
@@ -338,33 +347,28 @@ export default function Home() : ReactElement {
       throw responseData.error || new Error(`Request failed with status ${response.status}`);
     }
 
-    const jsonStr = JSON.parse(responseData).result;
+    const jsonStr: string = JSON.parse(responseData).result;
     if (!isJsonString(jsonStr)) {
       console.log('error');
       return;
     }
-    const json = JSON.parse(jsonStr);
-      if (json.error) {
-        setErrorMessages((prevState) => {
-          return nextState = [...prevState, json.error]
-        })
-      }
+    const json: Food = JSON.parse(jsonStr);
 
-    setFood((prevState) => {
-      let updatedFood = [...prevState];
+    setFood((prevState: Food[]): Food[] => {
+      let updatedFood: Food[] = [...prevState];
       updatedFood[index] = json;
       return updatedFood;
     });
   }
 
-  async function fetchActivityDescriptions() {
-    for (let i = 0; i< activities.length; i++) {
+  function fetchActivityDescriptions(): void {
+    for (let i: number = 0; i< activities.length; i++) {
       fetchActivityDescription(activities[i], i)
     }
   }
 
-  async function fetchDayTripDescriptions() {
-    for (let i = 0; i< dayTrips.length; i++) {
+  function fetchDayTripDescriptions(): void {
+    for (let i: number = 0; i< dayTrips.length; i++) {
       fetchDayTripDescription(dayTrips[i], i)
     }
   }
@@ -379,8 +383,8 @@ export default function Home() : ReactElement {
       "long_desc": "Explore the vast art collection of the Vatican Museums, housing masterpieces from different periods and cultures. Marvel at the stunning frescoes in the Sistine Chapel painted by Michelangelo and admire works by renowned artists like Raphael and Leonardo da Vinci."
     }
    */
-  async function fetchActivityDescription(location, index) {
-    setLoading((prev) => ({
+  async function fetchActivityDescription(location: Activity, index: number): Promise<string> {
+    setLoading((prev: LoadingState): LoadingState => ({
       days: true,
       dayTrips: prev.dayTrips,
     }));
@@ -397,26 +401,21 @@ export default function Home() : ReactElement {
         throw responseData.error || new Error(`Request failed with status ${response.status}`);
       }
 
-    const jsonStr = JSON.parse(responseData).result;
+    const jsonStr: string = JSON.parse(responseData).result;
     if (!isJsonString(jsonStr)) {
       return;
     }
-    const json = JSON.parse(jsonStr);
-    if (json.error) {
-      setErrorMessages((prevState) => {
-        return nextState = [...prevState, json.error]
-      })
-    }
+    const json: Activity = JSON.parse(jsonStr);
 
-    setActivities((prevState) => {
-      let updatedActivities = [...prevState];
+    setActivities((prevState: Activity[]): Activity[] => {
+      let updatedActivities: Activity[] = [...prevState];
       updatedActivities[index].long_desc = json.long_desc;
       updatedActivities[index].short_desc = json.short_desc;
       return updatedActivities;
     });
   }
 
-  async function fetchDayTripDescription(location, index) {
+  async function fetchDayTripDescription(location: DayTrip, index: number): Promise<string> {
       const response = await fetch("/api/generateActivityDescription", {
         method: "POST",
         headers: {
@@ -430,32 +429,26 @@ export default function Home() : ReactElement {
         throw responseData.error || new Error(`Request failed with status ${response.status}`);
       }
 
-    const jsonStr = JSON.parse(responseData).result;
+    const jsonStr: string = JSON.parse(responseData).result;
     if (!isJsonString(jsonStr)) {
       return;
     }
-    const json = JSON.parse(jsonStr);
-    if (json.error) {
-      setErrorMessages((prevState) => {
-        return nextState = [...prevState, json.error]
-      })
-    }
-
-    setDayTrips((prevState) => {
-      let updatedDayTrips = [...prevState];
+    const json: DayTrip = JSON.parse(jsonStr);
+    setDayTrips((prevState: DayTrip[]): DayTrip[] => {
+      let updatedDayTrips: DayTrip[] = [...prevState];
       updatedDayTrips[index].long_desc = json.long_desc;
       updatedDayTrips[index].short_desc = json.short_desc;
       return updatedDayTrips;
     });
 
-    setLoading((prev) => ({
+    setLoading((prev: LoadingState): LoadingState => ({
       days: prev.dayTrips,
       dayTrips: false,
     }));
   }
 
-  function fetchWalkingTours() {    
-    for (let i = 0; i< neighborhoods.length; i++) {
+  function fetchWalkingTours(): void {    
+    for (let i: number = 0; i< neighborhoods.length; i++) {
       fetchWalkingTour(neighborhoods[i], i)
     }
   }
@@ -471,8 +464,8 @@ export default function Home() : ReactElement {
         {"name": "Eataly Flatiron", "desc": "Explore this Italian food emporium, offering delicious gourmet food, coffee, and pastries."}
      ]
    */
-  async function fetchWalkingTour(neighborhood, index) {   
-    setLoading((prev) => ({
+  async function fetchWalkingTour(neighborhood: Neighborhood, index: number): Promise<string>  {   
+    setLoading((prev: LoadingState): LoadingState => ({
       days: true,
       dayTrips: prev.dayTrips,
     })); 
@@ -488,27 +481,23 @@ export default function Home() : ReactElement {
         throw responseData.error || new Error(`Request failed with status ${response.status}`);
       }
 
-      const jsonStr = JSON.parse(responseData).result;
+      const jsonStr: string = JSON.parse(responseData).result;
       if (!isJsonString(jsonStr)) {
         return;
       } 
-      const json = JSON.parse(jsonStr);
-      if (json.error) {
-        setErrorMessages((prevState) => {
-          return nextState = [...prevState, json.error]
-        })
-      }
-      const site = json[0].name;
+      const json: WalkingTourStep[] = JSON.parse(jsonStr);
+
+      const site: string = json[0].name;
       fetchImage(site, index);
 
-      setNeighborhoods((prevState) => {
+      setNeighborhoods((prevState: Neighborhood[]): Neighborhood[] => {
         let updatedNeighborhoods = [...prevState];
         updatedNeighborhoods[index].walking_tour = json;
         return updatedNeighborhoods;
       });
   }
 
-  async function fetchImage(site, index) {
+  async function fetchImage(site: string, index: number): Promise<string> {
     if (!neighborhoods || neighborhoods.length === 0) return;
     try {
       const response = await fetch("/api/fetchUnsplashImage", {
@@ -525,7 +514,7 @@ export default function Home() : ReactElement {
         throw data.error || new Error(`Request failed with status ${response.status}`);
       }
 
-      let updatedNeighborhoods = neighborhoods;
+      let updatedNeighborhoods: Neighborhood[] = [...neighborhoods];
       updatedNeighborhoods[index].image = data.images[0];
       setNeighborhoods(updatedNeighborhoods);
     } catch(error) {
@@ -534,47 +523,39 @@ export default function Home() : ReactElement {
     }
   }
 
-  function initializeItineraryStates() {
-    const initActivities = Array.from({length: tripLength}, () => ({
+  function initializeItineraryStates(): void {
+    const initActivities: Activity[] = Array.from({length: tripLength}, () => ({
       name:"",
       short_desc:"",
-      long_desc:"",
-      image: {}
+      long_desc:""
     }));
 
-    const initNeighborhoods = Array.from({length: tripLength}, () => ({
+    const initNeighborhoods: Neighborhood[] = Array.from({length: tripLength}, () => ({
       name: "",
-      walking_tour: [],
-      image: {}
+      walking_tour: [{} as WalkingTourStep],
+      image: {} as Photo
     }));
 
-    const initFood = Array.from({length: tripLength}, () => ({
+    const initFood: Food[] = Array.from({length: tripLength}, () => ({
       lunch: {name:"", desc:""},
       dinner: {name:"", desc:""}
     }));
 
-    const initDayTrips = Array.from({length: 2}, () =>  ({
+    const initDayTrips: DayTrip[] = Array.from({length: 2}, () =>  ({
       name: "",
       short_desc: "",
       long_desc: "",
-      food: {}
+      food: {name: "", desc:""}
     }));
     setDayTrips(initDayTrips);
     setActivities(initActivities);
     setNeighborhoods(initNeighborhoods);
-    setFood(initFood)
-  }
-
-  function checkCanDownload() {
-    const shouldDownloadDisable = (city && loading.callCount === 0)
-    shouldDownloadDisable ? setIsDownloadButtonDisabled(true) : setIsDownloadButtonDisabled(false);
+    setFood(initFood);
   }
   /*****************
   * FORM FUNCTIONS
   ******************/
-
-  async function onDownload(event) {
-    event.preventDefault();
+  async function onDownload(event): Promise<string> {
     if (!city) {
       setIsDownloadButtonDisabled(true)
       return;
@@ -622,9 +603,9 @@ export default function Home() : ReactElement {
     }
   }
 
-  async function onSubmit(event) {
+  function onSubmit(event): void {
     setLoading({
-      activities:true,
+      days: true,
       dayTrips: true,
     });
     event.preventDefault();
@@ -633,7 +614,7 @@ export default function Home() : ReactElement {
     fetchMeta();
     setIsDownloadButtonDisabled(false);
 
-    scrollTo(myRef);
+    scrollTo(itineraryRef);
   }
 
   const handleOnChange = (position) => {
@@ -680,7 +661,7 @@ export default function Home() : ReactElement {
                 />
 
                 <div className={styles.select}>
-                  <label forhtml="tripLength">How long are you there?</label>
+                  <label>How long are you there?</label>
                   <select 
                     name="tripLength" 
                     id="tripLength"
@@ -720,7 +701,6 @@ export default function Home() : ReactElement {
                 <input type="submit" value="Plan It" />
                 {renderLoader()}
               </form>
-              {errorMessages}
             </div>
           </div>
 
@@ -739,7 +719,7 @@ export default function Home() : ReactElement {
               </button>
             </div>
           </div>    
-          <div className={styles.result} ref={myRef}>
+          <div className={styles.result} ref={itineraryRef}>
             {city ? <h4>Travel Plan for <span className={styles.city}> {city} </span></h4> : ""}
             {renderDays()}
             <DayTrips

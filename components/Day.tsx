@@ -4,7 +4,7 @@ import styles from "./day.module.css";
 import { ReactElement } from "react";
 import { WalkingTour } from "../utils/types";
 
-function renderWalkingTourLong(tour : WalkingTour[]) : ReactElement {
+function renderWalkingTourLong(tour: WalkingTour[]): ReactElement {
     if (!tour) return null;
     return (
       <ol>
@@ -12,7 +12,7 @@ function renderWalkingTourLong(tour : WalkingTour[]) : ReactElement {
       </ol>
     );
   }
-export default function Day({activity, food, neighborhood, index, locationName, retry}) : ReactElement {
+export default function Day({activity, food, neighborhood, index, locationName, retry}): ReactElement {
     const {walking_tour, image} = neighborhood;
     let urls = !image ? '' : image.urls;
     let user = !image ? {username: ''} : image.user;
