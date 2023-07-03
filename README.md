@@ -1,4 +1,4 @@
-#Trippin AI
+# Trippin AI
 
 AI powered Travel Planner
 
