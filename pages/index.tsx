@@ -641,6 +641,7 @@ export default function Home() : ReactElement {
         <link rel="icon" href="/JourneyGenieLogo_thick.png" />
         <meta property="og:image" content="https://stephaniechou.com/assets/images/trippinspo_logo.png"></meta>
         <meta name="description" content="Artificial Intelligence powered travel planner. Creates a one to five day itinerary, Recommends Day Trips and Food options. Get inspired for your next vacation."/>
+        <meta name="_foundr" content="f785866cc563749ca77fcae47d19fb96"></meta>
       </Head>
         <main className={styles.main }>
           <div className={styles.hero}>
