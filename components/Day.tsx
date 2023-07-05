@@ -41,7 +41,7 @@ export default function Day({activity, food, neighborhood, index, locationName, 
             header={locationName}
             subheader={subheader}
           >
-            <h3> {neighborhood.name} Walking Tour</h3>
+            <h3>Where to go in {neighborhood.name}</h3>
             {renderWalkingTourLong(walking_tour)}
 
             {urls ? <img className={styles.image} src={urls.regular} /> : null}

@@ -9,7 +9,7 @@ const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-export default async function (req: NextApiRequest, res: NextApiResponse): Promise<string> {
+export default async function (req: NextApiRequest, res: NextApiResponse): Promise<void> {
   const { location, city } = req.body
   console.log("generate food for ", location);
 
@@ -77,15 +77,14 @@ export default async function (req: NextApiRequest, res: NextApiResponse): Promi
     return;
   }
 
-  getStreamResponse(data).then((streamResponse: string) => {
+  return getStreamResponse(data).then((streamResponse: string) => {
     console.log('CACHE MISS', JSON.stringify({result: streamResponse}))
 
     if (isJsonString(streamResponse)) {
       client.set(key, JSON.stringify({result: streamResponse}));
-      res.status(200).json(JSON.stringify({result: streamResponse}));
-      return;
+      return res.status(200).json(JSON.stringify({result: streamResponse}));
     }
-    res.status(500).json(JSON.stringify({error: "Invalid JSON returned"}));
+    return res.status(500).json(JSON.stringify({error: "Invalid JSON returned"}));
   });
 }
 

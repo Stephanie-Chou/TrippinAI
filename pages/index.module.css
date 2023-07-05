@@ -164,38 +164,7 @@
   outline-color: #7EC7B2;
 }
 
-.main form .select {
-  display: flex;
-  flex-direction: row;
-  margin-top: 24px;
-  justify-content: space-between;
-}
 
-.main form select {
-  width: 50%;
-  margin-left: 20px;
-}
-.main ::placeholder {
-  color: #8e8ea0;
-  opacity: 1;
-}
-.main input[type="submit"] {
-  padding: 12px 0;
-  color: #fff;
-  background-color: #D99146;
-  border: none;
-  border-radius: 4px;
-  text-align: center;
-  cursor: pointer;
-}
-
-.main .checkboxes {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin-bottom: 24px;
-}
 .main .result {
   font-weight: thin;
   margin-top: 40px;
@@ -253,68 +222,4 @@
 
 .modal button:hover{
   cursor: pointer;
-}
-
-
-/** loading spinner */
-.loader {
-  text-align: center;
-  color: #26A391;
-}
-
-.ldsellipsis {
-  position: relative;
-  width: 100px;
-  margin: auto;
-  height: 60px;
-}
-.ldsellipsis div {
-  position: absolute;
-  top: 33px;
-  width: 13px;
-  height: 13px;
-  border-radius: 50%;
-  background: #F74237;
-
-  animation-timing-function: cubic-bezier(0, 1, 1, 0);
-}
-.ldsellipsis div:nth-child(1) {
-  left: 18px;
-  animation: ldsellipsis1 0.6s infinite;
-}
-.ldsellipsis div:nth-child(2) {
-  left: 18px;
-  animation: ldsellipsis2 0.6s infinite;
-}
-.ldsellipsis div:nth-child(3) {
-  left: 42px;
-  animation: ldsellipsis2 0.6s infinite;
-}
-.ldsellipsis div:nth-child(4) {
-  left: 66px;
-  animation: ldsellipsis3 0.6s infinite;
-}
-@keyframes ldsellipsis1 {
-  0% {
-    transform: scale(0);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-@keyframes ldsellipsis3 {
-  0% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(0);
-  }
-}
-@keyframes ldsellipsis2 {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(24px, 0);
-  }
 }

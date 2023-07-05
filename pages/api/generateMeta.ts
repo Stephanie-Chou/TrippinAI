@@ -12,6 +12,8 @@ export default async function (req: Request): Promise<Response> {
   const { city, interests, tripLength } = (await req.json());
   const prompt: string = generateActivityPrompt(city, interests, tripLength);
 
+  console.log(`finding ${tripLength} activities for ${interests} in ${city}`)
+
   if (!prompt) {
     return new Response("No prompt in the request", { status: 400 });
   }
@@ -42,11 +44,16 @@ export default async function (req: Request): Promise<Response> {
 
 // generate a list of activities in a city
 function generateActivityPrompt(city: string, interests: string, tripLength: number): string {
-  if (!interests) {
-    interests = "general"
-  }
-    return `I am a tourist visiting a location. I want a list of ${tripLength} activities to do in that location that are relevant to my interests. My interests are ${interests}. each activity should include the neighborhood where it is located. In addition, return 2 day trip location suggestions. Return valid JSON containing the activities and the neighborhoods and day trips
+    return `I am a tourist visiting a ${city}. Provide a list of ${tripLength} activities to do in that location that are relevant to my interests and reason for travel. My interests are ${interests}. each activity should include the neighborhood where it is located. In addition, return 2 day trip location suggestions. Return valid JSON containing the activities and the neighborhoods and day trips. number of activities should equal the trip length ${tripLength}
 
+    City: Seattle
+    interests: Off the Beaten Path
+    tripLength: 1
+    return: {
+      "activities": ["Waterfall Garden Park"],
+      "neighborhoods": ["Pioneer Square"],
+      "dayTrips": ["Bainbridge Island", "Snoqualmie Falls"]
+    }
     City: Seattle
     interests: Off the Beaten Path
     tripLength: 1
@@ -60,10 +67,29 @@ function generateActivityPrompt(city: string, interests: string, tripLength: num
     interests: Adventure
     tripLength: 1
     return: {
-      "activities": ["Waterfall Garden Park"],
-      "neighborhoods": ["Pioneer Square"],
+      "activities": ["San Juan Island Whale Watching"],
+      "neighborhoods": ["San Juan Island"],
       "dayTrips": ["Snoqualmie Peak", "Olympic National Park"]
     }
+
+    City: Seattle
+    interests: Party Time
+    tripLength: 2
+    return: {
+      "activities": ["Ballard Brewery District", "Nightlife in Capitol Hill"],
+      "neighborhoods": ["Ballard", "Capitol Hill"],
+      "dayTrips": ["Portland, Oregon", "Vancouver, Canada"]
+    }
+
+    City: San Francisco
+    interests: Family Friendly Fun
+    tripLength: 2
+    return: {
+      "activities": ["Exploratorium in the Embarcadero", "Pier 39 at Fisherman's Wharf"],
+      "neighborhoods": ["Embarcadero", "Fisherman' Wharf"],
+      "dayTrips": ["Muir Beach Overlook", "Bay Area Discovery Museum"]
+    }
+
 
     City: Rome
     interests: Off the Beaten Path

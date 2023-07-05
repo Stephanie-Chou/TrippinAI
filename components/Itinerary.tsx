@@ -28,7 +28,7 @@ export default function Itinerary({activity, food, neighborhood}) : ReactElement
                 <td>{food.lunch.desc}</td>
               </tr>
               <tr>
-                <td>Walking tour of {neighborhood.name}</td>
+                <td>Where to go in {neighborhood.name}</td>
                 <td>
                   {renderWalkingTourShort(neighborhood.walking_tour)}
                 </td>

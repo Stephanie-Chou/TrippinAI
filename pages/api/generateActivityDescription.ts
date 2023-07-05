@@ -9,8 +9,8 @@ const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-export default async function (req: NextApiRequest, res: NextApiResponse): Promise<string> {
-  const { location, city } = req.body
+export default async function (req: NextApiRequest, res: NextApiResponse): Promise<void> {
+  const { location, city, interests } = req.body
   console.log("generate site description for ", location, city);
   
   /** Check cache */
@@ -19,7 +19,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse): Promi
       token: process.env.UPSTASH_REDIS_REST_TOKEN,
   })
 
-  const key: string = `activityDescriptions:location:${location.toLowerCase()}:city:${city.toLowerCase()}`;  
+  const key: string = `activityDescriptions:location:${location.toLowerCase()}:city:${city.toLowerCase()}:interests:${interests}`;  
   const cached = await client.get(key);
 
   if (cached) {
@@ -38,7 +38,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse): Promi
     return;
   }
 
-  const prompt: string = generateActivityDescriptionPrompt(location, city);
+  const prompt: string = generateActivityDescriptionPrompt(location, city, interests);
 
   if (!prompt) {
     res.status(400).json({
@@ -75,42 +75,62 @@ export default async function (req: NextApiRequest, res: NextApiResponse): Promi
     return;
   }
 
-  getStreamResponse(data).then((streamResponse: string) => {
+  return getStreamResponse(data).then((streamResponse: string) => {
     console.log('CACHE MISS', JSON.stringify({result: streamResponse}))
     if (isJsonString(streamResponse)) {
       client.set(key, JSON.stringify({result: streamResponse}));
-      res.status(200).json(JSON.stringify({result: streamResponse}));
-      return;
+      return res.status(200).json(JSON.stringify({result: streamResponse}));
+      
     }
-    res.status(500).json(JSON.stringify({error: "Invalid JSON returned"}));
+    return res.status(500).json(JSON.stringify({error: "Invalid JSON returned"}));
   });
 }
 
-function generateActivityDescriptionPrompt(location: string, city: string): string {
+function generateActivityDescriptionPrompt(location: string, city: string, interests: string): string {
   
-    return `I am a tourist visiting a location in a city. I want to learn something about the location. provide a long description- paragraph ofr 50-60 words describing the location. also provide a short description of 5-10 words.
+    return `I am a tourist visiting a ${location} in a ${city}. I am traveling because of my interest in ${interests} I want to learn something about the location. provide a long description- paragraph ofr 50-60 words describing the location. also provide a short description of 5-10 words.
 
     Location: Colosseum Rome
+    interests: History
     description: {
       "short_desc": "Iconic amphitheater of Ancient Rome, known for gladiatorial contests.",
       "long_desc": "Step into the grandeur of Ancient Rome at the Colosseum, the largest amphitheater ever built. Discover the history of gladiators, explore the vast arena, and marvel at the architectural masterpiece that has stood for centuries."
     }
     Location: Vatican Museums Rome
+    interests: Culture
     description: {
       "short_desc": "World-renowned art collection, including the Sistine Chapel.",
       "long_desc": "Explore the vast art collection of the Vatican Museums, housing masterpieces from different periods and cultures. Marvel at the stunning frescoes in the Sistine Chapel painted by Michelangelo and admire works by renowned artists like Raphael and Leonardo da Vinci."
     }
     Location: Pike Place Market Seattle
+    interests: Food
     description: {
-      "short_desc": " Historic farmers' market known for fresh produce, seafood, and eclectic shops.",
+      "short_desc": "Historic farmers' market known for fresh produce, seafood, and eclectic shops.",
       "long_desc": "Established in 1907, Pike Place Market is one of the oldest continuously operated public farmers' markets in the U.S. It offers an exciting blend of local produce, fresh seafood, specialty foods, artisan crafts, and lively atmosphere."
     }
     Location: Fremont Troll Seattle
+    interests: Off the beaten path
     description: {
       "short_desc":"Seattle's iconic under-bridge troll sculpture.",
-      "long_desc": " A quirky public art installation in Seattle's Fremont neighborhood, featuring a massive troll sculpture clutching a real-life Volkswagen Beetle under a bridge. It's a must-see for visitors seeking unique and playful attractions."
+      "long_desc": "A quirky public art installation in Seattle's Fremont neighborhood, featuring a massive troll sculpture clutching a real-life Volkswagen Beetle under a bridge. It's a must-see for visitors seeking unique and playful attractions."
     }
+
+    Location: Exploratorium in the Embarcadero
+    interests: family friendly fun
+    description: {
+      "short_desc":"Take your family to the Exploratorium, a hands-on science museum",
+      "long_desc": "Explore interactive exhibits, engage in scientific experiments, and discover fascinating concepts in a fun and educational environment."
+    }
+
+    Location: Nightlife in Capitol Hill
+    interests: party time
+    description: {
+      "short_desc": "Lively bars, clubs, and live music in Seattle's energetic neighborhood.",  
+      "long_desc": "Thriving nightlife with popular bars and clubs like Q Nightclub, Neumos, and Unicorn for a lively atmosphere, live music, and DJ sets."
+    }
+
     Location: ${location} ${city}
+    interests: ${interests}
     description:
   `;
 }

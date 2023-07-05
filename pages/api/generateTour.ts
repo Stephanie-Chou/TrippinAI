@@ -8,8 +8,8 @@ const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-export default async function (req: NextApiRequest, res: NextApiResponse): Promise<string> {
-  const { neighborhood, city } = req.body
+export default async function (req: NextApiRequest, res: NextApiResponse): Promise<void> {
+  const { neighborhood, city, interests } = req.body
 
   console.log("generate walking tour for ", neighborhood, city);
 
@@ -19,7 +19,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse): Promi
       token: process.env.UPSTASH_REDIS_REST_TOKEN,
   })
 
-  const key: string = `walkingTour:neighborhood:${neighborhood.toLowerCase()}:city:${city.toLowerCase()}`;
+  const key: string = `walkingTour:neighborhood:${neighborhood.toLowerCase()}:city:${city.toLowerCase()}:interests:${interests}`;
   const cached = await client.get(key);
 
   if (cached) {
@@ -38,7 +38,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse): Promi
     return;
   }
 
-  const prompt: string = generateWalkingTourPrompt(neighborhood);
+  const prompt: string = generateWalkingTourPrompt(neighborhood, interests);
 
   if (!prompt) {
     res.status(400).json({
@@ -76,35 +76,45 @@ export default async function (req: NextApiRequest, res: NextApiResponse): Promi
     return;
   }
 
-  getStreamResponse(data).then((streamResponse: string) => {
+  return getStreamResponse(data).then((streamResponse: string) => {
     console.log('CACHE MISS', JSON.stringify({result: streamResponse}))
 
     if (isJsonString(streamResponse)) {
       client.set(key, JSON.stringify({result: streamResponse}));
-      res.status(200).json(JSON.stringify({result: streamResponse}));
-      return;
+      return res.status(200).json(JSON.stringify({result: streamResponse}));
     }
-
+    return res.status(500).json(JSON.stringify({error: "Invalid JSON returned"}));
   });
 }
 
-function generateWalkingTourPrompt(neighborhood: string) {
+function generateWalkingTourPrompt(neighborhood: string, interests: string) {
   
-    return `Given a neighborhood, return a suggeseted walking tour with 3 stops. return a JSON string with the name of stop and a short description of the stop.
+    return `Given a neighborhood and interests, return a suggested set of 3 activities relevant to the interests. return a JSON string with the name of stop and a short description of the stop.
   
     tourStops: Vatican City
+    interests: history
     walking_tour: [
         {"name": "St. Peter's Basilica", "desc":"Discover the largest church in the world, known for its breathtaking architecture and religious significance."},
         {"name": "Vatican Gardens", "desc":"Stroll through the beautifully landscaped gardens, filled with lush greenery, fountains, and sculptures."},
         {"name": "Castel Sant'Angelo", "desc":"Visit this ancient fortress and former papal residence, offering panoramic views of Rome from its terrace."}
     ]
     tourStops: Fremont
+    interests: family friendly fun
     walking_tour: [ 
         {"name": "Fremont Sunday Market", "desc": "Browse the eclectic mix of crafts, vintage items, and local produce at this vibrant open-air market."},
         {"name": "Gas Works Park", "desc": "Enjoy panoramic views of the Seattle skyline and explore the unique industrial remnants of a gasification plant turned park."},
         {"name": "Theo Chocolate Factory", "desc": "Take a guided tour of the organic and fair-trade chocolate factory, and indulge in delicious samples."}
       ]
+
+    tourStopes: Fremont
+    interests: party time
+    walking_tour: [
+      {"name": "Dance at Nectar Lounge", "desc": "Enjoy live music and DJs at Nectar Lounge, a popular venue in Fremont known for its energetic atmosphere and diverse lineup of performers."},
+      {"name": "Bar hopping on Fremont Ave", "desc": "Embark on a bar-hopping adventure along Fremont Avenue. From craft breweries to laid-back cocktail lounges, there's a different vibe for any occasion."},
+      {"name": "Join the Fremont Solstice Parade", "desc": "If you're lucky enough to visit during the summer, don't miss the iconic Fremont Solstice Parade."}
+    ]
     tourStops: ${neighborhood}
+    interests: ${interests}
     walking_tour:
     `;
 }
