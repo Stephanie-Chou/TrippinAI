@@ -294,6 +294,7 @@ function generateHtml(city, neighborhoods, activities, foods, dayTrips) {
     `</tr>` +
     `</tbody>` +
     `</table>` +
+    `<img class="image" src="${trip.image.urls.regular}"/>` +
     `</div>` +
     `</section>`;
   });

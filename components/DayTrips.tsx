@@ -1,12 +1,15 @@
 import { ReactElement } from "react";
 import Page from "./Page";
 import styles from "./day.module.css";
-import { DayTrip } from "../utils/types";
+import { DayTrip, Photo } from "../utils/types";
 
 export default function DayTrips({dayTrips, locationName, retry}) : ReactElement{
     if (!dayTrips) return;
-
     return dayTrips.map((trip: DayTrip, index: number) => {
+      const image: Photo = trip.image;
+      let urls = !image ? {regular: ''} : image.urls;
+      let user = !image ? {username: '', name: ''} : image.user;
+      let username: string = !user ? '' : user.username
       return (
         <Page
           header={locationName}
@@ -37,6 +40,15 @@ export default function DayTrips({dayTrips, locationName, retry}) : ReactElement
             </table>
 
             <button className={styles.retryButton} onClick={() => retry(index)}>Regenerate</button>
+
+            {urls ? <img className={styles.image} src={urls.regular} /> : null}
+            <a
+              className={styles.credit}
+              target="_blank"
+              href={`https://unsplash.com/@${username}?utm_source=TrippinAI&utm_medium=referral`}
+            >
+              { user ? user.name : ''}
+            </a> on <a className={styles.credit} href="https://unsplash.com?utm_source=TrippinAI&utm_medium=referral">Unsplash</a>
         </Page>     
       )
     })

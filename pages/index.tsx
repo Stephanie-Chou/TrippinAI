@@ -121,7 +121,6 @@ export default function Home() : ReactElement {
     })
   }
 
-
   async function retryDay(index: number): Promise<string> {
     
     const response = await fetch("/api/generateRetryActivity", {
@@ -204,7 +203,8 @@ export default function Home() : ReactElement {
           name: streamResponse,
           short_desc: "",
           long_desc: "", 
-          food: {name: "", desc: ""}
+          food: {name: "", desc: ""},
+          image: {} as Photo
         };
 
         return nextState;
@@ -245,11 +245,14 @@ export default function Home() : ReactElement {
     }
     const json: Food = JSON.parse(jsonStr);
 
-    setDayTrips((prevState: DayTrip[]): DayTrip[] => {
-      const nextState = [...prevState];
-      nextState[index].food = json.lunch;
-      return nextState;
-    });
+    fetchImage(dayTrip.name, index).then((image: Photo) => {
+      setDayTrips((prevState: DayTrip[]): DayTrip[] => {
+        const nextState = [...prevState];
+        nextState[index].food = json.lunch;
+        nextState[index].image = image;
+        return nextState;
+      });
+    })
   }
 
   /**
@@ -307,7 +310,8 @@ export default function Home() : ReactElement {
           name: dayTrip,
           short_desc: "",
           long_desc: "",
-          food: {name: "", desc: ""}
+          food: {name: "", desc: ""},
+          image: {} as Photo
         }
       }))
 
@@ -492,16 +496,18 @@ export default function Home() : ReactElement {
       const json: WalkingTourStep[] = JSON.parse(jsonStr);
 
       const site: string = json[0].name;
-      fetchImage(site, index);
 
-      setNeighborhoods((prevState: Neighborhood[]): Neighborhood[] => {
-        let updatedNeighborhoods = [...prevState];
-        updatedNeighborhoods[index].walking_tour = json;
-        return updatedNeighborhoods;
+      fetchImage(site, index, city).then((image: Photo) => {
+        setNeighborhoods((prevState: Neighborhood[]): Neighborhood[] => {
+          let updatedNeighborhoods = [...prevState];
+          updatedNeighborhoods[index].image = image;
+          updatedNeighborhoods[index].walking_tour = json;
+          return updatedNeighborhoods;
+        });
       });
   }
 
-  async function fetchImage(site: string, index: number): Promise<string> {
+  async function fetchImage(site: string, index: number, city?: string): Promise<Photo> {
     if (!neighborhoods || neighborhoods.length === 0) return;
     try {
       const response = await fetch("/api/fetchUnsplashImage", {
@@ -509,7 +515,7 @@ export default function Home() : ReactElement {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ city, site})
+        body: JSON.stringify({city, site})
     });
 
     
@@ -518,9 +524,7 @@ export default function Home() : ReactElement {
         throw data.error || new Error(`Request failed with status ${response.status}`);
       }
 
-      let updatedNeighborhoods: Neighborhood[] = [...neighborhoods];
-      updatedNeighborhoods[index].image = data.images[0];
-      setNeighborhoods(updatedNeighborhoods);
+      return data.images[0]
     } catch(error) {
       // Consider implementing your own error handling logic here
       console.error(error);
@@ -549,7 +553,8 @@ export default function Home() : ReactElement {
       name: "",
       short_desc: "",
       long_desc: "",
-      food: {name: "", desc:""}
+      food: {name: "", desc:""},
+      image: {} as Photo
     }));
     setDayTrips(initDayTrips);
     setActivities(initActivities);

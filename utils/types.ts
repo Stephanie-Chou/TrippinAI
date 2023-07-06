@@ -11,6 +11,7 @@ export interface DayTrip {
     name: string,
     desc: string,
   },
+  image: Photo,
 }
 
 export interface Activity {

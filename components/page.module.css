@@ -1,5 +1,5 @@
 .page { 
-    min-height: 100vh;
+    min-height: 50vh;
     max-height: fit-content;
     width: clamp(320px, 100vw, 600px);
     margin-bottom: 10px;
