@@ -7,6 +7,7 @@ import styles from "./index.module.css";
 import { getStreamResponse } from "../utils/getStreamResponse";
 import isJsonString from "../utils/isJsonString";
 import * as stub from "../utils/stubData"
+import { DEFAULT_INTERESTS } from "../utils/constants";
 import {
   Activity,
   DayTrip,
@@ -19,7 +20,6 @@ import {
 import Form from "../components/Form";
 
 export default function Home() : ReactElement {
-  const DEFAULT_INTERESTS : Array<string> = ["Food", "Off the Beaten Path", "Adventure", "History", "Culture", "Family Friendly Fun", "Party Time"];
 
   // Modal State
   const [isOpen, setIsOpen] = useState(false);

@@ -21,50 +21,49 @@ export default function Form({
   handleOnChange,
   onSubmit,
 }): ReactElement {
+  const DEFAULT_INTEREST_LABELS : Array<string> = ["Food", "Off the Beaten Path", "Adventure", "History", "Culture", "Family Friendly Fun", "Party Time"];
 
   return (
     <div className={styles.form_container}>
       <form onSubmit={onSubmit}>
-        <div className={styles.thing}>
-          <div className={styles.row}>
-            <input
-              type="text"
-              name="city"
-              placeholder="I am going to ..."
-              value={cityInput}
-              className={styles.child}
-              onChange={(e) => {
-                setCityInput(e.target.value);
-                setCity(e.target.value);
-              }}
-            />
+        <div className={styles.row}>
+          <div className={styles.text}>I am going to</div>
+          <input
+            type="text"
+            name="city"
+            placeholder="Enter a location"
+            value={cityInput}
+            className={styles.child}
+            onChange={(e) => {
+              setCityInput(e.target.value);
+              setCity(e.target.value);
+            }}
+          />
+          
+          <div className={styles.text}>for</div>
+          <div className={styles.select}>
+            <select 
+              name="tripLength" 
+              id="tripLength"
+              defaultValue={tripLength}
+              onChange={(e) => setTripLength(parseInt(e.target.value))}
+            >
+              <option value="1">one</option>
+              <option value="2">two</option>
+              <option value="3">three</option>
+              <option value="4">four</option>
+              <option value="5">five</option>
+            </select>
           </div>
+          <div className={styles.text}>day(s).</div>
         </div>
-        
-
-        <div className={styles.select}>
-          <label>How long are you there?</label>
-          <select 
-            name="tripLength" 
-            id="tripLength"
-            defaultValue={tripLength}
-            onChange={(e) => setTripLength(parseInt(e.target.value))}
-          >
-            <option value="1">1 Day</option>
-            <option value="2">2 Days</option>
-            <option value="3">3 Days</option>
-            <option value="4">4 Days</option>
-            <option value="5">5 Days</option>
-          </select>
-        </div>
-
-
-        <p>Why are you traveling?</p>
-        <div className={styles.checkboxes}> 
+        <div className={styles.interests}>
+          <div className={styles.text}>I am interested in</div>
+          <div className={styles.checkboxes}> 
           {
             interests.map((interest: string, index: number) => {
               return (
-                <div key={index}>
+                <div key={index} className={styles.checkbox}>
                   <input
                     type="checkbox"
                     id={`interest-checkbox-${index}`}
@@ -75,11 +74,12 @@ export default function Form({
                   }/>
                   <label htmlFor={`interest-checkbox-${index}`}>{interest}</label>
                 </div>
-                
               )
             })
           }
+          </div>
         </div>
+         
         <input type="submit" value="Plan It" />
         {renderLoader(loading)}
       </form>
