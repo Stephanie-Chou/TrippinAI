@@ -638,6 +638,9 @@ export default function Home() : ReactElement {
     setIsOpen(false);
   }
 
+  const dayUnit = tripLength === 1 ? "day" : "days";
+  const capitalizedCity = city[0].toUpperCase() + city.slice(1).toLowerCase();
+
   return (
     <div>
       <Head>
@@ -684,7 +687,7 @@ export default function Home() : ReactElement {
             </div>
           </div>    
           <div className={styles.result} ref={itineraryRef}>
-            {city ? <h4>Travel Plan for {city}</h4> : ""}
+            {city ? <h4>Travel Plan for {tripLength} {dayUnit} in {capitalizedCity}</h4> : ""}
             {renderDays()}
             <DayTrips
               dayTrips={dayTrips}

@@ -22,7 +22,7 @@ export default function Form({
   onSubmit,
 }): ReactElement {
   const DEFAULT_INTEREST_LABELS : Array<string> = ["Food", "Off the Beaten Path", "Adventure", "History", "Culture", "Family Friendly Fun", "Party Time"];
-
+  const dayUnit = tripLength === 1 ? "day" : "days";
   return (
     <div className={styles.form_container}>
       <form onSubmit={onSubmit}>
@@ -55,7 +55,7 @@ export default function Form({
               <option value="5">five</option>
             </select>
           </div>
-          <div className={styles.text}>day(s).</div>
+          <div className={styles.text}>{dayUnit}.</div>
         </div>
         <div className={styles.interests}>
           <div className={styles.text}>I am interested in</div>

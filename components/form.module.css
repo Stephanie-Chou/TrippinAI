@@ -40,15 +40,18 @@
   background: transparent;
   border: none;
   border-bottom: 2px solid #D99146;
-  padding: 1px;
-  outline: none;
-  max-width: 50%;
-  margin-right: 12px;
+  color: #2D2D2D;
   display: inline-block;
+  font-family: 'karla';
+  font-size: 18px;
+  margin-right: 8px;
+  max-width: 50%;
+  outline: none;
+  padding: 1px;
 }
 
 .form_container ::placeholder {
-  color: gray;
+  color: #8f8f8f;
   opacity: 1;
 }
 
@@ -58,7 +61,7 @@
   border-bottom: 2px solid #D99146;
   display: inline;
   padding-bottom: 2px;
-  margin-right: 12px;
+  margin-right: 8px;
   min-width: 25%;
 }
 .form_container form select {
@@ -82,9 +85,6 @@
 }
 
 /* interests */
-.form_container .interests {
-  margin-top: 24px;
-}
 
 .form_container .checkboxes {
   display: flex;
