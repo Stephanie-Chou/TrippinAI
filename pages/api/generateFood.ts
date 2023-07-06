@@ -88,19 +88,19 @@ export default async function (req: NextApiRequest, res: NextApiResponse): Promi
   });
 }
 
-function generateFoodPrompt(location, city) {
+function generateFoodPrompt(location: string, city: string) {
 
     return `Given a location, recommend a regional specialty or commonly found food with a description. pick a recommendation for lunch and one for dinner. Should return valid JSON.
 
     location: Pike Place Market Seattle
     food: {
-      "lunch": {"name": "Seattle-style Clam Chowder","desc": "Enjoy a bowl of rich and creamy Seattle-style Clam Chowder, featuring fresh clams, potatoes, onions, celery, and bacon. It's a comforting and flavorful lunch option that captures the essence of the city's maritime heritage."},
-      "dinner": {"name": "Pacific Northwest Salmon","desc": "Savor the iconic Pacific Northwest Salmon, known for its incredible flavor and melt-in-your-mouth texture. Grilled, baked, or pan-seared, this local specialty showcases the region's pristine waters and sustainable seafood practices."}
+      "lunch": {"name": "Pike Place Chowder","desc": "Known for their award-winning chowders, this casual eatery offers delicious clam chowder, seafood bisque, and other comforting soups."},
+      "dinner": {"name": "The Pink Door","desc": "A popular Italian-American restaurant with a lively atmosphere, serving dishes like handmade pasta and fresh seafood."}
     }
     location: Ballard Seattle
     food: {
-      "lunch": {"name": "Salmon Burger","desc": "A regional specialty of Seattle, the Salmon Burger features a juicy salmon patty served on a bun with various toppings and sauces. It showcases the fresh flavors of the Pacific Northwest."},
-      "dinner": {"name": "Dungeness Crab","desc": "Indulge in the local favorite of Dungeness Crab, a sweet and succulent seafood delicacy. Enjoy it steamed, cracked, and served with melted butter for a truly satisfying dinner experience."}
+      "lunch": {"name": "Ballard Pizza Company","desc": "This local pizzeria offers a variety of delicious wood-fired pizzas with creative toppings in a laid back setting."},
+      "dinner": {"name": "The Walrus and the Carpenter","desc": "his popular oyster bar offers a delightful selection of fresh oysters, seafood dishes, and craft cocktails."}
     }
     location: Naples
     food: {
@@ -109,8 +109,8 @@ function generateFoodPrompt(location, city) {
     }
     location: Ancient Rome Rome
     {
-      "lunch": {"name": "Cacio e Pepe","desc": "A classic Roman pasta dish made with pecorino cheese and black pepper."},
-      "dinner": {"name": "Saltimbocca alla Romana","desc": "Thin slices of veal topped with prosciutto and sage, cooked in white wine and butter."}
+      "lunch": {"name": "Ristorante il Matriciano","desc": "A renowned restaurant serving authentic Roman cuisine, including classic dishes like amatriciana and coda alla vaccinara."},
+      "dinner": {"name": "Enoteca Corsi","desc": "A traditional Roman wine bar and restaurant where you can enjoy local wines, antipasti platters, and hearty pasta dishes."}
     }
     location: ${location} ${city}
     food:

@@ -40,7 +40,7 @@ export default function Home() : ReactElement {
   const [meta, setMeta] = useState({} as Meta);
   const [activities, setActivities] = useState([] as Activity[]);
   const [neighborhoods, setNeighborhoods] = useState([] as Neighborhood[]);
-  const [food, setFood] = useState([] as Food[]);
+  const [foods, setFood] = useState([] as Food[]);
 
   // States
   interface LoadingState {
@@ -67,7 +67,7 @@ export default function Home() : ReactElement {
       days: false,
       dayTrips: prev.dayTrips,
     }));
-  }, [activities, neighborhoods, food, tripLength])
+  }, [activities, neighborhoods, foods, tripLength])
 
   const itineraryRef: RefObject<HTMLInputElement> = useRef<HTMLInputElement>(null)
   
@@ -111,7 +111,7 @@ export default function Home() : ReactElement {
         <Day
           activity={activities[i]}
           neighborhood={neighborhoods[i]}
-          food={food[i]}
+          food={foods[i]}
           index={i}
           locationName={city}
           key={i}
@@ -221,7 +221,7 @@ export default function Home() : ReactElement {
   }
 
   async function fetchDayTripFood(dayTrip: DayTrip, index: number): Promise<string> {
-    const response = await fetch("/api/generateFoods", {
+    const response = await fetch("/api/generateFood", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -337,7 +337,7 @@ export default function Home() : ReactElement {
       days: true,
       dayTrips: prev.dayTrips,
     }));
-    const response = await fetch("/api/generateFoods", {
+    const response = await fetch("/api/generateFood", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -576,7 +576,7 @@ export default function Home() : ReactElement {
           city: city,
           neighborhoods: neighborhoods,
           activities: activities,
-          foods: food,
+          foods: foods,
           dayTrips: dayTrips
         })
     });
