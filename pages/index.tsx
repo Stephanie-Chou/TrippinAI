@@ -639,7 +639,7 @@ export default function Home() : ReactElement {
   }
 
   const dayUnit = tripLength === 1 ? "day" : "days";
-  const capitalizedCity = city[0].toUpperCase() + city.slice(1).toLowerCase();
+  const capitalizedCity = city ? city[0].toUpperCase() + city.slice(1).toLowerCase() : "";
 
   return (
     <div>
