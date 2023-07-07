@@ -21,7 +21,6 @@ export default function Form({
   handleOnChange,
   onSubmit,
 }): ReactElement {
-  const DEFAULT_INTEREST_LABELS : Array<string> = ["Food", "Off the Beaten Path", "Adventure", "History", "Culture", "Family Friendly Fun", "Party Time"];
   const dayUnit = tripLength === 1 ? "day" : "days";
   return (
     <div className={styles.form_container}>

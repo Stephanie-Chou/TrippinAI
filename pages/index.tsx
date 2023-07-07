@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useState, useEffect, useRef, useLayoutEffect, ReactElement, RefObject} from "react";
+import { useState, useEffect, useRef, useLayoutEffect, ReactElement, RefObject } from "react";
 import Day from "../components/Day";
 import DayTrips from "../components/DayTrips";
 import DownloadModal from "../components/DownloadModal";
@@ -16,10 +16,11 @@ import {
   Neighborhood,
   Photo,
   RetryDay,
-  WalkingTourStep } from "../utils/types";
+  WalkingTourStep
+} from "../utils/types";
 import Form from "../components/Form";
 
-export default function Home() : ReactElement {
+export default function Home(): ReactElement {
 
   // Modal State
   const [isOpen, setIsOpen] = useState(false);
@@ -31,7 +32,7 @@ export default function Home() : ReactElement {
   const [cityInput, setCityInput] = useState("");
   const [city, setCity] = useState("");
   const [checkedState, setCheckedState] = useState(
-    DEFAULT_INTERESTS.map((interest) => ({name: interest, isChecked: false}))
+    DEFAULT_INTERESTS.map((interest) => ({ name: interest, isChecked: false }))
   );
   const [tripLength, setTripLength] = useState(3);
 
@@ -52,7 +53,7 @@ export default function Home() : ReactElement {
     days: false,
     dayTrips: false,
   });
-  
+
   useEffect(() => {
     fetchActivityDescriptions();
     fetchActivityLists();
@@ -70,10 +71,10 @@ export default function Home() : ReactElement {
   }, [activities, neighborhoods, foods, tripLength])
 
   const itineraryRef: RefObject<HTMLInputElement> = useRef<HTMLInputElement>(null)
-  
+
   function scrollTo(ref: RefObject<HTMLInputElement>) {
     if (!ref.current) return;
-    ref.current.scrollIntoView({behavior: 'smooth'});
+    ref.current.scrollIntoView({ behavior: 'smooth' });
   }
 
   const stickyHeader: RefObject<HTMLInputElement> = useRef<HTMLInputElement>();
@@ -92,9 +93,9 @@ export default function Home() : ReactElement {
   }, [])
 
   function getInterestsString(): string {
-    const selectedInterests = checkedState.map((item) => item.isChecked? item.name : "").filter((n)=>n).join()
+    const selectedInterests = checkedState.map((item) => item.isChecked ? item.name : "").filter((n) => n).join()
     if (!selectedInterests || selectedInterests.length === 0) {
-       return "general"
+      return "general"
     }
     return selectedInterests;
   }
@@ -103,10 +104,10 @@ export default function Home() : ReactElement {
   ************************/
 
 
-  function renderDays() : ReactElement[]{
+  function renderDays(): ReactElement[] {
     if (activities.length === 0) return;
-    let days : ReactElement[] = new Array(tripLength).fill(0);
-    return days.map((day, i:number) => {
+    let days: ReactElement[] = new Array(tripLength).fill(0);
+    return days.map((day, i: number) => {
       return (
         <Day
           activity={activities[i]}
@@ -122,7 +123,7 @@ export default function Home() : ReactElement {
   }
 
   async function retryDay(index: number): Promise<string> {
-    
+
     const response = await fetch("/api/generateRetryActivity", {
       method: "POST",
       headers: {
@@ -141,10 +142,10 @@ export default function Home() : ReactElement {
 
     getStreamResponse(data).then((streamResponse: string) => {
       if (!isJsonString(streamResponse)) return;
-      const json : RetryDay = JSON.parse(streamResponse);
+      const json: RetryDay = JSON.parse(streamResponse);
 
       setMeta((prevState: Meta): Meta => {
-        const nextState : Meta = {...prevState};
+        const nextState: Meta = { ...prevState };
         nextState.activities[index] = json.activity;
         nextState.neighborhoods[index] = json.neighborhood;
         return nextState;
@@ -155,7 +156,7 @@ export default function Home() : ReactElement {
         nextState[index] = {
           name: json.activity,
           short_desc: "",
-          long_desc: "", 
+          long_desc: "",
         };
         return nextState;
       });
@@ -172,8 +173,8 @@ export default function Home() : ReactElement {
     });
   }
 
-  async function retryDayTrip(index: number): Promise<string>  {
-    
+  async function retryDayTrip(index: number): Promise<string> {
+
     const response = await fetch("/api/generateRetryDayTrip", {
       method: "POST",
       headers: {
@@ -192,7 +193,7 @@ export default function Home() : ReactElement {
 
     getStreamResponse(data).then((streamResponse: string) => {
       setMeta((prevState: Meta): Meta => {
-        const nextState = {...prevState};
+        const nextState = { ...prevState };
         nextState.dayTrips[index] = streamResponse;
         return nextState;
       });
@@ -202,8 +203,8 @@ export default function Home() : ReactElement {
         nextState[index] = {
           name: streamResponse,
           short_desc: "",
-          long_desc: "", 
-          food: {name: "", desc: ""},
+          long_desc: "",
+          food: { name: "", desc: "" },
           image: {} as Photo
         };
 
@@ -214,7 +215,7 @@ export default function Home() : ReactElement {
   /***********************
   * DATA FETCH FUNCTIONS
   ************************/
- function fetchDayTripFoods(): void {
+  function fetchDayTripFoods(): void {
     for (let i: number = 0; i < dayTrips.length; i++) {
       fetchDayTripFood(dayTrips[i], i);
     }
@@ -264,10 +265,10 @@ export default function Home() : ReactElement {
       "dayTrips": ["Mt. Rainier", "Snoqualmie Falls"]
     }
    */
-    async function fetchMeta(): Promise<string> {
+  async function fetchMeta(): Promise<string> {
     if (!cityInput) return;
-    
-    console.log(`fetching with inputs  ${cityInput} days: ${tripLength}` )
+
+    console.log(`fetching with inputs  ${cityInput} days: ${tripLength}`)
 
     const response = await fetch("/api/generateMeta", {
       method: "POST",
@@ -310,7 +311,7 @@ export default function Home() : ReactElement {
           name: dayTrip,
           short_desc: "",
           long_desc: "",
-          food: {name: "", desc: ""},
+          food: { name: "", desc: "" },
           image: {} as Photo
         }
       }))
@@ -320,7 +321,7 @@ export default function Home() : ReactElement {
   }
 
   function fetchFoods(): void {
-    for (let i: number = 0; i< neighborhoods.length; i++) {
+    for (let i: number = 0; i < neighborhoods.length; i++) {
       fetchFood(neighborhoods[i], i)
     }
   }
@@ -346,7 +347,7 @@ export default function Home() : ReactElement {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ location: location.name +' ' + city, city: city}),
+      body: JSON.stringify({ location: location.name + ' ' + city, city: city }),
     });
     const responseData = await response.json();
     if (response.status !== 200) {
@@ -368,13 +369,13 @@ export default function Home() : ReactElement {
   }
 
   function fetchActivityDescriptions(): void {
-    for (let i: number = 0; i< activities.length; i++) {
+    for (let i: number = 0; i < activities.length; i++) {
       fetchActivityDescription(activities[i], i)
     }
   }
 
   function fetchDayTripDescriptions(): void {
-    for (let i: number = 0; i< dayTrips.length; i++) {
+    for (let i: number = 0; i < dayTrips.length; i++) {
       fetchDayTripDescription(dayTrips[i], i)
     }
   }
@@ -394,19 +395,19 @@ export default function Home() : ReactElement {
       days: true,
       dayTrips: prev.dayTrips,
     }));
-    
-      const response = await fetch("/api/generateActivityDescription", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({location: location.name, city: city, interests: getInterestsString() })
-      });
-     
-      const responseData = await response.json();
-      if (response.status !== 200) {
-        throw responseData.error || new Error(`Request failed with status ${response.status}`);
-      }
+
+    const response = await fetch("/api/generateActivityDescription", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ location: location.name, city: city, interests: getInterestsString() })
+    });
+
+    const responseData = await response.json();
+    if (response.status !== 200) {
+      throw responseData.error || new Error(`Request failed with status ${response.status}`);
+    }
 
     const jsonStr: string = JSON.parse(responseData).result;
     if (!isJsonString(jsonStr)) {
@@ -423,19 +424,19 @@ export default function Home() : ReactElement {
   }
 
   async function fetchDayTripDescription(location: DayTrip, index: number): Promise<string> {
-      const response = await fetch("/api/generateActivityDescription", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({location: location.name, city: city, interests: getInterestsString()})
-      });
-     
-      const responseData = await response.json();
-      if (response.status !== 200) {
-        console.log(response);
-        throw responseData.error || new Error(`Request failed with status ${response.status}`);
-      }
+    const response = await fetch("/api/generateActivityDescription", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ location: location.name, city: city, interests: getInterestsString() })
+    });
+
+    const responseData = await response.json();
+    if (response.status !== 200) {
+      console.log(response);
+      throw responseData.error || new Error(`Request failed with status ${response.status}`);
+    }
 
     const jsonStr: string = JSON.parse(responseData).result;
     if (!isJsonString(jsonStr)) {
@@ -455,8 +456,8 @@ export default function Home() : ReactElement {
     }));
   }
 
-  function fetchActivityLists(): void {    
-    for (let i: number = 0; i< neighborhoods.length; i++) {
+  function fetchActivityLists(): void {
+    for (let i: number = 0; i < neighborhoods.length; i++) {
       fetchActivityList(neighborhoods[i], i)
     }
   }
@@ -472,39 +473,39 @@ export default function Home() : ReactElement {
         {"name": "Eataly Flatiron", "desc": "Explore this Italian food emporium, offering delicious gourmet food, coffee, and pastries."}
      ]
    */
-  async function fetchActivityList(neighborhood: Neighborhood, index: number): Promise<string>  {   
+  async function fetchActivityList(neighborhood: Neighborhood, index: number): Promise<string> {
     setLoading((prev: LoadingState): LoadingState => ({
       days: true,
       dayTrips: prev.dayTrips,
-    })); 
+    }));
     const response = await fetch("/api/generateTour", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ neighborhood: neighborhood.name, city: city, interests: getInterestsString()}),
+      body: JSON.stringify({ neighborhood: neighborhood.name, city: city, interests: getInterestsString() }),
     });
     const responseData = await response.json();
-      if (response.status !== 200) {
-        throw responseData.error || new Error(`Request failed with status ${response.status}`);
-      }
+    if (response.status !== 200) {
+      throw responseData.error || new Error(`Request failed with status ${response.status}`);
+    }
 
-      const jsonStr: string = JSON.parse(responseData).result;
-      if (!isJsonString(jsonStr)) {
-        return;
-      } 
-      const json: WalkingTourStep[] = JSON.parse(jsonStr);
+    const jsonStr: string = JSON.parse(responseData).result;
+    if (!isJsonString(jsonStr)) {
+      return;
+    }
+    const json: WalkingTourStep[] = JSON.parse(jsonStr);
 
-      const site: string = json[0].name;
+    const site: string = json[0].name;
 
-      fetchImage(site, index, city).then((image: Photo) => {
-        setNeighborhoods((prevState: Neighborhood[]): Neighborhood[] => {
-          let updatedNeighborhoods = [...prevState];
-          updatedNeighborhoods[index].image = image;
-          updatedNeighborhoods[index].walking_tour = json;
-          return updatedNeighborhoods;
-        });
+    fetchImage(site, index, city).then((image: Photo) => {
+      setNeighborhoods((prevState: Neighborhood[]): Neighborhood[] => {
+        let updatedNeighborhoods = [...prevState];
+        updatedNeighborhoods[index].image = image;
+        updatedNeighborhoods[index].walking_tour = json;
+        return updatedNeighborhoods;
       });
+    });
   }
 
   async function fetchImage(site: string, index: number, city?: string): Promise<Photo> {
@@ -515,45 +516,45 @@ export default function Home() : ReactElement {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({city, site})
-    });
+        body: JSON.stringify({ city, site })
+      });
 
-    
+
       const data = await response.json();
       if (response.status !== 200) {
         throw data.error || new Error(`Request failed with status ${response.status}`);
       }
 
       return data.images[0]
-    } catch(error) {
+    } catch (error) {
       // Consider implementing your own error handling logic here
       console.error(error);
     }
   }
 
   function initializeItineraryStates(): void {
-    const initActivities: Activity[] = Array.from({length: tripLength}, () => ({
-      name:"",
-      short_desc:"",
-      long_desc:""
+    const initActivities: Activity[] = Array.from({ length: tripLength }, () => ({
+      name: "",
+      short_desc: "",
+      long_desc: ""
     }));
 
-    const initNeighborhoods: Neighborhood[] = Array.from({length: tripLength}, () => ({
+    const initNeighborhoods: Neighborhood[] = Array.from({ length: tripLength }, () => ({
       name: "",
       walking_tour: [{} as WalkingTourStep],
       image: {} as Photo
     }));
 
-    const initFood: Food[] = Array.from({length: tripLength}, () => ({
-      lunch: {name:"", desc:""},
-      dinner: {name:"", desc:""}
+    const initFood: Food[] = Array.from({ length: tripLength }, () => ({
+      lunch: { name: "", desc: "" },
+      dinner: { name: "", desc: "" }
     }));
 
-    const initDayTrips: DayTrip[] = Array.from({length: 2}, () =>  ({
+    const initDayTrips: DayTrip[] = Array.from({ length: 2 }, () => ({
       name: "",
       short_desc: "",
       long_desc: "",
-      food: {name: "", desc:""},
+      food: { name: "", desc: "" },
       image: {} as Photo
     }));
     setDayTrips(initDayTrips);
@@ -584,16 +585,16 @@ export default function Home() : ReactElement {
           foods: foods,
           dayTrips: dayTrips
         })
-    });
+      });
 
       const responseData = await response.json();
       if (response.status !== 200) {
         throw responseData.error || new Error(`Request failed with status ${response.status}`);
       }
-      let arr= new Uint8Array(responseData.result.data);
+      let arr = new Uint8Array(responseData.result.data);
       let buffer = arr.buffer
 
-      let blob=new Blob([buffer], {type: "application/pdf"});
+      let blob = new Blob([buffer], { type: "application/pdf" });
       const href = URL.createObjectURL(blob);
 
       // Creating new object of PDF file
@@ -605,7 +606,7 @@ export default function Home() : ReactElement {
       alink.target = "_blank";
       alink.click();
       setDownloadButtonText('Download Plan as PDF');
-    } catch(error) {
+    } catch (error) {
       // Consider implementing your own error handling logic here
       console.error(error);
       setDownloadButtonText('Error on Download');
@@ -628,7 +629,7 @@ export default function Home() : ReactElement {
 
   const handleOnChange = (position) => {
     const updatedCheckedState = checkedState.map((item, index) =>
-      index === position ? {name: item.name, isChecked: !item.isChecked} : item
+      index === position ? { name: item.name, isChecked: !item.isChecked } : item
     );
     setCheckedState(updatedCheckedState)
   }
@@ -644,7 +645,7 @@ export default function Home() : ReactElement {
   }
 
   const dayUnit = tripLength === 1 ? "day" : "days";
-  const capitalizedCity = city ? city[0].toUpperCase() + city.slice(1).toLowerCase() : "";
+  const capitalizedCity = city ? city.split(' ').map((word: string) => word ? word[0].toUpperCase() + word.slice(1).toLowerCase() : '').join(' ') : "";
 
   return (
     <div>
@@ -652,58 +653,61 @@ export default function Home() : ReactElement {
         <title>Trippin - The AI Powered Travel Planner</title>
         <link rel="icon" href="/JourneyGenieLogo_thick.png" />
         <meta property="og:image" content="https://stephaniechou.com/assets/images/trippinspo_logo.png"></meta>
-        <meta name="description" content="Artificial Intelligence powered travel planner. Creates a one to five day itinerary, Recommends Day Trips and Food options. Get inspired for your next vacation."/>
+        <meta name="description" content="Artificial Intelligence powered travel planner. Creates a one to five day itinerary, Recommends Day Trips and Food options. Get inspired for your next vacation." />
         <meta name="_foundr" content="f785866cc563749ca77fcae47d19fb96"></meta>
       </Head>
-        <main className={styles.main }>
-          <div className={styles.hero}>
-            <div className={styles.input}>
-              <img src="/JourneyGenieLogo_thick.png" className={styles.icon} />
-              <h1>Trippin</h1>
-              <h2> The AI Powered Travel Planner </h2>
-              <Form
-                cityInput={cityInput}
-                checkedState={checkedState}
-                interests={DEFAULT_INTERESTS}
-                loading={loading}
-                tripLength={tripLength}
-                onSubmit={onSubmit}
-                handleOnChange={handleOnChange}
-                setCity={setCity}
-                setCityInput={setCityInput}
-                setTripLength={setTripLength}
-              />
-            </div>
-          </div>
-
-          <div className={isStickyHeader ? (styles.fixedTop) : styles.mainHeader } ref={stickyHeader} id="mainHeader">
-            <h4>Trippin</h4>
-            <button
-              onClick={onDownload}
-              className={styles.download}
-              disabled={isDownloadButtonDisabled}
-            >
-              {downloadButtonText}
-            </button>
-            <div className={styles.modal}>
-              <button onClick={onModalOpenClick}>
-                <img src="/tipjar.png"/>
-              </button>
-            </div>
-          </div>    
-          <div className={styles.result} ref={itineraryRef}>
-            {city ? <h4>Travel Plan for {tripLength} {dayUnit} in {capitalizedCity}</h4> : ""}
-            {renderDays()}
-            <DayTrips
-              dayTrips={dayTrips}
-              locationName={city}
-              retry={retryDayTrip}
+      <main className={styles.main}>
+        <div className={styles.hero}>
+          <div className={styles.input}>
+            <img src="/JourneyGenieLogo_thick.png" className={styles.icon} />
+            <h1>Trippin</h1>
+            <h2> The AI Powered Travel Planner </h2>
+            <Form
+              cityInput={cityInput}
+              checkedState={checkedState}
+              interests={DEFAULT_INTERESTS}
+              loading={loading}
+              tripLength={tripLength}
+              onSubmit={onSubmit}
+              handleOnChange={handleOnChange}
+              setCity={setCity}
+              setCityInput={setCityInput}
+              setTripLength={setTripLength}
             />
           </div>
-          {isOpen && <DownloadModal onClose={onModalCloseClick}/>}
+        </div>
+
+        <div className={isStickyHeader ? (styles.fixedTop) : styles.mainHeader} ref={stickyHeader} id="mainHeader">
+          <h4>Trippin</h4>
+          <button
+            onClick={onDownload}
+            className={styles.download}
+            disabled={isDownloadButtonDisabled}
+          >
+            {downloadButtonText}
+          </button>
+          <div className={styles.modal}>
+            <button onClick={onModalOpenClick}>
+              <img src="/tipjar.png" />
+            </button>
+          </div>
+        </div>
+
+        <div className={styles.result} ref={itineraryRef}>
+          <div className={styles.plan_title}>
+            {city ? <h3>Travel Plan for {tripLength} {dayUnit} in {capitalizedCity}</h3> : ""}
+          </div>
+          {renderDays()}
+          <DayTrips
+            dayTrips={dayTrips}
+            locationName={city}
+            retry={retryDayTrip}
+          />
+        </div>
+        {isOpen && <DownloadModal onClose={onModalCloseClick} />}
 
 
-        </main>
+      </main>
     </div>
   );
 }

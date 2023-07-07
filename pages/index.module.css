@@ -15,7 +15,6 @@
 }
 
 .mainHeader {
-  padding: 0px 18px;
   background-color: #2D2D2D;
   color: #F9F5F0;
   text-align: center;
@@ -27,11 +26,13 @@
 .main .mainHeader h4 {
   color: #F9F5F0;
   font-family: 'Fredericka the Great', cursive;
+  padding-left: 18px;
 }
 
 .main .fixedTop h4 {
   color: #F9F5F0;
   font-family: 'Fredericka the Great', cursive;
+  padding-left: 18px;
 }
 
 .fixedTop {
@@ -41,9 +42,6 @@
 
   padding-top: 0px;
   padding-bottom: 0px;
-  padding-left: 18px;
-  padding-right: 24px;
-  margin-right: 24px;
   background-color: #2D2D2D;
   color: #F9F5F0;
   text-align: center;
@@ -52,7 +50,7 @@
   justify-content: space-between;
 }
 
-.fixedTop + .main{
+.fixedTop+.main {
   padding-top: 102px;
 }
 
@@ -91,6 +89,7 @@
   color: #2D2D2D;
   font-family: 'Karla', sans-serif;
 }
+
 .main {
   display: flex;
   flex-direction: column;
@@ -103,6 +102,7 @@
   width: 100%;
   margin: 0;
 }
+
 .main .input {
   margin: auto;
   text-align: center;
@@ -110,6 +110,7 @@
   flex-direction: column;
   align-items: center;
 }
+
 .main .icon {
   width: 140px;
 }
@@ -132,22 +133,18 @@
 }
 
 .main h3 {
-  font-size: 32px;
-  line-height: 40px;
+  font-size: 28px;
   font-weight: bold;
   color: #202123;
-  margin: 16px 0 40px;
 }
 
 .main h4 {
   font-size: 20px;
-  line-height: 40px;
+  line-height: 2;
   font-weight: bold;
   color: #202123;
   margin: 12px 0 12px;
 }
-
-
 
 .main .result {
   font-weight: thin;
@@ -155,15 +152,20 @@
   margin: auto;
 }
 
-.main td, .main th {
+.main td,
+.main th {
   border: 1px solid #ddd;
   padding: 8px;
   font-size: 12px;
 }
 
-.main tr:nth-child(even){background-color: #f2f2f2;}
+.main tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
 
-.main tr:hover {background-color: #ddd;}
+.main tr:hover {
+  background-color: #ddd;
+}
 
 .main th {
   padding-top: 12px;
@@ -171,16 +173,9 @@
   text-align: left;
 }
 
-/** loading spinner */
-.stream {
-  font-size: 4px;
-  display: inline-block;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  line-clamp: 1;
-  -webkit-box-orient: vertical;
-  height: 24px;
+
+.main .result .plan_title {
+  text-align: center;
 }
 
 /** Modal Button */
@@ -193,17 +188,17 @@
 
 }
 
-.modal button{
+.modal button {
   background: #2D2D2D;
   height: 56px;
   border: none;
-} 
+}
 
 .modal button img {
   width: 36px;
   height: 36px;
 }
 
-.modal button:hover{
+.modal button:hover {
   cursor: pointer;
 }
