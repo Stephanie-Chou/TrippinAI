@@ -25,6 +25,8 @@ export default async function (req: NextApiRequest, res: NextApiResponse): Promi
         orientation: "landscape",
         perPage: 1
       });
+
+      api.photos.trackDownload({downloadLocation: images.response.results[0].links.download_location})
       res.status(200).json({images: images.response.results});
     }catch(error){
       console.log(error);
