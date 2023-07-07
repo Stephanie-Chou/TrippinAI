@@ -26,12 +26,10 @@ export default function Form({
   return (
     <div className={styles.form_container}>
       <form onSubmit={onSubmit}>
-        <div className={styles.row}>
-          <div className={styles.text}>I am going to</div>
           <input
             type="text"
             name="city"
-            placeholder="Enter a location"
+            placeholder="I'm going to... "
             value={cityInput}
             className={styles.child}
             onChange={(e) => {
@@ -40,7 +38,8 @@ export default function Form({
             }}
           />
           
-          <div className={styles.text}>for</div>
+        <div>
+          <div className={styles.text}>My trip is</div>
           <div className={styles.select}>
             <select 
               name="tripLength" 
@@ -57,6 +56,8 @@ export default function Form({
           </div>
           <div className={styles.text}>{dayUnit}.</div>
         </div>
+          
+        
         <div className={styles.interests}>
           <div className={styles.text}>I am interested in</div>
           <div className={styles.checkboxes}> 

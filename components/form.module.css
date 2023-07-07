@@ -7,6 +7,9 @@
   margin-bottom: 24px;
   padding: 20px;
   text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
 }
 
 @media only screen and (max-width: 600px) {
@@ -21,33 +24,25 @@
   }
 }
 
-.main input[type="text"] {
-  padding: 12px 16px;
-  border: 1px solid #7EC7B2;
-  border-radius: 4px;
-  outline-color: #7EC7B2;
-  padding-right: 12px;
-}
-
 .form_container form .text {
   display: inline-block;
   padding-right: 12px;
-  line-height: 2.7;
+  line-height: 2.3;
 }
 /* I am going to blank for blank */
 
 .form_container input[type=text] {
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid #D99146;
+  border: 1px solid #7ec7b2;
+  border-radius: 4px;
   color: #2D2D2D;
-  display: inline-block;
+  display: block;
   font-family: 'karla';
   font-size: 18px;
   margin-right: 8px;
-  max-width: 50%;
-  outline: none;
-  padding: 1px;
+  margin-bottom: 18px;
+  outline-color: #7ec7b2;
+  padding: 12px 16px;
+
 }
 
 .form_container ::placeholder {
@@ -58,7 +53,7 @@
 /* how long are you there */
 
 .form_container form .select {
-  border-bottom: 2px solid #D99146;
+  border-color: #7ec7b2;;
   display: inline;
   padding-bottom: 2px;
   margin-right: 8px;
@@ -66,9 +61,9 @@
 }
 .form_container form select {
   display: inline-block;
-  appearance: none;
-  border: none;
-  background: none;
+  border-color: #7ec7b2;
+  background-color: #7ec7b2;
+  outline: none;
   min-width: 10%;
   font-family: 'Karla';
   font-style: normal;
@@ -77,10 +72,6 @@
   color: #2D2D2D;
 }
 .form_container form select:hover {
-  display: inline-block;
-  appearance: none;
-  border: none;
-  background: none;
   cursor: pointer;
 }
 
