@@ -20,6 +20,7 @@ import {
 } from "../utils/types";
 import Form from "../components/Form";
 import TravelDay from "../components/TravelDay";
+import NeighborhoodRecommendations from "../components/NeighborhoodRecommendations";
 
 export default function Home(): ReactElement {
 
@@ -39,6 +40,7 @@ export default function Home(): ReactElement {
 
   // Itinerary Model State
   const [travelTips, setTravelTips] = useState("");
+  const [neighborhoodRecommendations, setNeighborhoodRecommendations] = useState("");
   const [dayTrips, setDayTrips] = useState([] as DayTrip[]);
   const [meta, setMeta] = useState({} as Meta);
   const [activities, setActivities] = useState([] as Activity[]);
@@ -46,6 +48,7 @@ export default function Home(): ReactElement {
   const [foods, setFood] = useState([] as Food[]);
 
   const [showTravelDay, setShowTravelDay] = useState(false);
+  const [showNeighborhoodRecommendations, setShowNeighborhoodRecommendations] = useState(false);
 
   // Loading States
   interface LoadingState {
@@ -324,8 +327,27 @@ export default function Home(): ReactElement {
     });
   }
 
+  async function fetchNeighborhoodRecommendations(): Promise<string> {
+    if (!cityInput) return;
+    const response = await fetch("/api/generateNeighborhoods", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ city: cityInput }),
+    });
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.statusText}`);
+    }
+
+    const data = response.body;
+    if (!data) {
+      return;
+    }
+    getStreamResponse(data, setNeighborhoodRecommendations);
+  }
+
   async function fetchTravelDay(): Promise<string> {
-    console.log('travel day time');
     if (!cityInput) return;
     const response = await fetch("/api/generateTravelDay", {
       method: "POST",
@@ -647,12 +669,14 @@ export default function Home(): ReactElement {
     });
 
     setShowTravelDay(true);
+    setShowNeighborhoodRecommendations(true);
 
     event.preventDefault();
 
     initializeItineraryStates();
     fetchMeta();
     fetchTravelDay();
+    fetchNeighborhoodRecommendations();
     setIsDownloadButtonDisabled(false);
 
     scrollTo(itineraryRef);
@@ -730,6 +754,9 @@ export default function Home(): ReactElement {
           </div>
 
           {showTravelDay && <TravelDay locationName={city} travelTips={travelTips} />}
+
+          {showNeighborhoodRecommendations && <NeighborhoodRecommendations locationName={city} neighborhoodRecommendations={neighborhoodRecommendations} />}
+
           {renderDays()}
           <DayTrips
             dayTrips={dayTrips}

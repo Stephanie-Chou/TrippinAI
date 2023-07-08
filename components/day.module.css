@@ -36,5 +36,11 @@
   white-space: -pre-wrap;
   white-space: -o-pre-wrap;
   word-wrap: break-word;
-  font-family: 'Karla', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+
+.day_description b {
+  font-weight: 1000;
+  text-transform: uppercase;
 }
