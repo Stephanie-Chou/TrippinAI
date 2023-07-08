@@ -19,6 +19,7 @@ import {
   WalkingTourStep
 } from "../utils/types";
 import Form from "../components/Form";
+import TravelDay from "../components/TravelDay";
 
 export default function Home(): ReactElement {
 
@@ -37,13 +38,16 @@ export default function Home(): ReactElement {
   const [tripLength, setTripLength] = useState(3);
 
   // Itinerary Model State
+  const [travelTips, setTravelTips] = useState("");
   const [dayTrips, setDayTrips] = useState([] as DayTrip[]);
   const [meta, setMeta] = useState({} as Meta);
   const [activities, setActivities] = useState([] as Activity[]);
   const [neighborhoods, setNeighborhoods] = useState([] as Neighborhood[]);
   const [foods, setFood] = useState([] as Food[]);
 
-  // States
+  const [showTravelDay, setShowTravelDay] = useState(false);
+
+  // Loading States
   interface LoadingState {
     days: boolean,
     dayTrips: boolean,
@@ -320,6 +324,28 @@ export default function Home(): ReactElement {
     });
   }
 
+  async function fetchTravelDay(): Promise<string> {
+    console.log('travel day time');
+    if (!cityInput) return;
+    const response = await fetch("/api/generateTravelDay", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ city: cityInput }),
+    });
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.statusText}`);
+    }
+
+    const data = response.body;
+    if (!data) {
+      return;
+    }
+    getStreamResponse(data, setTravelTips);
+  }
+
+
   function fetchFoods(): void {
     for (let i: number = 0; i < neighborhoods.length; i++) {
       fetchFood(neighborhoods[i], i)
@@ -562,6 +588,7 @@ export default function Home(): ReactElement {
     setNeighborhoods(initNeighborhoods);
     setFood(initFood);
   }
+
   /*****************
   * FORM FUNCTIONS
   ******************/
@@ -618,10 +645,14 @@ export default function Home(): ReactElement {
       days: true,
       dayTrips: true,
     });
+
+    setShowTravelDay(true);
+
     event.preventDefault();
 
     initializeItineraryStates();
     fetchMeta();
+    fetchTravelDay();
     setIsDownloadButtonDisabled(false);
 
     scrollTo(itineraryRef);
@@ -697,6 +728,8 @@ export default function Home(): ReactElement {
           <div className={styles.plan_title}>
             {city ? <h3>Travel Plan for {tripLength} {dayUnit} in {capitalizedCity}</h3> : ""}
           </div>
+
+          {showTravelDay && <TravelDay locationName={city} travelTips={travelTips} />}
           {renderDays()}
           <DayTrips
             dayTrips={dayTrips}
@@ -705,8 +738,6 @@ export default function Home(): ReactElement {
           />
         </div>
         {isOpen && <DownloadModal onClose={onModalCloseClick} />}
-
-
       </main>
     </div>
   );

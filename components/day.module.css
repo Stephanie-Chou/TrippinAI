@@ -1,28 +1,33 @@
 .image {
-    width: 100%;
-    max-height: 320px;
+  width: 100%;
+  max-height: 320px;
 }
 
 .credit {
-    font-size: 12px;
-    line-height: 15px;
-    text-decoration-line: underline;
-    color: #b3b3b3;
-  }
-  
-  .retryButton {
-    color: #fff;
-    background-color: #D99146;
-    border: none;
-    border-radius: 4px;
-    text-align: center;
-    cursor: pointer;
-    padding: 4px 12px;
-    margin: 12px 0;
-    font-size: 12px;
-  }
+  font-size: 12px;
+  line-height: 15px;
+  text-decoration-line: underline;
+  color: #b3b3b3;
+}
+
+.retryButton {
+  color: #fff;
+  background-color: #D99146;
+  border: none;
+  border-radius: 4px;
+  text-align: center;
+  cursor: pointer;
+  padding: 4px 12px;
+  margin: 12px 0;
+  font-size: 12px;
+}
 
 
-  .neighboorhood_long_desc {
-    margin-bottom: 18px;
-  }
+.day_description {
+  margin-bottom: 18px;
+}
+
+.day_description pre {
+  text-wrap: wrap;
+  font-family: 'Karla', sans-serif;
+}

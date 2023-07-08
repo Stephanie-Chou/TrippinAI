@@ -21,15 +21,15 @@ export default async function (req, res) {
     }
   };
   return axios(config)
-  .then(function(response) {
-    res.status(200).json({result: response.data});
-  })
-  .catch(function(error) {
-    // DocRaptor error messages are contained in the response body
-    // Since the response is binary encoded, let's decode
-    var decoder = new TextDecoder("utf-8");
-    console.log(decoder.decode(error.response.data));
-  });
+    .then(function (response) {
+      res.status(200).json({ result: response.data });
+    })
+    .catch(function (error) {
+      // DocRaptor error messages are contained in the response body
+      // Since the response is binary encoded, let's decode
+      var decoder = new TextDecoder("utf-8");
+      console.log(decoder.decode(error.response.data));
+    });
 };
 
 function generateStyles() {
@@ -196,6 +196,17 @@ function generateStyles() {
 </head>`
 }
 
+function getImg(image) {
+  if (!image) return '';
+
+  if (image.urls) {
+    if (image.urls.regular) {
+      return `<img class="image" src="${image.urls.regular}"/>`
+    }
+    return '';
+  }
+  return '';
+}
 // generate a list of day trips from a city.
 function generateHtml(city, neighborhoods, activities, foods, dayTrips) {
   const capitalizedCity = city[0].toUpperCase() + city.slice(1).toLowerCase();
@@ -207,100 +218,104 @@ function generateHtml(city, neighborhoods, activities, foods, dayTrips) {
     let food = foods[index];
     let subheader = index + 1;
 
-    return `<section class="page"><div class="header"><div class="tag">`+
-    `<div class="tagHeader">${capitalizedCity}</div>`+
-    `<div class="tagSubheader">Day ${subheader}</div>`+
-    `</div></div>` +
-    `<div class="container">` +
-    `<h3> ${neighborhood.name}</h3>` +
-    `<div class="activity_long_desc">${activity.long_desc}</div>` +
-    `<table>` +
-    `<tbody>` +
-    `<tr>` +
-    `<th> Activity </th>` +
-    `<th> Description </th>` +
-    `</tr>` +
-    `<tr>` +
-    `<td>${activity.name}</td>` +
-    `<td>${activity.short_desc}</td>` +
-    `</tr>` +
-    `<tr>` +
-    `<td> <div>Lunch</div> ${food.lunch.name}</td>` +
-    `<td>${food.lunch.desc}</td>` +
-    `</tr>` +
-    `<tr>` +
-    `<td>Walking tour of ${neighborhood.name}</td>` +
-    `<td>` +
-    `<ol>` +
-    `<li>${neighborhood.walking_tour[0].name}</li>` +
-    `<li>${neighborhood.walking_tour[1].name}</li>` +
-    `<li>${neighborhood.walking_tour[2].name}t</li>` +
-    `</ol>` +
-    `</td>` +
-    `</tr>` +
-    `<tr>` +
-    `<td> <div>Dinner</div> ${food.dinner.name}</td>` +
-    `<td> ${food.dinner.desc}</td>` +
-    `</tr>` +
-    `</tbody>` +
-    `</table>` +
-    `</div >` +
-    `</section>`;
+    return `<section class="page"><div class="header"><div class="tag">` +
+      `<div class="tagHeader">${capitalizedCity}</div>` +
+      `<div class="tagSubheader">Day ${subheader}</div>` +
+      `</div></div>` +
+      `<div class="container">` +
+      `<h3> ${neighborhood.name}</h3>` +
+      `<div class="activity_long_desc">${activity.long_desc}</div>` +
+      `<table>` +
+      `<tbody>` +
+      `<tr>` +
+      `<th> Activity </th>` +
+      `<th> Description </th>` +
+      `</tr>` +
+      `<tr>` +
+      `<td>${activity.name}</td>` +
+      `<td>${activity.short_desc}</td>` +
+      `</tr>` +
+      `<tr>` +
+      `<td> <div>Lunch</div> ${food.lunch.name}</td>` +
+      `<td>${food.lunch.desc}</td>` +
+      `</tr>` +
+      `<tr>` +
+      `<td>Walking tour of ${neighborhood.name}</td>` +
+      `<td>` +
+      `<ol>` +
+      `<li>${neighborhood.walking_tour[0].name}</li>` +
+      `<li>${neighborhood.walking_tour[1].name}</li>` +
+      `<li>${neighborhood.walking_tour[2].name}t</li>` +
+      `</ol>` +
+      `</td>` +
+      `</tr>` +
+      `<tr>` +
+      `<td> <div>Dinner</div> ${food.dinner.name}</td>` +
+      `<td> ${food.dinner.desc}</td>` +
+      `</tr>` +
+      `</tbody>` +
+      `</table>` +
+      `</div >` +
+      `</section>`;
   });
 
   let walkingTourHtml = neighborhoods.map((neighborhood, index) => {
     let subheader = index + 1;
-    return `<section class="page"><div class="header"><div class="tag">`+
-    `<div class="tagHeader">${capitalizedCity}</div>`+
-    `<div class="tagSubheader">Day ${subheader}</div>`+
-    `</div></div>` +
-    `<div class="container">` +
-    `<h3> ${neighborhood.name} Walking Tour</h3>` +
-    `<ol>` +
-    `<li>${neighborhood.walking_tour[0].name} ${neighborhood.walking_tour[0].desc}</li>` +
-    `<li>${neighborhood.walking_tour[1].name} ${neighborhood.walking_tour[1].desc}</li>` +
-    `<li>${neighborhood.walking_tour[2].name} ${neighborhood.walking_tour[2].desc}</li>` +
-    `</ol>` +
-    `<img class="image" src="${neighborhood.image.urls.regular}"/>` +
-    `</div>` +
-    `</section>`;
+    const image = getImg(neighborhood.image);
+    return `<section class="page"><div class="header"><div class="tag">` +
+      `<div class="tagHeader">${capitalizedCity}</div>` +
+      `<div class="tagSubheader">Day ${subheader}</div>` +
+      `</div></div>` +
+      `<div class="container">` +
+      `<h3> ${neighborhood.name} Walking Tour</h3>` +
+      `<ol>` +
+      `<li>${neighborhood.walking_tour[0].name} ${neighborhood.walking_tour[0].desc}</li>` +
+      `<li>${neighborhood.walking_tour[1].name} ${neighborhood.walking_tour[1].desc}</li>` +
+      `<li>${neighborhood.walking_tour[2].name} ${neighborhood.walking_tour[2].desc}</li>` +
+      `</ol>` +
+      `${image}` +
+      `</div>` +
+      `</section>`;
   })
 
+
   let dayTripHtml = dayTrips.map((trip) => {
-    return `<section class="page"><div class="header"><div class="tag">`+
-    `<div class="tagHeader">${capitalizedCity}</div>`+
-    `<div class="tagSubheader">Day Trip</div>`+
-    `</div></div>` +
-    `<div class="container">` +
-    `<h3>${trip.name}</h3>` +
-    `<div>${trip.long_desc}</div>` +
-    `<table>` +
-    `<tbody>` +
-    `<tr>` +
-    `<th> Activity </th>` +
-    `<th> Description </th>` +
-    `</tr>` +
-    `<tr>` +
-    `<td>Morning Travel</td>` +
-    `<td>Travel to ${trip.name}</td>` +
-    `</tr>` +
-    `<tr>` +
-    `<td>${trip.name} </td>` +
-    `<td>${trip.short_desc}</td>` +
-    `</tr>` +
-    `<tr>` +
-    `<td>Eat at ${trip.food.name}  </td>` +
-    `<td>${trip.food.desc}</td>` +
-    `</tr>` +
-    `</tbody>` +
-    `</table>` +
-    `<img class="image" src="${trip.image.urls.regular}"/>` +
-    `</div>` +
-    `</section>`;
+
+    const image = getImg(trip.image);
+    return `<section class="page"><div class="header"><div class="tag">` +
+      `<div class="tagHeader">${capitalizedCity}</div>` +
+      `<div class="tagSubheader">Day Trip</div>` +
+      `</div></div>` +
+      `<div class="container">` +
+      `<h3>${trip.name}</h3>` +
+      `<div>${trip.long_desc}</div>` +
+      `<table>` +
+      `<tbody>` +
+      `<tr>` +
+      `<th> Activity </th>` +
+      `<th> Description </th>` +
+      `</tr>` +
+      `<tr>` +
+      `<td>Morning Travel</td>` +
+      `<td>Travel to ${trip.name}</td>` +
+      `</tr>` +
+      `<tr>` +
+      `<td>${trip.name} </td>` +
+      `<td>${trip.short_desc}</td>` +
+      `</tr>` +
+      `<tr>` +
+      `<td>Eat at ${trip.food.name}  </td>` +
+      `<td>${trip.food.desc}</td>` +
+      `</tr>` +
+      `</tbody>` +
+      `</table>` +
+      `${image}` +
+      `</div>` +
+      `</section>`;
   });
 
   let returnHTML = htmlStart
-  for (let i = 0; i < neighborhoods.length; i ++ ){
+  for (let i = 0; i < neighborhoods.length; i++) {
     returnHTML += dayItineraryHtml[i] + walkingTourHtml[i]
   }
   returnHTML += dayTripHtml.join(' ')
