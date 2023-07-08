@@ -1,7 +1,8 @@
 .form_container {
   width: clamp(600px, 50vw, 70vw);
 }
-.form_container form{
+
+.form_container form {
   font-size: 18px;
   background: #7EC7B2;
   margin-bottom: 24px;
@@ -16,7 +17,8 @@
   .form_container {
     width: 100%;
   }
-  .form_container form{
+
+  .form_container form {
     font-size: 16px;
     background: #7EC7B2;
     margin-bottom: 24px;
@@ -29,6 +31,7 @@
   padding-right: 12px;
   line-height: 2.3;
 }
+
 /* I am going to blank for blank */
 
 .form_container input[type=text] {
@@ -53,12 +56,14 @@
 /* how long are you there */
 
 .form_container form .select {
-  border-color: #7ec7b2;;
+  border-color: #7ec7b2;
+  ;
   display: inline;
   padding-bottom: 2px;
   margin-right: 8px;
   min-width: 25%;
 }
+
 .form_container form select {
   display: inline-block;
   border-color: #7ec7b2;
@@ -71,6 +76,7 @@
   font-size: 18px;
   color: #2D2D2D;
 }
+
 .form_container form select:hover {
   cursor: pointer;
 }
@@ -93,6 +99,7 @@
 /* submit */
 .form_container input[type="submit"] {
   padding: 12px 0;
+  line-height: 1.5;
   color: #fff;
   background-color: #D99146;
   border: none;
@@ -114,6 +121,7 @@
   margin: auto;
   height: 60px;
 }
+
 .ldsellipsis div {
   position: absolute;
   top: 33px;
@@ -124,42 +132,52 @@
 
   animation-timing-function: cubic-bezier(0, 1, 1, 0);
 }
+
 .ldsellipsis div:nth-child(1) {
   left: 18px;
   animation: ldsellipsis1 0.6s infinite;
 }
+
 .ldsellipsis div:nth-child(2) {
   left: 18px;
   animation: ldsellipsis2 0.6s infinite;
 }
+
 .ldsellipsis div:nth-child(3) {
   left: 42px;
   animation: ldsellipsis2 0.6s infinite;
 }
+
 .ldsellipsis div:nth-child(4) {
   left: 66px;
   animation: ldsellipsis3 0.6s infinite;
 }
+
 @keyframes ldsellipsis1 {
   0% {
     transform: scale(0);
   }
+
   100% {
     transform: scale(1);
   }
 }
+
 @keyframes ldsellipsis3 {
   0% {
     transform: scale(1);
   }
+
   100% {
     transform: scale(0);
   }
 }
+
 @keyframes ldsellipsis2 {
   0% {
     transform: translate(0, 0);
   }
+
   100% {
     transform: translate(24px, 0);
   }
