@@ -30,7 +30,11 @@
 
 .day_description pre {
   max-width: 100%;
-  text-wrap: wrap;
-  overflow-wrap: break-word;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
   font-family: 'Karla', sans-serif;
 }

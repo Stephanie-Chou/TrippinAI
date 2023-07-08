@@ -646,13 +646,13 @@ export default function Home(): ReactElement {
       dayTrips: true,
     });
 
-    // setShowTravelDay(true);
+    setShowTravelDay(true);
 
     event.preventDefault();
 
     initializeItineraryStates();
     fetchMeta();
-    // fetchTravelDay();
+    fetchTravelDay();
     setIsDownloadButtonDisabled(false);
 
     scrollTo(itineraryRef);
@@ -729,7 +729,7 @@ export default function Home(): ReactElement {
             {city ? <h3>Travel Plan for {tripLength} {dayUnit} in {capitalizedCity}</h3> : ""}
           </div>
 
-          {/* {showTravelDay && <TravelDay locationName={city} travelTips={travelTips} />} */}
+          {showTravelDay && <TravelDay locationName={city} travelTips={travelTips} />}
           {renderDays()}
           <DayTrips
             dayTrips={dayTrips}
