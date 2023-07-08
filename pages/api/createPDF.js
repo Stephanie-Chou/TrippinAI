@@ -106,7 +106,7 @@ function generateStyles() {
     max-height: fit-content;
     width: clamp(320px, 100vw, 600px);
     background-color: #F9F5F0;
-    font-family: 'Karla', sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
   }
 
   .page .container {
