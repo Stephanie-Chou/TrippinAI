@@ -40,6 +40,6 @@ export default async function (req: Request): Promise<Response> {
   );
 };
 function generateTravelDayPrompt(location: string): string {
-  return ` I am a traveler going to ${location}. Give advice specific to ${location}. Assume the traveler is not local. Give instructions on how to get to ${location} Give practical tips about whether to rent a car, use public transportation or some other private transportation in ${location}. Provide the information as a list. Add a new line character, \n, between each step of the list. Limit the response to 200 words or less.
+  return ` I am a traveler going to ${location}. Give advice specific to ${location}. Assume the traveler is not local. Give instructions on how to get to ${location}. Give practical tips about whether to rent a car, use public transportation or some other private transportation in ${location}. Provide the information as a list. Add a new line character, \n, between each step of the list. Limit the response to 150 words total or less.
   `;
 }

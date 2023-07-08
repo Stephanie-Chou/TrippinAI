@@ -25,9 +25,12 @@
 
 .day_description {
   margin-bottom: 18px;
+  max-width: 100%;
 }
 
 .day_description pre {
+  max-width: 100%;
   text-wrap: wrap;
+  overflow-wrap: break-word;
   font-family: 'Karla', sans-serif;
 }
