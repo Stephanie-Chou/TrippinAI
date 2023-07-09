@@ -6,7 +6,7 @@ export default function TravelDayButton({ onClick }): ReactElement {
   return (
     <button className={styles.button_container} onClick={onClick}>
       <div className={styles.calendar_button}>
-        <span className={styles.material_symbols_outlined} />
+        <span className="material-symbols-outlined">flight_takeoff</span>
         <div className={styles.day_tag}>Travel Day</div>
       </div>
     </button>

@@ -7,7 +7,7 @@ import styles from "./index.module.css";
 import { getStreamResponse } from "../utils/getStreamResponse";
 import isJsonString from "../utils/isJsonString";
 import * as stub from "../utils/stubData"
-import { DAY_IDS, DEFAULT_INTERESTS, TRAVEL_DAY_ID } from "../utils/constants";
+import { DAY_IDS, DEFAULT_INTERESTS, DownloadButtonStatus, TRAVEL_DAY_ID } from "../utils/constants";
 import {
   Activity,
   DayTrip,
@@ -24,12 +24,13 @@ import NeighborhoodRecommendations from "../components/NeighborhoodRecommendatio
 import CalendarButton from "../components/CalendarButton";
 import TravelDayButton from "../components/TravelDayButton";
 import SplitPillMenu from "../components/SplitPillMenu";
+import WhatToEat from "../components/WhatToEat";
 
 export default function Home(): ReactElement {
 
   // Modal State
   const [isOpen, setIsOpen] = useState(false);
-  const [downloadButtonText, setDownloadButtonText] = useState('Save Plan as PDF');
+  const [downloadButtonState, setDownloadButtonState] = useState(DownloadButtonStatus.READY);
   const [isDownloadButtonDisabled, setIsDownloadButtonDisabled] = useState(true);
   const [isStickyHeader, setIsStickyHeader] = useState(false);
 
@@ -43,7 +44,8 @@ export default function Home(): ReactElement {
 
   // Itinerary Model State
   const [travelTips, setTravelTips] = useState("");
-  const [neighborhoodRecommendations, setNeighborhoodRecommendations] = useState("");
+  const [whereToStay, setWhereToStay] = useState("");
+  const [whatToEat, setWhatToEat] = useState("");
   const [dayTrips, setDayTrips] = useState([] as DayTrip[]);
   const [meta, setMeta] = useState({} as Meta);
   const [activities, setActivities] = useState([] as Activity[]);
@@ -53,7 +55,7 @@ export default function Home(): ReactElement {
 
   /** STUB DATA */
   // const [travelTips, setTravelTips] = useState(stub.mock_travelDay);
-  // const [neighborhoodRecommendations, setNeighborhoodRecommendations] = useState(stub.mock_neighborhood_recs);
+  // const [whereToStay, setWhereToStay] = useState(stub.mock_neighborhood_recs);
   // const [dayTrips, setDayTrips] = useState(stub.mock_dayTrips);
   // const [meta, setMeta] = useState(stub.mock_meta);
   // const [activities, setActivities] = useState(stub.mock_activities);
@@ -64,8 +66,6 @@ export default function Home(): ReactElement {
 
 
   const placeholderDays: ReactElement[] = new Array(tripLength).fill(0);
-  console.log(placeholderDays);
-
   // Loading States
   interface LoadingState {
     days: boolean,
@@ -92,6 +92,10 @@ export default function Home(): ReactElement {
       dayTrips: prev.dayTrips,
     }));
   }, [activities, neighborhoods, foods, tripLength])
+
+  useEffect(() => {
+    scrollTo(itineraryRef);
+  }, [setShowResult])
 
   const itineraryRef: RefObject<HTMLInputElement> = useRef<HTMLInputElement>(null)
 
@@ -342,9 +346,9 @@ export default function Home(): ReactElement {
     });
   }
 
-  async function fetchNeighborhoodRecommendations(): Promise<string> {
+  async function fetchWhereToStay(): Promise<string> {
     if (!cityInput) return;
-    const response = await fetch("/api/generateNeighborhoods", {
+    const response = await fetch("/api/generateWhereToStay", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -359,8 +363,29 @@ export default function Home(): ReactElement {
     if (!data) {
       return;
     }
-    getStreamResponse(data, setNeighborhoodRecommendations);
+    getStreamResponse(data, setWhereToStay);
   }
+
+  async function fetchWhatToEat(): Promise<string> {
+    if (!cityInput) return;
+    const response = await fetch("/api/generateWhatToEat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ city: cityInput }),
+    });
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.statusText}`);
+    }
+
+    const data = response.body;
+    if (!data) {
+      return;
+    }
+    getStreamResponse(data, setWhatToEat);
+  }
+
 
   async function fetchTravelDay(): Promise<string> {
     if (!cityInput) return;
@@ -636,7 +661,7 @@ export default function Home(): ReactElement {
       return;
     };
 
-    setDownloadButtonText('Downloading ...');
+    setDownloadButtonState(DownloadButtonStatus.IN_PROGRESS);
     try {
       const response = await fetch("/api/createPDF", {
         method: "POST",
@@ -670,33 +695,31 @@ export default function Home(): ReactElement {
       alink.download = "Trippin_Itinerary.pdf"
       alink.target = "_blank";
       alink.click();
-      setDownloadButtonText('Save Plan as PDF');
+
+      setDownloadButtonState(DownloadButtonStatus.READY);
       setIsDownloadButtonDisabled(false)
     } catch (error) {
       // Consider implementing your own error handling logic here
       console.error(error);
-      setDownloadButtonText('Error on Download');
+      setDownloadButtonState(DownloadButtonStatus.ERROR);
       setIsDownloadButtonDisabled(false)
     }
   }
 
   function onSubmit(event): void {
+    event.preventDefault();
     setLoading({
       days: true,
       dayTrips: true,
     });
-
     setShowResult(true);
-
-    event.preventDefault();
 
     initializeItineraryStates();
     fetchMeta();
     fetchTravelDay();
-    fetchNeighborhoodRecommendations();
+    fetchWhereToStay();
+    fetchWhatToEat();
     setIsDownloadButtonDisabled(false);
-
-    scrollTo(itineraryRef);
   }
 
   const handleOnChange = (position) => {
@@ -717,8 +740,6 @@ export default function Home(): ReactElement {
   }
 
   function handleScrollToSection(id: string) {
-
-    console.log(id);
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -733,6 +754,7 @@ export default function Home(): ReactElement {
       <Head>
         <title>Trippin - The AI Powered Travel Planner</title>
         <link rel="icon" href="/JourneyGenieLogo_thick.png" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
         <meta property="og:image" content="https://stephaniechou.com/assets/images/trippinspo_logo.png"></meta>
         <meta name="description" content="Artificial Intelligence powered travel planner. Creates a one to five day itinerary, Recommends Day Trips and Food options. Get inspired for your next vacation." />
         <meta name="_foundr" content="f785866cc563749ca77fcae47d19fb96"></meta>
@@ -761,7 +783,7 @@ export default function Home(): ReactElement {
         <div className={isStickyHeader ? (styles.fixedTop) : styles.mainHeader} ref={stickyHeader} id="mainHeader">
           <h4>Trippin</h4>
           <div className={styles.calendar_button_container}>
-            {/* <TravelDayButton onClick={(e) => {
+            <TravelDayButton onClick={(e) => {
               e.preventDefault();
               handleScrollToSection(TRAVEL_DAY_ID)
             }} />
@@ -770,7 +792,7 @@ export default function Home(): ReactElement {
                 e.preventDefault();
                 handleScrollToSection(DAY_IDS[index])
               }} />
-            })} */}
+            })}
           </div>
 
           <div className={styles.modal}>
@@ -799,18 +821,22 @@ export default function Home(): ReactElement {
             retry={retryDayTrip}
           />
           {/* WHERE TO STAY */}
-          {showResult && <NeighborhoodRecommendations locationName={city} neighborhoodRecommendations={neighborhoodRecommendations} />}
+          {showResult && <NeighborhoodRecommendations locationName={city} whereToStay={whereToStay} />}
 
+          {/* WHAT TO EAT*/}
+          {showResult && <WhatToEat locationName={city} whatToEat={whatToEat} />}
+
+          {/* SPACER */}
           <div className={styles.bottom_spacer}></div>
 
           {/* WHAT TO EAT */}
-          <SplitPillMenu
+          {showResult && <SplitPillMenu
             onDownload={onDownload}
-            downloadText={downloadButtonText}
+            downloadState={downloadButtonState}
             isDownloadButtonDisabled={isDownloadButtonDisabled}
             isButtonDisabled={!showResult}
             onClick={handleScrollToSection}
-          />
+          />}
         </div>
         {isOpen && <DownloadModal onClose={onModalCloseClick} />}
       </main>
