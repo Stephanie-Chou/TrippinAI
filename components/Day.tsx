@@ -3,6 +3,7 @@ import Itinerary from "./Itinerary";
 import styles from "./day.module.css";
 import { ReactElement } from "react";
 import { WalkingTourStep } from "../utils/types";
+import { DAY_IDS } from "../utils/constants";
 
 function renderWalkingTourLong(tour: WalkingTourStep[]): ReactElement {
   if (!tour) return null;
@@ -24,6 +25,7 @@ export default function Day({ activity, food, neighborhood, index, locationName,
       <Page
         header={locationName}
         subheader={subheader}
+        id={DAY_IDS[index]}
       >
         <h3>{activity.name}</h3>
         <h4>In the {neighborhood.name} Neighborhood</h4>
@@ -35,12 +37,7 @@ export default function Day({ activity, food, neighborhood, index, locationName,
         />
 
         <button className={styles.retryButton} onClick={() => retry(index)}>Regenerate</button>
-      </Page>
 
-      <Page
-        header={locationName}
-        subheader={subheader}
-      >
         <h3>Where to go in {neighborhood.name}</h3>
         {renderWalkingTourLong(walking_tour)}
 

@@ -1,6 +1,7 @@
 /* for the pdf */
 @import url('https://fonts.googleapis.com/css2?family=Londrina+Outline&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Karla&family=Londrina+Outline&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Unbounded&family=Londrina+Outline&display=swap');
+
 @page {
   min-height: 100vh;
   max-height: fit-content;
@@ -10,9 +11,14 @@
   margin-right: auto;
   background-color: #F9F5F0;
 }
-@page { counter-increment: page }
-@page table, figure {
-    page-break-inside: avoid;
+
+@page {
+  counter-increment: page
+}
+
+@page table,
+figure {
+  page-break-inside: avoid;
 }
 
 @page h2 {
