@@ -39,7 +39,7 @@ export default function Home(): ReactElement {
   const [checkedState, setCheckedState] = useState(
     DEFAULT_INTERESTS.map((interest) => ({ name: interest, isChecked: false }))
   );
-  const [tripLength, setTripLength] = useState(3);
+  const [tripLength, setTripLength] = useState(5);
 
   // Itinerary Model State
   const [travelTips, setTravelTips] = useState("");
@@ -50,8 +50,18 @@ export default function Home(): ReactElement {
   const [neighborhoods, setNeighborhoods] = useState([] as Neighborhood[]);
   const [foods, setFood] = useState([] as Food[]);
 
-  const [showTravelDay, setShowTravelDay] = useState(false);
-  const [showNeighborhoodRecommendations, setShowNeighborhoodRecommendations] = useState(false);
+
+  /** STUB DATA */
+  // const [travelTips, setTravelTips] = useState(stub.mock_travelDay);
+  // const [neighborhoodRecommendations, setNeighborhoodRecommendations] = useState(stub.mock_neighborhood_recs);
+  // const [dayTrips, setDayTrips] = useState(stub.mock_dayTrips);
+  // const [meta, setMeta] = useState(stub.mock_meta);
+  // const [activities, setActivities] = useState(stub.mock_activities);
+  // const [neighborhoods, setNeighborhoods] = useState(stub.mock_neighborhoods);
+  // const [foods, setFood] = useState(stub.mock_foods);
+
+  const [showResult, setShowResult] = useState(false);
+
 
   const placeholderDays: ReactElement[] = new Array(tripLength).fill(0);
   console.log(placeholderDays);
@@ -87,7 +97,7 @@ export default function Home(): ReactElement {
 
   function scrollTo(ref: RefObject<HTMLInputElement>) {
     if (!ref.current) return;
-    ref.current.scrollIntoView({ behavior: 'smooth' });
+    ref.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
   const stickyHeader: RefObject<HTMLInputElement> = useRef<HTMLInputElement>();
@@ -620,8 +630,9 @@ export default function Home(): ReactElement {
   * FORM FUNCTIONS
   ******************/
   async function onDownload(event): Promise<string> {
+    setIsDownloadButtonDisabled(true)
+
     if (!city) {
-      setIsDownloadButtonDisabled(true)
       return;
     };
 
@@ -660,10 +671,12 @@ export default function Home(): ReactElement {
       alink.target = "_blank";
       alink.click();
       setDownloadButtonText('Save Plan as PDF');
+      setIsDownloadButtonDisabled(false)
     } catch (error) {
       // Consider implementing your own error handling logic here
       console.error(error);
       setDownloadButtonText('Error on Download');
+      setIsDownloadButtonDisabled(false)
     }
   }
 
@@ -673,8 +686,7 @@ export default function Home(): ReactElement {
       dayTrips: true,
     });
 
-    setShowTravelDay(true);
-    setShowNeighborhoodRecommendations(true);
+    setShowResult(true);
 
     event.preventDefault();
 
@@ -705,10 +717,10 @@ export default function Home(): ReactElement {
   }
 
   function handleScrollToSection(id: string) {
-    event.preventDefault();
+
+    console.log(id);
     const element = document.getElementById(id);
     if (element) {
-      // 👇 Will scroll smoothly to the top of the next section
       element.scrollIntoView({ behavior: 'smooth' });
     }
   }
@@ -748,24 +760,8 @@ export default function Home(): ReactElement {
 
         <div className={isStickyHeader ? (styles.fixedTop) : styles.mainHeader} ref={stickyHeader} id="mainHeader">
           <h4>Trippin</h4>
-          <div className={styles.modal}>
-            <button onClick={onModalOpenClick}>
-              <img src="/tipjar.png" />
-            </button>
-          </div>
-        </div>
-
-        <div className={styles.result} ref={itineraryRef}>
-          <div className={styles.plan_title}>
-            {city ? <h3>Travel Plan for {tripLength} {dayUnit} in {capitalizedCity}</h3> : ""}
-          </div>
-
-          {showTravelDay && <TravelDay locationName={city} travelTips={travelTips} />}
-
-          {showNeighborhoodRecommendations && <NeighborhoodRecommendations locationName={city} neighborhoodRecommendations={neighborhoodRecommendations} />}
-
           <div className={styles.calendar_button_container}>
-            <TravelDayButton onClick={(e) => {
+            {/* <TravelDayButton onClick={(e) => {
               e.preventDefault();
               handleScrollToSection(TRAVEL_DAY_ID)
             }} />
@@ -774,21 +770,46 @@ export default function Home(): ReactElement {
                 e.preventDefault();
                 handleScrollToSection(DAY_IDS[index])
               }} />
-            })}
+            })} */}
           </div>
 
-          <SplitPillMenu
-            onDownload={onDownload}
-            downloadText={downloadButtonText}
-            isDownloadButtonDisabled={isDownloadButtonDisabled}
-            onClick={() => { }}
-          />
+          <div className={styles.modal}>
+            <button onClick={onModalOpenClick}>
+              <img src="/tipjar.png" />
+            </button>
+          </div>
+        </div>
 
+
+        <div className={styles.result} ref={itineraryRef}>
+          <div className={styles.plan_title}>
+            {city ? <h3>{tripLength} {dayUnit} in {capitalizedCity}</h3> : ""}
+          </div>
+
+          {/* Travel Day */}
+          {showResult && <TravelDay locationName={city} travelTips={travelTips} />}
+
+          {/* TRIP DAYS */}
           {renderDays()}
+
+          {/* DAY TRIPS */}
           <DayTrips
             dayTrips={dayTrips}
             locationName={city}
             retry={retryDayTrip}
+          />
+          {/* WHERE TO STAY */}
+          {showResult && <NeighborhoodRecommendations locationName={city} neighborhoodRecommendations={neighborhoodRecommendations} />}
+
+          <div className={styles.bottom_spacer}></div>
+
+          {/* WHAT TO EAT */}
+          <SplitPillMenu
+            onDownload={onDownload}
+            downloadText={downloadButtonText}
+            isDownloadButtonDisabled={isDownloadButtonDisabled}
+            isButtonDisabled={!showResult}
+            onClick={handleScrollToSection}
           />
         </div>
         {isOpen && <DownloadModal onClose={onModalCloseClick} />}
