@@ -10,7 +10,7 @@ export const config = {
 
 export default async function (req: Request): Promise<Response> {
   const { city } = (await req.json());
-  const prompt: string = generateTravelDayPrompt(city);
+  const prompt: string = generateWhereToStayPrompt(city);
 
   if (!prompt) {
     return new Response("No prompt in the request", { status: 400 });
@@ -39,7 +39,7 @@ export default async function (req: Request): Promise<Response> {
   }
   );
 };
-function generateTravelDayPrompt(location: string): string {
+function generateWhereToStayPrompt(location: string): string {
   return ` I am a traveler going to ${location}. Recommend neighborhoods in the location to stay in. Give a reason why someone would stay there. Give a reason why that neighborhood might not be suitable to someone. Categorize the neighborhoods by: First Time Visitors, Feel like a Local, Budget Friendly, 
 
   location: Chicago
@@ -49,7 +49,7 @@ function generateTravelDayPrompt(location: string): string {
     <br>
     <div>Reason to stay</div>
     <div>Central location with easy access to popular attractions like Millennium Park, Art Institute of Chicago, and Magnificent Mile.</div>
-<br>    <div>Not suitable for</div>
+    <br> <div>Not suitable for</div>
     <div>Travelers on a tight budget, as downtown accommodations can be relatively expensive.</div>
     <br>
     <b>River North</b>
