@@ -7,7 +7,7 @@ import styles from "./index.module.css";
 import { getStreamResponse } from "../utils/getStreamResponse";
 import isJsonString from "../utils/isJsonString";
 import * as stub from "../utils/stubData"
-import { DEFAULT_INTERESTS } from "../utils/constants";
+import { DAY_IDS, DEFAULT_INTERESTS, TRAVEL_DAY_ID } from "../utils/constants";
 import {
   Activity,
   DayTrip,
@@ -21,12 +21,15 @@ import {
 import Form from "../components/Form";
 import TravelDay from "../components/TravelDay";
 import NeighborhoodRecommendations from "../components/NeighborhoodRecommendations";
+import CalendarButton from "../components/CalendarButton";
+import TravelDayButton from "../components/TravelDayButton";
+import SplitPillMenu from "../components/SplitPillMenu";
 
 export default function Home(): ReactElement {
 
   // Modal State
   const [isOpen, setIsOpen] = useState(false);
-  const [downloadButtonText, setDownloadButtonText] = useState('Download Plan as PDF');
+  const [downloadButtonText, setDownloadButtonText] = useState('Save Plan as PDF');
   const [isDownloadButtonDisabled, setIsDownloadButtonDisabled] = useState(true);
   const [isStickyHeader, setIsStickyHeader] = useState(false);
 
@@ -49,6 +52,9 @@ export default function Home(): ReactElement {
 
   const [showTravelDay, setShowTravelDay] = useState(false);
   const [showNeighborhoodRecommendations, setShowNeighborhoodRecommendations] = useState(false);
+
+  const placeholderDays: ReactElement[] = new Array(tripLength).fill(0);
+  console.log(placeholderDays);
 
   // Loading States
   interface LoadingState {
@@ -113,8 +119,7 @@ export default function Home(): ReactElement {
 
   function renderDays(): ReactElement[] {
     if (activities.length === 0) return;
-    let days: ReactElement[] = new Array(tripLength).fill(0);
-    return days.map((day, i: number) => {
+    return placeholderDays.map((day, i: number) => {
       return (
         <Day
           activity={activities[i]}
@@ -654,7 +659,7 @@ export default function Home(): ReactElement {
       alink.download = "Trippin_Itinerary.pdf"
       alink.target = "_blank";
       alink.click();
-      setDownloadButtonText('Download Plan as PDF');
+      setDownloadButtonText('Save Plan as PDF');
     } catch (error) {
       // Consider implementing your own error handling logic here
       console.error(error);
@@ -699,6 +704,15 @@ export default function Home(): ReactElement {
     setIsOpen(false);
   }
 
+  function handleScrollToSection(id: string) {
+    event.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      // 👇 Will scroll smoothly to the top of the next section
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
   const dayUnit = tripLength === 1 ? "day" : "days";
   const capitalizedCity = city ? city.split(' ').map((word: string) => word ? word[0].toUpperCase() + word.slice(1).toLowerCase() : '').join(' ') : "";
 
@@ -734,13 +748,6 @@ export default function Home(): ReactElement {
 
         <div className={isStickyHeader ? (styles.fixedTop) : styles.mainHeader} ref={stickyHeader} id="mainHeader">
           <h4>Trippin</h4>
-          <button
-            onClick={onDownload}
-            className={styles.download}
-            disabled={isDownloadButtonDisabled}
-          >
-            {downloadButtonText}
-          </button>
           <div className={styles.modal}>
             <button onClick={onModalOpenClick}>
               <img src="/tipjar.png" />
@@ -756,6 +763,26 @@ export default function Home(): ReactElement {
           {showTravelDay && <TravelDay locationName={city} travelTips={travelTips} />}
 
           {showNeighborhoodRecommendations && <NeighborhoodRecommendations locationName={city} neighborhoodRecommendations={neighborhoodRecommendations} />}
+
+          <div className={styles.calendar_button_container}>
+            <TravelDayButton onClick={(e) => {
+              e.preventDefault();
+              handleScrollToSection(TRAVEL_DAY_ID)
+            }} />
+            {placeholderDays.map((day, index) => {
+              return <CalendarButton index={index} onClick={(e) => {
+                e.preventDefault();
+                handleScrollToSection(DAY_IDS[index])
+              }} />
+            })}
+          </div>
+
+          <SplitPillMenu
+            onDownload={onDownload}
+            downloadText={downloadButtonText}
+            isDownloadButtonDisabled={isDownloadButtonDisabled}
+            onClick={() => { }}
+          />
 
           {renderDays()}
           <DayTrips

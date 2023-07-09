@@ -210,3 +210,12 @@
 .modal button:hover {
   cursor: pointer;
 }
+
+
+/* calendar buttons */
+.calendar_button_container {
+  width: 600px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
