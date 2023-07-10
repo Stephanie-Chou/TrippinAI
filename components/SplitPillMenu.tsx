@@ -33,8 +33,6 @@ export default function SplitPillMenu({
       <div className={styles.divider}></div>
       <button disabled={isButtonDisabled} onClick={() => onClick(WHAT_TO_EAT_ID)}><span className="material-symbols-outlined">restaurant</span></button>
       <div className={styles.divider}></div>
-
-
       <button disabled={isDownloadButtonDisabled} onClick={onDownload}>{downloadButtonContent}</button>
     </div>
   );

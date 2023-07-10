@@ -207,9 +207,17 @@ function getImg(image) {
   }
   return '';
 }
+
+function getWalkingTour(tour) {
+  // error handling. if no walking tour exists then we need to provide something else
+  console.log('tour', tour);
+  return (tour && tour.length > 0) ? tour : [{ name: '', desc: '' }, { name: '', desc: '' }, { name: '', desc: '' }];
+}
+
 // generate a list of day trips from a city.
 function generateHtml(city, neighborhoods, activities, foods, dayTrips) {
-  const capitalizedCity = city[0].toUpperCase() + city.slice(1).toLowerCase();
+
+  const capitalizedCity = (!city || city.length === 0) ? '' : city[0].toUpperCase() + city.slice(1).toLowerCase();
 
   const htmlStart = `<html>${generateStyles()}<body><div class="main">`;
   const htmlEnd = `</div></body></html>`
@@ -217,6 +225,8 @@ function generateHtml(city, neighborhoods, activities, foods, dayTrips) {
     let neighborhood = neighborhoods[index];
     let food = foods[index];
     let subheader = index + 1;
+    const walking_tour = getWalkingTour(neighborhood.walking_tour);
+    console.log('walking_tour', walking_tour)
 
     return `<section class="page"><div class="header"><div class="tag">` +
       `<div class="tagHeader">${capitalizedCity}</div>` +
@@ -236,22 +246,22 @@ function generateHtml(city, neighborhoods, activities, foods, dayTrips) {
       `<td>${activity.short_desc}</td>` +
       `</tr>` +
       `<tr>` +
-      `<td> <div>Lunch</div> ${food.lunch.name}</td>` +
-      `<td>${food.lunch.desc}</td>` +
+      `<td> <div>Lunch</div> ${food.lunch ? food.lunch.name : ''}</td>` +
+      `<td>${food.lunch ? food.lunch.desc : ''}</td>` +
       `</tr>` +
       `<tr>` +
       `<td>Walking tour of ${neighborhood.name}</td>` +
       `<td>` +
       `<ol>` +
-      `<li>${neighborhood.walking_tour[0].name}</li>` +
-      `<li>${neighborhood.walking_tour[1].name}</li>` +
-      `<li>${neighborhood.walking_tour[2].name}t</li>` +
+      `<li>${walking_tour[0].name}</li>` +
+      `<li>${walking_tour[1].name}</li>` +
+      `<li>${walking_tour[2].name}</li>` +
       `</ol>` +
       `</td>` +
       `</tr>` +
       `<tr>` +
-      `<td> <div>Dinner</div> ${food.dinner.name}</td>` +
-      `<td> ${food.dinner.desc}</td>` +
+      `<td> <div>Dinner</div> ${food.dinner ? food.dinner.name : ''}</td>` +
+      `<td> ${food.dinner ? food.dinner.desc : ''}</td>` +
       `</tr>` +
       `</tbody>` +
       `</table>` +
@@ -262,6 +272,8 @@ function generateHtml(city, neighborhoods, activities, foods, dayTrips) {
   let walkingTourHtml = neighborhoods.map((neighborhood, index) => {
     let subheader = index + 1;
     const image = getImg(neighborhood.image);
+    const walking_tour = getWalkingTour(neighborhood.walking_tour)
+
     return `<section class="page"><div class="header"><div class="tag">` +
       `<div class="tagHeader">${capitalizedCity}</div>` +
       `<div class="tagSubheader">Day ${subheader}</div>` +
@@ -269,9 +281,9 @@ function generateHtml(city, neighborhoods, activities, foods, dayTrips) {
       `<div class="container">` +
       `<h3> ${neighborhood.name} Walking Tour</h3>` +
       `<ol>` +
-      `<li>${neighborhood.walking_tour[0].name} ${neighborhood.walking_tour[0].desc}</li>` +
-      `<li>${neighborhood.walking_tour[1].name} ${neighborhood.walking_tour[1].desc}</li>` +
-      `<li>${neighborhood.walking_tour[2].name} ${neighborhood.walking_tour[2].desc}</li>` +
+      `<li>${walking_tour[0].name} ${walking_tour[0].desc}</li>` +
+      `<li>${walking_tour[1].name} ${walking_tour[1].desc}</li>` +
+      `<li>${walking_tour[2].name} ${walking_tour[2].desc}</li>` +
       `</ol>` +
       `${image}` +
       `</div>` +

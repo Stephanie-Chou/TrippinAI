@@ -53,12 +53,8 @@ export const mock_neighborhoods: Array<Neighborhood> = [
     image: photo
   },
   {
-    name: 'Manhattan',
-    walking_tour: [
-      { name: "Flatiron Building", desc: "Admire the iconic triangular building, a National Historic Landmark and a symbol of New York City." },
-      { name: "Madison Square Park", desc: "Relax in the park, surrounded by iconic skyscrapers, and enjoy the seasonal art installations." },
-      { name: "Eataly Flatiron", desc: "Explore this Italian food emporium, offering delicious gourmet food, coffee, and pastries." }
-    ],
+    name: 'Bad Walking Tour return',
+    walking_tour: [],
     image: photo
   },
   {
@@ -88,13 +84,13 @@ export const mock_activities: Array<Activity> = [
     long_desc: "Explore the vast art collection of the Vatican Museums, housing masterpieces from different periods and cultures. Marvel at the stunning frescoes in the Sistine Chapel painted by Michelangelo and admire works by renowned artists like Raphael and Leonardo da Vinci."
   },
   {
-    name: 'Another Rome Thing',
-    short_desc: "World-renowned art collection, including the Sistine Chapel.",
-    long_desc: "Explore the vast art collection of the Vatican Museums, housing masterpieces from different periods and cultures. Marvel at the stunning frescoes in the Sistine Chapel painted by Michelangelo and admire works by renowned artists like Raphael and Leonardo da Vinci."
+    name: 'no descriptions thing',
+    short_desc: "",
+    long_desc: ""
   },
   {
-    name: 'Another Rome Thing',
-    short_desc: "World-renowned art collection, including the Sistine Chapel.",
+    name: '',
+    short_desc: "No Name thing",
     long_desc: "Explore the vast art collection of the Vatican Museums, housing masterpieces from different periods and cultures. Marvel at the stunning frescoes in the Sistine Chapel painted by Michelangelo and admire works by renowned artists like Raphael and Leonardo da Vinci."
   }
 ]

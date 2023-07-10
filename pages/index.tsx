@@ -32,7 +32,7 @@ export default function Home(): ReactElement {
   // Modal State
   const [isOpen, setIsOpen] = useState(false);
   const [downloadButtonState, setDownloadButtonState] = useState(DownloadButtonStatus.READY);
-  const [isDownloadButtonDisabled, setIsDownloadButtonDisabled] = useState(true);
+  const [isDownloadButtonDisabled, setIsDownloadButtonDisabled] = useState(false);
   const [isStickyHeader, setIsStickyHeader] = useState(false);
 
   //Form State
@@ -65,8 +65,6 @@ export default function Home(): ReactElement {
   // const [foods, setFood] = useState(stub.mock_foods);
 
   const [showResult, setShowResult] = useState(false);
-
-
   const [placeholderDays, setPlaceholderDays] = useState(new Array(INIT_TRIP_LENGTH).fill(0));
 
   // Loading States
@@ -658,6 +656,7 @@ export default function Home(): ReactElement {
   * FORM FUNCTIONS
   ******************/
   async function onDownload(event): Promise<string> {
+    event.preventDefault();
     setIsDownloadButtonDisabled(true)
 
     if (!city) {
@@ -672,7 +671,7 @@ export default function Home(): ReactElement {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          city: city,
+          city: '',
           neighborhoods: neighborhoods,
           activities: activities,
           foods: foods,
