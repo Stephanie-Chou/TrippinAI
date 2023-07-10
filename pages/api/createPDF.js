@@ -138,7 +138,7 @@ function generateStyles() {
     height: 40px;
     max-width: 50%;
     margin: 24px 0;
-    background-color: #2D2D2D;
+    background-color: #142639;
     color: #F9F5F0;
     padding: 4px;
   }

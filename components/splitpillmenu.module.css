@@ -26,6 +26,7 @@
   border: none;
   white-space: nowrap;
   font-size: 12px;
+  color: #142639;
 }
 
 .menu button:disabled {
@@ -38,5 +39,5 @@
 }
 
 .menu button:active {
-  color: #D99146;
+  color: #ffc285;
 }

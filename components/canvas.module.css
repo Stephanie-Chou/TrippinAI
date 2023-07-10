@@ -1,0 +1,85 @@
+.canvas_container {
+  background: linear-gradient(45deg, #2d2f3e 0%, #1b1a2a 50%, #221e35 100%) center;
+  background-size: 100% 100% !important;
+}
+
+.canvas {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: linear-gradient(-90deg,
+      #e3e5e8 0%,
+      #ebe4e3 10%,
+      #e4e1e0 25%,
+      #e5cee9 45%,
+      #e1b2db 60%,
+      #e5a2d4 75%,
+      #e282bb 85%,
+      #e8398e 100%);
+
+  z-index: 0;
+}
+
+.canvas::before,
+.canvas::after,
+.canvas>.circles,
+.canvas>.circles::before,
+.canvas>.circles::after {
+  filter: blur(75px);
+}
+
+.canvas::before,
+.canvas::after {
+  position: absolute;
+  content: "";
+  width: 390px;
+  height: 390px;
+  border-radius: 100%;
+}
+
+.canvas::before {
+  background: #ffecf5;
+  top: -195px;
+  left: -195px;
+}
+
+.canvas::after {
+  background: #86e1ef;
+  right: -195px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.canvas>.circles,
+.canvas>.circles::before,
+.canvas>.circles::after {
+  border-radius: 100%;
+  position: absolute;
+}
+
+.canvas>.circles::before,
+.canvas>.circles::after {
+  content: "";
+  width: 140px;
+  height: 140px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.canvas>.circles {
+  width: 230px;
+  height: 230px;
+  background: #ffc285;
+  bottom: -60px;
+  left: 75px;
+}
+
+.canvas>.circles::before {
+  background: #8600ff;
+  left: -40%;
+}
+
+.canvas>.circles::after {
+  background: #ff0000;
+  right: -20%;
+}

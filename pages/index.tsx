@@ -25,6 +25,7 @@ import CalendarButton from "../components/CalendarButton";
 import TravelDayButton from "../components/TravelDayButton";
 import SplitPillMenu from "../components/SplitPillMenu";
 import WhatToEat from "../components/WhatToEat";
+import CanvasBackground from "../components/CanvasBackground";
 
 export default function Home(): ReactElement {
 
@@ -56,6 +57,7 @@ export default function Home(): ReactElement {
   /** STUB DATA */
   // const [travelTips, setTravelTips] = useState(stub.mock_travelDay);
   // const [whereToStay, setWhereToStay] = useState(stub.mock_neighborhood_recs);
+  // const [whatToEat, setWhatToEat] = useState("");
   // const [dayTrips, setDayTrips] = useState(stub.mock_dayTrips);
   // const [meta, setMeta] = useState(stub.mock_meta);
   // const [activities, setActivities] = useState(stub.mock_activities);
@@ -770,26 +772,29 @@ export default function Home(): ReactElement {
       </Head>
       <main className={styles.main}>
         <div className={styles.hero}>
-          <div className={styles.input}>
-            <img src="/JourneyGenieLogo_thick.png" className={styles.icon} />
-            <h1>Trippin</h1>
-            <h2> The AI Powered Travel Planner </h2>
-            <Form
-              cityInput={cityInput}
-              checkedState={checkedState}
-              interests={DEFAULT_INTERESTS}
-              loading={loading}
-              tripLength={tripLength}
-              onSubmit={onSubmit}
-              handleOnChange={handleOnChange}
-              setCity={setCity}
-              setCityInput={setCityInput}
-              handleTripLengthChange={handleTripLengthChange}
-            />
-          </div>
+          <CanvasBackground>
+            <div className={styles.input}>
+              <img src="/JourneyGenieLogo_thick.png" className={styles.icon} />
+              <h1>Trippin</h1>
+              <h2> The AI Powered Travel Planner </h2>
+              <Form
+                cityInput={cityInput}
+                checkedState={checkedState}
+                interests={DEFAULT_INTERESTS}
+                loading={loading}
+                tripLength={tripLength}
+                onSubmit={onSubmit}
+                handleOnChange={handleOnChange}
+                setCity={setCity}
+                setCityInput={setCityInput}
+                handleTripLengthChange={handleTripLengthChange}
+              />
+            </div>
+          </CanvasBackground>
+
         </div>
 
-        <div className={isStickyHeader ? (styles.fixedTop) : styles.mainHeader} ref={stickyHeader} id="mainHeader">
+        {showResult && <div className={isStickyHeader ? (styles.fixedTop) : styles.mainHeader} ref={stickyHeader} id="mainHeader">
           <h4>Trippin</h4>
           <div className={styles.calendar_button_container}>
             <TravelDayButton onClick={(e) => {
@@ -809,7 +814,7 @@ export default function Home(): ReactElement {
               <img src="/tipjar.png" />
             </button>
           </div>
-        </div>
+        </div>}
 
 
         <div className={styles.result} ref={itineraryRef}>
@@ -847,6 +852,7 @@ export default function Home(): ReactElement {
             onClick={handleScrollToSection}
           />}
         </div>
+        <div className={styles.footer}>Trippin Created by SugarJie Studios</div>
         {isOpen && <DownloadModal onClose={onModalCloseClick} />}
       </main>
     </div>

@@ -4,7 +4,9 @@
 
 .form_container form {
   font-size: 18px;
-  background: #7EC7B2;
+  /* background: #7EC7B2; */
+  background: rgb(126, 199, 178);
+  background: linear-gradient(0deg, rgba(126, 199, 178, 1) 0%, rgba(249, 245, 240, 0.7735688025210083) 100%);
   margin-bottom: 24px;
   padding: 20px;
   text-align: left;
@@ -20,7 +22,7 @@
 
   .form_container form {
     font-size: 16px;
-    background: #7EC7B2;
+
     margin-bottom: 24px;
     text-align: left;
   }
@@ -37,7 +39,7 @@
 .form_container input[type=text] {
   border: 1px solid #7ec7b2;
   border-radius: 4px;
-  color: #2D2D2D;
+  color: #142639;
   display: block;
   font-family: 'Space Grotesk';
   font-size: 18px;
@@ -56,8 +58,7 @@
 /* how long are you there */
 
 .form_container form .select {
-  border-color: #7ec7b2;
-  ;
+  border-color: transparent;
   display: inline;
   padding-bottom: 2px;
   margin-right: 8px;
@@ -66,15 +67,15 @@
 
 .form_container form select {
   display: inline-block;
-  border-color: #7ec7b2;
-  background-color: #7ec7b2;
+  border-color: transparent;
+  background-color: transparent;
   outline: none;
   min-width: 10%;
   font-family: 'Space Grotesk';
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
-  color: #2D2D2D;
+  color: #142639;
 }
 
 .form_container form select:hover {
