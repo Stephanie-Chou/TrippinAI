@@ -1,18 +1,9 @@
 import { ReactElement } from "react";
 import styles from "./form.module.css";
 
-function renderLoader(loading): ReactElement {
-  const { days, dayTrips } = loading;
-  return (days || dayTrips) ?
-    <div className={styles.loader}>
-      <div className={styles.ldsellipsis}><div></div><div></div><div></div><div></div></div>
-    </div> : null;
-}
-
 export default function Form({
   cityInput,
   interests,
-  loading,
   tripLength,
   setCity,
   setCityInput,
@@ -81,7 +72,6 @@ export default function Form({
         </div>
 
         <input type="submit" value="Plan It" />
-        {renderLoader(loading)}
       </form>
     </div>
   );

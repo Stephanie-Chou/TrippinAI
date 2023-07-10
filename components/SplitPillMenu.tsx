@@ -5,9 +5,9 @@ import { ReactElement } from "react";
 function getDownloadButtonContent(downloadState): ReactElement {
   switch (downloadState) {
     case DownloadButtonStatus.READY:
-      return <div><span className="material-symbols-outlined">download</span><span className="material-symbols-outlined">picture_as_pdf</span></div>
+      return <div><span className="material-symbols-outlined ">download</span><span className="material-symbols-outlined">picture_as_pdf</span></div>
     case DownloadButtonStatus.IN_PROGRESS:
-      return <span className="material-symbols-outlined">downloading</span>;
+      return <div className={styles.downloading}><span className="material-symbols-outlined">downloading</span></div>;
     case DownloadButtonStatus.ERROR:
       return <span className="material-symbols-outlined">error</span>;
     default:

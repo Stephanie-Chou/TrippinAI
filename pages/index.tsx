@@ -26,6 +26,7 @@ import TravelDayButton from "../components/TravelDayButton";
 import SplitPillMenu from "../components/SplitPillMenu";
 import WhatToEat from "../components/WhatToEat";
 import CanvasBackground from "../components/CanvasBackground";
+import Loader from "../components/Loader";
 
 export default function Home(): ReactElement {
 
@@ -780,7 +781,6 @@ export default function Home(): ReactElement {
                 cityInput={cityInput}
                 checkedState={checkedState}
                 interests={DEFAULT_INTERESTS}
-                loading={loading}
                 tripLength={tripLength}
                 onSubmit={onSubmit}
                 handleOnChange={handleOnChange}
