@@ -6,6 +6,7 @@ import DownloadModal from "../components/DownloadModal";
 import styles from "./index.module.css";
 import { getStreamResponse } from "../utils/getStreamResponse";
 import isJsonString from "../utils/isJsonString";
+import fetchImage from "../utils/fetchImage";
 import * as stub from "../utils/stubData"
 import { DAY_IDS, DEFAULT_INTERESTS, DownloadButtonStatus, INIT_TRIP_LENGTH, TRAVEL_DAY_ID } from "../utils/constants";
 import {
@@ -43,16 +44,18 @@ export default function Home(): ReactElement {
     DEFAULT_INTERESTS.map((interest) => ({ name: interest, isChecked: false }))
   );
   const [tripLength, setTripLength] = useState(INIT_TRIP_LENGTH);
+  const [placeholderDays, setPlaceholderDays] = useState(new Array(INIT_TRIP_LENGTH).fill(0));
 
   // Itinerary Model State
   const [travelTips, setTravelTips] = useState("");
   const [whereToStay, setWhereToStay] = useState("");
   const [whatToEat, setWhatToEat] = useState("");
-  const [dayTrips, setDayTrips] = useState([] as DayTrip[]);
   const [meta, setMeta] = useState({} as Meta);
   const [activities, setActivities] = useState([] as Activity[]);
   const [neighborhoods, setNeighborhoods] = useState([] as Neighborhood[]);
   const [foods, setFood] = useState([] as Food[]);
+  const [dayTrips, setDayTrips] = useState([] as DayTrip[]);
+  const [showResult, setShowResult] = useState(false);
 
 
   /** STUB DATA */
@@ -64,9 +67,7 @@ export default function Home(): ReactElement {
   // const [activities, setActivities] = useState(stub.mock_activities);
   // const [neighborhoods, setNeighborhoods] = useState(stub.mock_neighborhoods);
   // const [foods, setFood] = useState(stub.mock_foods);
-
-  const [showResult, setShowResult] = useState(false);
-  const [placeholderDays, setPlaceholderDays] = useState(new Array(INIT_TRIP_LENGTH).fill(0));
+  // const [showResult, setShowResult] = useState(true);
 
   // Loading States
   interface LoadingState {
@@ -83,8 +84,6 @@ export default function Home(): ReactElement {
     fetchActivityDescriptions();
     fetchActivityLists();
     fetchFoods();
-    fetchDayTripFoods();
-    fetchDayTripDescriptions();
   }, [meta]);
 
   useEffect(() => {
@@ -131,8 +130,6 @@ export default function Home(): ReactElement {
   /***********************
   * RENDER FUNCTIONS
   ************************/
-
-
   function renderDays(): ReactElement[] {
     if (activities.length === 0) return;
     return placeholderDays.map((day, i: number) => {
@@ -201,89 +198,9 @@ export default function Home(): ReactElement {
     });
   }
 
-  async function retryDayTrip(index: number): Promise<string> {
-
-    const response = await fetch("/api/generateRetryDayTrip", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ city: city, interests: getInterestsString(), currentTrips: meta.dayTrips }),
-    });
-    if (!response.ok) {
-      throw new Error(`Request failed with status ${response.statusText}`);
-    }
-
-    const data = response.body;
-    if (!data) {
-      return;
-    }
-
-    getStreamResponse(data).then((streamResponse: string) => {
-      setMeta((prevState: Meta): Meta => {
-        const nextState = { ...prevState };
-        nextState.dayTrips[index] = streamResponse;
-        return nextState;
-      });
-
-      setDayTrips((prevState: DayTrip[]): DayTrip[] => {
-        const nextState = [...prevState];
-        nextState[index] = {
-          name: streamResponse,
-          short_desc: "",
-          long_desc: "",
-          food: { name: "", desc: "" },
-          image: {} as Photo
-        };
-
-        return nextState;
-      });
-    });
-  }
   /***********************
   * DATA FETCH FUNCTIONS
   ************************/
-  function fetchDayTripFoods(): void {
-    for (let i: number = 0; i < dayTrips.length; i++) {
-      fetchDayTripFood(dayTrips[i], i);
-    }
-  }
-
-  async function fetchDayTripFood(dayTrip: DayTrip, index: number): Promise<string> {
-    const response = await fetch("/api/generateFood", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ location: dayTrip.name, city: city }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Request failed with status ${response.statusText}`);
-    }
-
-    const responseData = await response.json();
-    if (response.status !== 200) {
-      throw responseData.error || new Error(`Request failed with status ${response.status}`);
-    }
-
-    const jsonStr: string = JSON.parse(responseData).result;
-
-    if (!isJsonString(jsonStr)) {
-      return;
-    }
-    const json: Food = JSON.parse(jsonStr);
-
-    fetchImage(dayTrip.name, index).then((image: Photo) => {
-      setDayTrips((prevState: DayTrip[]): DayTrip[] => {
-        const nextState = [...prevState];
-        nextState[index].food = json.lunch;
-        nextState[index].image = image;
-        return nextState;
-      });
-    })
-  }
-
   /**
    * 
    * @returns Activities and Neighborhoods list.
@@ -464,12 +381,6 @@ export default function Home(): ReactElement {
     }
   }
 
-  function fetchDayTripDescriptions(): void {
-    for (let i: number = 0; i < dayTrips.length; i++) {
-      fetchDayTripDescription(dayTrips[i], i)
-    }
-  }
-
   /**
    * 
    * @param {*} activity 
@@ -511,39 +422,6 @@ export default function Home(): ReactElement {
       updatedActivities[index].short_desc = json.short_desc;
       return updatedActivities;
     });
-  }
-
-  async function fetchDayTripDescription(location: DayTrip, index: number): Promise<string> {
-    const response = await fetch("/api/generateActivityDescription", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ location: location.name, city: city, interests: getInterestsString() })
-    });
-
-    const responseData = await response.json();
-    if (response.status !== 200) {
-      console.log(response);
-      throw responseData.error || new Error(`Request failed with status ${response.status}`);
-    }
-
-    const jsonStr: string = JSON.parse(responseData).result;
-    if (!isJsonString(jsonStr)) {
-      return;
-    }
-    const json: DayTrip = JSON.parse(jsonStr);
-    setDayTrips((prevState: DayTrip[]): DayTrip[] => {
-      let updatedDayTrips: DayTrip[] = [...prevState];
-      updatedDayTrips[index].long_desc = json.long_desc;
-      updatedDayTrips[index].short_desc = json.short_desc;
-      return updatedDayTrips;
-    });
-
-    setLoading((prev: LoadingState): LoadingState => ({
-      days: prev.dayTrips,
-      dayTrips: false,
-    }));
   }
 
   function fetchActivityLists(): void {
@@ -598,29 +476,7 @@ export default function Home(): ReactElement {
     });
   }
 
-  async function fetchImage(site: string, index: number, city?: string): Promise<Photo> {
-    if (!neighborhoods || neighborhoods.length === 0) return;
-    try {
-      const response = await fetch("/api/fetchUnsplashImage", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ city, site })
-      });
 
-
-      const data = await response.json();
-      if (response.status !== 200) {
-        throw data.error || new Error(`Request failed with status ${response.status}`);
-      }
-
-      return data.images[0]
-    } catch (error) {
-      // Consider implementing your own error handling logic here
-      console.error(error);
-    }
-  }
 
   function initializeItineraryStates(): void {
     const initActivities: Activity[] = Array.from({ length: tripLength }, () => ({
@@ -829,9 +685,12 @@ export default function Home(): ReactElement {
 
           {/* DAY TRIPS */}
           <DayTrips
+            city={city}
             dayTrips={dayTrips}
-            locationName={city}
-            retry={retryDayTrip}
+            getInterestsString={getInterestsString}
+            setMeta={setMeta}
+            setDayTrips={setDayTrips}
+            meta={meta}
           />
           {/* WHERE TO STAY */}
           {showResult && <NeighborhoodRecommendations locationName={city} whereToStay={whereToStay} />}
