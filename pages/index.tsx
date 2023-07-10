@@ -794,7 +794,7 @@ export default function Home(): ReactElement {
 
         </div>
 
-        {showResult && <div className={isStickyHeader ? (styles.fixedTop) : styles.mainHeader} ref={stickyHeader} id="mainHeader">
+        <div className={isStickyHeader ? (styles.fixedTop) : styles.mainHeader} ref={stickyHeader} id="mainHeader">
           <h4>Trippin</h4>
           <div className={styles.calendar_button_container}>
             <TravelDayButton onClick={(e) => {
@@ -814,7 +814,7 @@ export default function Home(): ReactElement {
               <img src="/tipjar.png" />
             </button>
           </div>
-        </div>}
+        </div>
 
 
         <div className={styles.result} ref={itineraryRef}>
