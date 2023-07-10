@@ -25,14 +25,16 @@ export default function SplitPillMenu({
 
   return (
     <div className={styles.menu}>
-      <button disabled={isButtonDisabled} onClick={() => onClick(WHERE_TO_STAY_ID)}><span className="material-symbols-outlined">hotel</span></button>
-      <div className={styles.divider}></div>
-      <button disabled={isButtonDisabled} onClick={() => onClick(WHAT_TO_EAT_ID)}><span className="material-symbols-outlined">restaurant</span></button>
-      <div className={styles.divider}></div>
       <button disabled={isButtonDisabled} onClick={() => onClick(DAY_TRIP_IDS[0])}><span className="material-symbols-outlined">
         your_trips
       </span></button>
       <div className={styles.divider}></div>
+      <button disabled={isButtonDisabled} onClick={() => onClick(WHERE_TO_STAY_ID)}><span className="material-symbols-outlined">hotel</span></button>
+      <div className={styles.divider}></div>
+      <button disabled={isButtonDisabled} onClick={() => onClick(WHAT_TO_EAT_ID)}><span className="material-symbols-outlined">restaurant</span></button>
+      <div className={styles.divider}></div>
+
+
       <button disabled={isDownloadButtonDisabled} onClick={onDownload}>{downloadButtonContent}</button>
     </div>
   );
