@@ -7,7 +7,7 @@ import styles from "./index.module.css";
 import { getStreamResponse } from "../utils/getStreamResponse";
 import isJsonString from "../utils/isJsonString";
 import * as stub from "../utils/stubData"
-import { DAY_IDS, DEFAULT_INTERESTS, DownloadButtonStatus, TRAVEL_DAY_ID } from "../utils/constants";
+import { DAY_IDS, DEFAULT_INTERESTS, DownloadButtonStatus, INIT_TRIP_LENGTH, TRAVEL_DAY_ID } from "../utils/constants";
 import {
   Activity,
   DayTrip,
@@ -40,7 +40,7 @@ export default function Home(): ReactElement {
   const [checkedState, setCheckedState] = useState(
     DEFAULT_INTERESTS.map((interest) => ({ name: interest, isChecked: false }))
   );
-  const [tripLength, setTripLength] = useState(5);
+  const [tripLength, setTripLength] = useState(INIT_TRIP_LENGTH);
 
   // Itinerary Model State
   const [travelTips, setTravelTips] = useState("");
@@ -65,7 +65,8 @@ export default function Home(): ReactElement {
   const [showResult, setShowResult] = useState(false);
 
 
-  const placeholderDays: ReactElement[] = new Array(tripLength).fill(0);
+  const [placeholderDays, setPlaceholderDays] = useState(new Array(INIT_TRIP_LENGTH).fill(0));
+
   // Loading States
   interface LoadingState {
     days: boolean,
@@ -94,14 +95,14 @@ export default function Home(): ReactElement {
   }, [activities, neighborhoods, foods, tripLength])
 
   useEffect(() => {
-    scrollTo(itineraryRef);
-  }, [setShowResult])
+    scrollToRef(itineraryRef);
+  }, [showResult])
 
-  const itineraryRef: RefObject<HTMLInputElement> = useRef<HTMLInputElement>(null)
+  const itineraryRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null)
 
-  function scrollTo(ref: RefObject<HTMLInputElement>) {
+  function scrollToRef(ref: RefObject<HTMLDivElement>) {
     if (!ref.current) return;
-    ref.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    ref.current.scrollIntoView({ behavior: 'smooth' });
   }
 
   const stickyHeader: RefObject<HTMLInputElement> = useRef<HTMLInputElement>();
@@ -707,6 +708,9 @@ export default function Home(): ReactElement {
   }
 
   function onSubmit(event): void {
+    if (showResult) {
+      scrollToRef(itineraryRef);
+    }
     event.preventDefault();
     setLoading({
       days: true,
@@ -739,6 +743,11 @@ export default function Home(): ReactElement {
     setIsOpen(false);
   }
 
+  function handleTripLengthChange(event) {
+    const length = parseInt(event.target.value)
+    setTripLength(length);
+    setPlaceholderDays(new Array(length).fill(0))
+  }
   function handleScrollToSection(id: string) {
     const element = document.getElementById(id);
     if (element) {
@@ -775,7 +784,7 @@ export default function Home(): ReactElement {
               handleOnChange={handleOnChange}
               setCity={setCity}
               setCityInput={setCityInput}
-              setTripLength={setTripLength}
+              handleTripLengthChange={handleTripLengthChange}
             />
           </div>
         </div>
