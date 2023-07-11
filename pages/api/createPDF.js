@@ -210,7 +210,6 @@ function getImg(image) {
 
 function getWalkingTour(tour) {
   // error handling. if no walking tour exists then we need to provide something else
-  console.log('tour', tour);
   return (tour && tour.length > 0) ? tour : [{ name: '', desc: '' }, { name: '', desc: '' }, { name: '', desc: '' }];
 }
 
@@ -226,7 +225,6 @@ function generateHtml(city, neighborhoods, activities, foods, dayTrips) {
     let food = foods[index];
     let subheader = index + 1;
     const walking_tour = getWalkingTour(neighborhood.walking_tour);
-    console.log('walking_tour', walking_tour)
 
     return `<section class="page"><div class="header"><div class="tag">` +
       `<div class="tagHeader">${capitalizedCity}</div>` +

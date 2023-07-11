@@ -17,6 +17,7 @@ export default function Form({
     <div className={styles.form_container}>
       <form onSubmit={onSubmit}>
         <input
+          alt="I'm going to Entry Form field"
           type="text"
           name="city"
           placeholder="I'm going to... "
@@ -56,6 +57,7 @@ export default function Form({
                 return (
                   <div key={index} className={styles.checkbox}>
                     <input
+                      alt={`${interest} checkbox`}
                       type="checkbox"
                       id={`interest-checkbox-${index}`}
                       name={interest}
@@ -71,7 +73,7 @@ export default function Form({
           </div>
         </div>
 
-        <input type="submit" value="Plan It" />
+        <input type="submit" value="Plan It" alt="Plan it Submit Button" />
       </form>
     </div>
   );
