@@ -1,48 +1,20 @@
 /* Sticky header */
-.mainHeader h4 {
+.index .mainHeader h4 {
   color: #F9F5F0;
   font-family: 'Unbounded', cursive;
   padding-left: 18px;
   line-height: 1.2;
 }
 
-.fixedTop h4 {
+.index .fixedTop h4 {
   color: #F9F5F0;
   font-family: 'Unbounded', cursive;
   padding-left: 18px;
   line-height: 1.2;
 }
 
-.fixedTop+.main {
+.index .fixedTop+.main {
   padding-top: 102px;
-}
-
-.download {
-  color: #fff;
-  background-color: #26A391;
-  border: none;
-  border-radius: 4px;
-  text-align: center;
-  padding: 4px 12px;
-  margin: 12px 0;
-  font-size: 12px;
-}
-
-.download:hover {
-  cursor: pointer;
-}
-
-.download:disabled {
-  color: #fff;
-  background-color: #26A391;
-  border: none;
-  border-radius: 4px;
-  text-align: center;
-  padding: 4px 12px;
-  margin: 12px 0;
-  font-size: 12px;
-  opacity: 0.6;
-  cursor: not-allowed;
 }
 
 .mainHeader {
@@ -58,7 +30,7 @@
   overflow: scroll;
 }
 
-.fixedTop {
+.index .fixedTop {
   width: 100%;
   position: fixed;
   top: 0;
@@ -140,6 +112,34 @@
   cursor: pointer;
 }
 
+
+.index .download {
+  color: #fff;
+  background-color: #26A391;
+  border: none;
+  border-radius: 4px;
+  text-align: center;
+  padding: 4px 12px;
+  margin: 12px 0;
+  font-size: 12px;
+}
+
+.index .download:hover {
+  cursor: pointer;
+}
+
+.index .download:disabled {
+  color: #fff;
+  background-color: #26A391;
+  border: none;
+  border-radius: 4px;
+  text-align: center;
+  padding: 4px 12px;
+  margin: 12px 0;
+  font-size: 12px;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 
 /* calendar buttons */
 .calendar_button_container {

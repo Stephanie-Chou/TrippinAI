@@ -553,90 +553,91 @@ export default function Home(): ReactElement {
   const itineraryData = { city, neighborhoods, activities, foods, dayTrips };
   return (
     <PageWrapper>
-      <div className={styles.hero}>
-        <CanvasBackground>
-          <div className={styles.form_container}>
-            <img src="/JourneyGenieLogo_thick.png" className={styles.icon} alt={"Trippinspo Logo: dotted line to location marker"} />
-            <h1>Trippin</h1>
-            <h2> The AI Powered Travel Planner </h2>
-            <Form
-              cityInput={cityInput}
-              checkedState={checkedState}
-              interests={DEFAULT_INTERESTS}
-              tripLength={tripLength}
-              onSubmit={onSubmit}
-              handleOnChange={handleOnChange}
-              setCity={setCity}
-              setCityInput={setCityInput}
-              handleTripLengthChange={handleTripLengthChange}
-            />
-          </div>
-        </CanvasBackground>
+      <div className={styles.index}>
+        <div className={styles.hero}>
+          <CanvasBackground>
+            <div className={styles.form_container}>
+              <img src="/JourneyGenieLogo_thick.png" className={styles.icon} alt={"Trippinspo Logo: dotted line to location marker"} />
+              <h1>Trippin</h1>
+              <h2> The AI Powered Travel Planner </h2>
+              <Form
+                cityInput={cityInput}
+                checkedState={checkedState}
+                interests={DEFAULT_INTERESTS}
+                tripLength={tripLength}
+                onSubmit={onSubmit}
+                handleOnChange={handleOnChange}
+                setCity={setCity}
+                setCityInput={setCityInput}
+                handleTripLengthChange={handleTripLengthChange}
+              />
+            </div>
+          </CanvasBackground>
+        </div>
 
-      </div>
-
-      <div className={isStickyHeader ? (styles.fixedTop) : styles.mainHeader} ref={stickyHeader} id="mainHeader">
-        <h4>Trippin</h4>
-        <div className={styles.calendar_button_container}>
-          <TravelDayButton onClick={(e) => {
-            e.preventDefault();
-            handleScrollToSection(TRAVEL_DAY_ID)
-          }} />
-          {placeholderDays.map((day, index) => {
-            return <CalendarButton index={index} onClick={(e) => {
+        <div className={isStickyHeader ? (styles.fixedTop) : styles.mainHeader} ref={stickyHeader} id="mainHeader">
+          <h4>Trippin</h4>
+          <div className={styles.calendar_button_container}>
+            <TravelDayButton onClick={(e) => {
               e.preventDefault();
-              handleScrollToSection(DAY_IDS[index])
+              handleScrollToSection(TRAVEL_DAY_ID)
             }} />
-          })}
-        </div>
+            {placeholderDays.map((day, index) => {
+              return <CalendarButton index={index} onClick={(e) => {
+                e.preventDefault();
+                handleScrollToSection(DAY_IDS[index])
+              }} />
+            })}
+          </div>
 
-        <div className={styles.modal}>
-          <button onClick={onModalOpenClick}>
-            <img src="/tipjar.png" />
-          </button>
+          <div className={styles.modal}>
+            <button onClick={onModalOpenClick}>
+              <img src="/tipjar.png" />
+            </button>
+          </div>
         </div>
+        <div className={styles.result} ref={itineraryRef}>
+          <div className={styles.plan_title}>
+            {city ? <h3>{tripLength} {dayUnit} in {capitalizedCity}</h3> : ""}
+          </div>
+
+          {/* <Loader loading={loading} /> */}
+
+          {/* Travel Day */}
+          {showResult && <TravelDay locationName={city} travelTips={travelTips} />}
+
+          {/* TRIP DAYS */}
+          {renderDays()}
+
+          {/* DAY TRIPS */}
+          <DayTrips
+            city={city}
+            dayTrips={dayTrips}
+            getInterestsString={getInterestsString}
+            setMeta={setMeta}
+            setDayTrips={setDayTrips}
+            setLoading={setLoading}
+            meta={meta}
+          />
+          {/* WHERE TO STAY */}
+          {showResult && <WhereToStay locationName={city} whereToStay={whereToStay} />}
+
+          {/* WHAT TO EAT*/}
+          {showResult && <WhatToEat locationName={city} whatToEat={whatToEat} />}
+
+          {/* SPACER */}
+          <div className={styles.bottom_spacer}></div>
+
+          {/* WHAT TO EAT */}
+          {showResult && <SplitPillMenu
+            isButtonDisabled={!showResult}
+            isLoading={loading.dayTrips || loading.days}
+            itineraryData={itineraryData}
+            onClick={handleScrollToSection}
+          />}
+        </div>
+        {isOpen && <TipJarModal onClose={onModalCloseClick} />}
       </div>
-      <div className={styles.result} ref={itineraryRef}>
-        <div className={styles.plan_title}>
-          {city ? <h3>{tripLength} {dayUnit} in {capitalizedCity}</h3> : ""}
-        </div>
-
-        {/* <Loader loading={loading} /> */}
-
-        {/* Travel Day */}
-        {showResult && <TravelDay locationName={city} travelTips={travelTips} />}
-
-        {/* TRIP DAYS */}
-        {renderDays()}
-
-        {/* DAY TRIPS */}
-        <DayTrips
-          city={city}
-          dayTrips={dayTrips}
-          getInterestsString={getInterestsString}
-          setMeta={setMeta}
-          setDayTrips={setDayTrips}
-          setLoading={setLoading}
-          meta={meta}
-        />
-        {/* WHERE TO STAY */}
-        {showResult && <WhereToStay locationName={city} whereToStay={whereToStay} />}
-
-        {/* WHAT TO EAT*/}
-        {showResult && <WhatToEat locationName={city} whatToEat={whatToEat} />}
-
-        {/* SPACER */}
-        <div className={styles.bottom_spacer}></div>
-
-        {/* WHAT TO EAT */}
-        {showResult && <SplitPillMenu
-          isButtonDisabled={!showResult}
-          isLoading={loading.dayTrips || loading.days}
-          itineraryData={itineraryData}
-          onClick={handleScrollToSection}
-        />}
-      </div>
-      {isOpen && <TipJarModal onClose={onModalCloseClick} />}
     </PageWrapper >
   );
 }
