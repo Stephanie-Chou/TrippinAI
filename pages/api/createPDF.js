@@ -248,7 +248,7 @@ function generateHtml(city, neighborhoods, activities, foods, dayTrips) {
       `<td>${food.lunch ? food.lunch.desc : ''}</td>` +
       `</tr>` +
       `<tr>` +
-      `<td>Walking tour of ${neighborhood.name}</td>` +
+      `<td>What to Do in ${neighborhood.name}</td>` +
       `<td>` +
       `<ol>` +
       `<li>${walking_tour[0].name}</li>` +
@@ -360,7 +360,7 @@ function generateHtml(city, neighborhoods, activities, foods, dayTrips) {
                   <td>Tuck into some of the freshest sushi in Tokyo, made from sustainably sourced seafood.</td>
                 </tr>
                 <tr>
-                  <td>Walking tour of Tsukuji</td>
+                  <td>What to Do in Tsukuji</td>
                   <td>
                     <ol>
                       <li>Tsukiji Outer Market</li>
