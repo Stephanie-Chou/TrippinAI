@@ -92,49 +92,31 @@ function generateActivityDescriptionPrompt(location: string, city: string, inter
 
     Location: Colosseum Rome
     interests: History
-    description: {
-      "short_desc": "Iconic amphitheater of Ancient Rome, known for gladiatorial contests.",
-      "long_desc": "Step into the grandeur of Ancient Rome at the Colosseum, the largest amphitheater ever built. Discover the history of gladiators, explore the vast arena, and marvel at the architectural masterpiece that has stood for centuries."
-    }
+    description: { "short_desc": "Iconic amphitheater of Ancient Rome, known for gladiatorial contests.", "long_desc": "Step into the grandeur of Ancient Rome at the Colosseum, the largest amphitheater ever built. Discover the history of gladiators, explore the vast arena, and marvel at the architectural masterpiece that has stood for centuries."}
+
     Location: Vatican Museums Rome
     interests: Culture
-    description: {
-      "short_desc": "World-renowned art collection, including the Sistine Chapel.",
-      "long_desc": "Explore the vast art collection of the Vatican Museums, housing masterpieces from different periods and cultures. Marvel at the stunning frescoes in the Sistine Chapel painted by Michelangelo and admire works by renowned artists like Raphael and Leonardo da Vinci."
-    }
+    description: { "short_desc": "World-renowned art collection, including the Sistine Chapel.", "long_desc": "Explore the vast art collection of the Vatican Museums, housing masterpieces from different periods and cultures. Marvel at the stunning frescoes in the Sistine Chapel painted by Michelangelo and admire works by renowned artists like Raphael and Leonardo da Vinci."}
+
     Location: Pike Place Market Seattle
     interests: Food
-    description: {
-      "short_desc": "Historic farmers' market known for fresh produce, seafood, and eclectic shops.",
-      "long_desc": "Established in 1907, Pike Place Market is one of the oldest continuously operated public farmers' markets in the U.S. It offers an exciting blend of local produce, fresh seafood, specialty foods, artisan crafts, and lively atmosphere."
-    }
+    description: { "short_desc": "Historic farmers' market known for fresh produce, seafood, and eclectic shops.", "long_desc": "Established in 1907, Pike Place Market is one of the oldest continuously operated public farmers' markets in the U.S. It offers an exciting blend of local produce, fresh seafood, specialty foods, artisan crafts, and lively atmosphere."}
+
     Location: Fremont Troll Seattle
     interests: Off the beaten path
-    description: {
-      "short_desc":"Seattle's iconic under-bridge troll sculpture.",
-      "long_desc": "A quirky public art installation in Seattle's Fremont neighborhood, featuring a massive troll sculpture clutching a real-life Volkswagen Beetle under a bridge. It's a must-see for visitors seeking unique and playful attractions."
-    }
+    description: { "short_desc":"Seattle's iconic under-bridge troll sculpture.", "long_desc": "A quirky public art installation in Seattle's Fremont neighborhood, featuring a massive troll sculpture clutching a real-life Volkswagen Beetle under a bridge. It's a must-see for visitors seeking unique and playful attractions."}
 
     Location: Exploratorium in the Embarcadero
     interests: family friendly fun
-    description: {
-      "short_desc":"Take your family to the Exploratorium, a hands-on science museum",
-      "long_desc": "Explore interactive exhibits, engage in scientific experiments, and discover fascinating concepts in a fun and educational environment."
-    }
+    description: { "short_desc":"Take your family to the Exploratorium, a hands-on science museum", "long_desc": "Explore interactive exhibits, engage in scientific experiments, and discover fascinating concepts in a fun and educational environment."}
 
     Location: Nightlife in Capitol Hill
     interests: party time
-    description: {
-      "short_desc": "Lively bars, clubs, and live music in Seattle's energetic neighborhood.",  
-      "long_desc": "Thriving nightlife with popular bars and clubs like Q Nightclub, Neumos, and Unicorn for a lively atmosphere, live music, and DJ sets."
-    }
+    description: { "short_desc": "Lively bars, clubs, and live music in Seattle's energetic neighborhood.",   "long_desc": "Thriving nightlife with popular bars and clubs like Q Nightclub, Neumos, and Unicorn for a lively atmosphere, live music, and DJ sets."}
 
     Location: Waimea Canyon
     interests: Adventure
-    description {
-      "short_desc": "A majestic canyon in Kauai, Hawaii",
-      "long_desc": "Experience the breathtaking beauty of Waimea Canyon, a majestic canyon in Kauai, Hawaii. With its red-hued rock walls, lush greenery, and dramatic cliffs, Waimea Canyon is considered the 'Grand Canyon of the Pacific'"
-    }
+    description { "short_desc": "A majestic canyon in Kauai, Hawaii", "long_desc": "Experience the breathtaking beauty of Waimea Canyon, a majestic canyon in Kauai, Hawaii. With its red-hued rock walls, lush greenery, and dramatic cliffs, Waimea Canyon is considered the 'Grand Canyon of the Pacific'."}
 
     Location: ${location} ${city}
     interests: ${interests}

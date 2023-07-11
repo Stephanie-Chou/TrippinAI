@@ -1,0 +1,42 @@
+/* about page */
+
+.about {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.about .canvas_contents {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.about .textLogo {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  margin-top: 10vh;
+  z-index: 1;
+}
+
+.about .aboutText {
+  margin: auto;
+  width: 50vw;
+  z-index: 1;
+}
+
+@media only screen and (max-width: 600px) {
+  .about .aboutText {
+    margin: auto;
+    width: 80vw;
+  }
+}
+
+.about .splashBanner {
+  width: 100%;
+  display: block;
+}

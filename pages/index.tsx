@@ -1,4 +1,3 @@
-import Head from "next/head";
 import { useState, useEffect, useRef, useLayoutEffect, ReactElement, RefObject } from "react";
 import Day from "../components/Day";
 import DayTrips from "../components/DayTrips";
@@ -29,6 +28,7 @@ import SplitPillMenu from "../components/SplitPillMenu";
 import WhatToEat from "../components/WhatToEat";
 import CanvasBackground from "../components/CanvasBackground";
 import Loader from "../components/Loader";
+import PageWrapper from "../components/PageWrapper";
 
 export default function Home(): ReactElement {
 
@@ -552,104 +552,91 @@ export default function Home(): ReactElement {
   const capitalizedCity = city ? city.split(' ').map((word: string) => word ? word[0].toUpperCase() + word.slice(1).toLowerCase() : '').join(' ') : "";
   const itineraryData = { city, neighborhoods, activities, foods, dayTrips };
   return (
-    <div>
-      <Head>
-        <title>Trippin - The AI Powered Travel Planner</title>
-        <link rel="icon" href="/JourneyGenieLogo_thick.png" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
-        <meta property="og:image" content="https://stephaniechou.com/assets/images/trippinspo_logo.png"></meta>
-        <meta name="description" content="Artificial Intelligence powered travel planner. Creates a one to five day itinerary, Recommends Day Trips and Food options. Get inspired for your next vacation." />
-        <meta name="_foundr" content="f785866cc563749ca77fcae47d19fb96"></meta>
-      </Head>
-      <main className={styles.main}>
-        <div className={styles.hero}>
-          <CanvasBackground>
-            <div className={styles.input}>
-              <img src="/JourneyGenieLogo_thick.png" className={styles.icon} alt={"Trippinspo Logo: dotted line to location marker"} />
-              <h1>Trippin</h1>
-              <h2> The AI Powered Travel Planner </h2>
-              <Form
-                cityInput={cityInput}
-                checkedState={checkedState}
-                interests={DEFAULT_INTERESTS}
-                tripLength={tripLength}
-                onSubmit={onSubmit}
-                handleOnChange={handleOnChange}
-                setCity={setCity}
-                setCityInput={setCityInput}
-                handleTripLengthChange={handleTripLengthChange}
-              />
-            </div>
-          </CanvasBackground>
+    <PageWrapper>
+      <div className={styles.hero}>
+        <CanvasBackground>
+          <div className={styles.form_container}>
+            <img src="/JourneyGenieLogo_thick.png" className={styles.icon} alt={"Trippinspo Logo: dotted line to location marker"} />
+            <h1>Trippin</h1>
+            <h2> The AI Powered Travel Planner </h2>
+            <Form
+              cityInput={cityInput}
+              checkedState={checkedState}
+              interests={DEFAULT_INTERESTS}
+              tripLength={tripLength}
+              onSubmit={onSubmit}
+              handleOnChange={handleOnChange}
+              setCity={setCity}
+              setCityInput={setCityInput}
+              handleTripLengthChange={handleTripLengthChange}
+            />
+          </div>
+        </CanvasBackground>
 
-        </div>
+      </div>
 
-        <div className={isStickyHeader ? (styles.fixedTop) : styles.mainHeader} ref={stickyHeader} id="mainHeader">
-          <h4>Trippin</h4>
-          <div className={styles.calendar_button_container}>
-            <TravelDayButton onClick={(e) => {
+      <div className={isStickyHeader ? (styles.fixedTop) : styles.mainHeader} ref={stickyHeader} id="mainHeader">
+        <h4>Trippin</h4>
+        <div className={styles.calendar_button_container}>
+          <TravelDayButton onClick={(e) => {
+            e.preventDefault();
+            handleScrollToSection(TRAVEL_DAY_ID)
+          }} />
+          {placeholderDays.map((day, index) => {
+            return <CalendarButton index={index} onClick={(e) => {
               e.preventDefault();
-              handleScrollToSection(TRAVEL_DAY_ID)
+              handleScrollToSection(DAY_IDS[index])
             }} />
-            {placeholderDays.map((day, index) => {
-              return <CalendarButton index={index} onClick={(e) => {
-                e.preventDefault();
-                handleScrollToSection(DAY_IDS[index])
-              }} />
-            })}
-          </div>
-
-          <div className={styles.modal}>
-            <button onClick={onModalOpenClick}>
-              <img src="/tipjar.png" />
-            </button>
-          </div>
+          })}
         </div>
 
-
-        <div className={styles.result} ref={itineraryRef}>
-          <div className={styles.plan_title}>
-            {city ? <h3>{tripLength} {dayUnit} in {capitalizedCity}</h3> : ""}
-          </div>
-
-          {/* <Loader loading={loading} /> */}
-
-          {/* Travel Day */}
-          {showResult && <TravelDay locationName={city} travelTips={travelTips} />}
-
-          {/* TRIP DAYS */}
-          {renderDays()}
-
-          {/* DAY TRIPS */}
-          <DayTrips
-            city={city}
-            dayTrips={dayTrips}
-            getInterestsString={getInterestsString}
-            setMeta={setMeta}
-            setDayTrips={setDayTrips}
-            setLoading={setLoading}
-            meta={meta}
-          />
-          {/* WHERE TO STAY */}
-          {showResult && <WhereToStay locationName={city} whereToStay={whereToStay} />}
-
-          {/* WHAT TO EAT*/}
-          {showResult && <WhatToEat locationName={city} whatToEat={whatToEat} />}
-
-          {/* SPACER */}
-          <div className={styles.bottom_spacer}></div>
-
-          {/* WHAT TO EAT */}
-          {showResult && <SplitPillMenu
-            isButtonDisabled={!showResult}
-            isLoading={loading.dayTrips || loading.days}
-            itineraryData={itineraryData}
-            onClick={handleScrollToSection}
-          />}
+        <div className={styles.modal}>
+          <button onClick={onModalOpenClick}>
+            <img src="/tipjar.png" />
+          </button>
         </div>
-        <div className={styles.footer}>Trippin Created by SugarJie Studios</div>
-        {isOpen && <TipJarModal onClose={onModalCloseClick} />}
-      </main>
-    </div>
+      </div>
+      <div className={styles.result} ref={itineraryRef}>
+        <div className={styles.plan_title}>
+          {city ? <h3>{tripLength} {dayUnit} in {capitalizedCity}</h3> : ""}
+        </div>
+
+        {/* <Loader loading={loading} /> */}
+
+        {/* Travel Day */}
+        {showResult && <TravelDay locationName={city} travelTips={travelTips} />}
+
+        {/* TRIP DAYS */}
+        {renderDays()}
+
+        {/* DAY TRIPS */}
+        <DayTrips
+          city={city}
+          dayTrips={dayTrips}
+          getInterestsString={getInterestsString}
+          setMeta={setMeta}
+          setDayTrips={setDayTrips}
+          setLoading={setLoading}
+          meta={meta}
+        />
+        {/* WHERE TO STAY */}
+        {showResult && <WhereToStay locationName={city} whereToStay={whereToStay} />}
+
+        {/* WHAT TO EAT*/}
+        {showResult && <WhatToEat locationName={city} whatToEat={whatToEat} />}
+
+        {/* SPACER */}
+        <div className={styles.bottom_spacer}></div>
+
+        {/* WHAT TO EAT */}
+        {showResult && <SplitPillMenu
+          isButtonDisabled={!showResult}
+          isLoading={loading.dayTrips || loading.days}
+          itineraryData={itineraryData}
+          onClick={handleScrollToSection}
+        />}
+      </div>
+      {isOpen && <TipJarModal onClose={onModalCloseClick} />}
+    </PageWrapper >
   );
 }

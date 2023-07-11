@@ -1,0 +1,115 @@
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://fonts.gstatic.com/s/spacegrotesk/v15/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUXskPMBBSSJLm2E.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* latin */
+@font-face {
+  font-family: 'Unbounded';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/unbounded/v6/Yq6F-LOTXCb04q32xlpat-6uR42XTqtG60bx44rNgdyOV0c1bQ.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+.colorTest {
+  color: #D54BEC;
+  color: #FE6D63;
+  color: #DC3670;
+  color: #E7D1D2;
+  color: #142639;
+  color: #FEDFDD;
+}
+
+
+.main {
+  font-size: 16px;
+  line-height: 24px;
+  color: #142639;
+  font-family: 'Space Grotesk', sans-serif;
+  min-height: 100vh;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  background-color: #f9f5f0;
+  flex-grow: 1;
+}
+
+.main h1 {
+  font-size: 84px;
+  line-height: 60px;
+  font-weight: bold;
+  color: #142639;
+  margin: 20px 0 20px;
+  font-family: 'Unbounded', cursive;
+}
+
+.main .hero h2 {
+  font-size: 22px;
+  font-weight: normal;
+  color: #142639;
+  margin: 10px 0 20px;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.main h3 {
+  font-size: 28px;
+  font-weight: bold;
+  color: #142639;
+}
+
+.main h4 {
+  font-size: 20px;
+  line-height: 2;
+  font-weight: bold;
+  color: #142639;
+  margin: 12px 0 12px;
+}
+
+
+
+.main td,
+.main th {
+  border: 1px solid #ddd;
+  padding: 8px;
+  font-size: 12px;
+}
+
+.main tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.main tr:hover {
+  background-color: #ddd;
+}
+
+.main th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+}
+
+
+.footer {
+  background: rgb(38, 163, 145);
+  background: linear-gradient(0deg, rgba(38, 163, 145, 1) 0%, rgba(249, 245, 240, 0) 80%);
+  color: #142639;
+  display: block;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  height: 44px;
+  width: 100%;
+  bottom: 0;
+}
+
+.footer div {
+  width: inherit;
+  display: flex;
+  justify-content: center;
+}
