@@ -24,6 +24,7 @@ export default function PageWrapper({ children }): ReactElement {
           <a href="https://github.com/Stephanie-Chou/TrippinAI" target="_blank">The Project</a>
           <a href="https://account.venmo.com/u/choustephanie" target="_blank">Buy me a Tea</a>
           <a href="/about">About</a>
+          <a href="https://www.instagram.com/trippinspo/" target="_blank">Follow us on Insta</a>
         </div>
       </footer>
     </div>
