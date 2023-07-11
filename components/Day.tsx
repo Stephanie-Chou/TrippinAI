@@ -13,17 +13,24 @@ function renderWalkingTourLong(tour: WalkingTourStep[]): ReactElement {
     </ol>
   );
 }
-export default function Day({ activity, food, neighborhood, index, locationName, retry }): ReactElement {
+export default function Day({
+  activity,
+  food,
+  neighborhood,
+  index,
+  city,
+  retry }): ReactElement {
   const { walking_tour, image } = neighborhood;
   let urls = !image ? { regular: '' } : image.urls;
   let user = !image ? { username: '', name: '' } : image.user;
   let username: string = !user ? '' : user.username
 
   const subheader: string = "Day " + (index + 1);
+
   return (
     <>
       <Page
-        header={locationName}
+        header={city}
         subheader={subheader}
         id={DAY_IDS[index]}
       >

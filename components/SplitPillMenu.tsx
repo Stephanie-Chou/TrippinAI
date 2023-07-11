@@ -1,27 +1,13 @@
 import { DAY_TRIP_IDS, WHERE_TO_STAY_ID, WHAT_TO_EAT_ID, DownloadButtonStatus } from "../utils/constants";
+import DownloadButton from "./DownloadButton";
 import styles from "./splitpillmenu.module.css";
 import { ReactElement } from "react";
 
-function getDownloadButtonContent(downloadState): ReactElement {
-  switch (downloadState) {
-    case DownloadButtonStatus.READY:
-      return <div><span className="material-symbols-outlined ">download</span><span className="material-symbols-outlined">picture_as_pdf</span></div>
-    case DownloadButtonStatus.IN_PROGRESS:
-      return <div className={styles.downloading}><span className="material-symbols-outlined">downloading</span></div>;
-    case DownloadButtonStatus.ERROR:
-      return <span className="material-symbols-outlined">error</span>;
-    default:
-      return <div><span className="material-symbols-outlined">download</span><span className="material-symbols-outlined">picture_as_pdf</span></div>;
-  }
-}
 export default function SplitPillMenu({
-  onDownload,
-  onClick,
-  downloadState,
-  isDownloadButtonDisabled,
-  isButtonDisabled }): ReactElement {
-
-  let downloadButtonContent = getDownloadButtonContent(downloadState)
+  isButtonDisabled,
+  isLoading,
+  itineraryData,
+  onClick }): ReactElement {
 
   return (
     <div className={styles.menu}>
@@ -33,7 +19,7 @@ export default function SplitPillMenu({
       <div className={styles.divider}></div>
       <button disabled={isButtonDisabled} onClick={() => onClick(WHAT_TO_EAT_ID)}><span className="material-symbols-outlined">restaurant</span></button>
       <div className={styles.divider}></div>
-      <button disabled={isDownloadButtonDisabled} onClick={onDownload}>{downloadButtonContent}</button>
+      <DownloadButton itineraryData={itineraryData} isLoading={isLoading} />
     </div>
   );
 }
