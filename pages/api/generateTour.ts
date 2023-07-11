@@ -1,6 +1,6 @@
 import { Configuration } from "openai";
 import { NextApiRequest, NextApiResponse } from "next";
-import { OpenAIStream, OpenAIStreamPayload} from "./OpenAIStream";
+import { OpenAIStream, OpenAIStreamPayload } from "./OpenAIStream";
 import { Redis } from '@upstash/redis'
 import { getStreamResponse } from "../../utils/getStreamResponse";
 import isJsonString from "../../utils/isJsonString";
@@ -15,8 +15,8 @@ export default async function (req: NextApiRequest, res: NextApiResponse): Promi
 
   /** Check cache */
   const client = new Redis({
-      url: process.env.UPSTASH_REDIS_REST_URL,
-      token: process.env.UPSTASH_REDIS_REST_TOKEN,
+    url: process.env.UPSTASH_REDIS_REST_URL,
+    token: process.env.UPSTASH_REDIS_REST_TOKEN,
   })
 
   const key: string = `walkingTour:neighborhood:${neighborhood.toLowerCase()}:city:${city.toLowerCase()}:interests:${interests}`;
@@ -63,11 +63,11 @@ export default async function (req: NextApiRequest, res: NextApiResponse): Promi
   const stream = await OpenAIStream(payload);
   let response = new Response(
     stream, {
-      headers: new Headers({
-        // 'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache',
-      })
-    }
+    headers: new Headers({
+      // 'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+    })
+  }
   );
 
   const data = response.body;
@@ -77,28 +77,28 @@ export default async function (req: NextApiRequest, res: NextApiResponse): Promi
   }
 
   return getStreamResponse(data).then((streamResponse: string) => {
-    console.log('CACHE MISS', JSON.stringify({result: streamResponse}))
+    console.log('CACHE MISS', JSON.stringify({ result: streamResponse }))
 
     if (isJsonString(streamResponse)) {
-      client.set(key, JSON.stringify({result: streamResponse}));
-      return res.status(200).json(JSON.stringify({result: streamResponse}));
+      client.set(key, JSON.stringify({ result: streamResponse }));
+      return res.status(200).json(JSON.stringify({ result: streamResponse }));
     }
-    return res.status(500).json(JSON.stringify({error: "Invalid JSON returned"}));
+    return res.status(500).json(JSON.stringify({ error: "Invalid JSON returned" }));
   });
 }
 
 function generateWalkingTourPrompt(neighborhood: string, interests: string) {
+
+  return `Given a neighborhood and interests, return a suggested set of 3 activities relevant to the interests. return a JSON string with the name of stop and a short description of the stop.
   
-    return `Given a neighborhood and interests, return a suggested set of 3 activities relevant to the interests. return a JSON string with the name of stop and a short description of the stop.
-  
-    tourStops: Vatican City
+    neighborhood: Vatican City
     interests: history
     walking_tour: [
         {"name": "St. Peter's Basilica", "desc":"Discover the largest church in the world, known for its breathtaking architecture and religious significance."},
         {"name": "Vatican Gardens", "desc":"Stroll through the beautifully landscaped gardens, filled with lush greenery, fountains, and sculptures."},
         {"name": "Castel Sant'Angelo", "desc":"Visit this ancient fortress and former papal residence, offering panoramic views of Rome from its terrace."}
     ]
-    tourStops: Fremont
+    neighborhood: Fremont
     interests: family friendly fun
     walking_tour: [ 
         {"name": "Fremont Sunday Market", "desc": "Browse the eclectic mix of crafts, vintage items, and local produce at this vibrant open-air market."},
@@ -106,14 +106,14 @@ function generateWalkingTourPrompt(neighborhood: string, interests: string) {
         {"name": "Theo Chocolate Factory", "desc": "Take a guided tour of the organic and fair-trade chocolate factory, and indulge in delicious samples."}
       ]
 
-    tourStopes: Fremont
+    neighborhood: Fremont
     interests: party time
     walking_tour: [
       {"name": "Dance at Nectar Lounge", "desc": "Enjoy live music and DJs at Nectar Lounge, a popular venue in Fremont known for its energetic atmosphere and diverse lineup of performers."},
       {"name": "Bar hopping on Fremont Ave", "desc": "Embark on a bar-hopping adventure along Fremont Avenue. From craft breweries to laid-back cocktail lounges, there's a different vibe for any occasion."},
       {"name": "Join the Fremont Solstice Parade", "desc": "If you're lucky enough to visit during the summer, don't miss the iconic Fremont Solstice Parade."}
     ]
-    tourStops: ${neighborhood}
+    neighborhood: ${neighborhood}
     interests: ${interests}
     walking_tour:
     `;
