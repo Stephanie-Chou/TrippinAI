@@ -28,7 +28,7 @@ export default function About(): ReactElement {
               </ul>
 
             </div>
-            <img className={styles.splashBanner} src="/TrippinSplashBanner.svg" alt="Trippin Splash Banner: Let's Get Trippin." />
+            <img className={styles.splashBanner} src="/Trippinsplashbanner.svg" alt="Trippin Splash Banner: Let's Get Trippin." />
           </div>
 
         </CanvasBackground>
