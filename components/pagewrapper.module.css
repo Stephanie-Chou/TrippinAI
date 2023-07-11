@@ -97,8 +97,8 @@
 
 
 .footer {
-  background: rgb(38, 163, 145);
-  background: linear-gradient(0deg, rgba(38, 163, 145, 1) 0%, rgba(249, 245, 240, 0) 80%);
+  background: rgb(38, 162, 145);
+  background: linear-gradient(0deg, rgba(38, 162, 145, 0.46544555322128855) 17%, rgba(249, 245, 240, 1) 65%);
   color: #142639;
   font-family: 'Space Grotesk', sans-serif;
   font-size: 12px;

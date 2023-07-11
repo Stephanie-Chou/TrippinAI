@@ -28,6 +28,7 @@
   flex-direction: row;
   justify-content: space-between;
   overflow: scroll;
+  visibility: hidden;
 }
 
 .index .fixedTop {
