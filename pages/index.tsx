@@ -501,8 +501,6 @@ export default function Home(): ReactElement {
   /*****************
   * FORM FUNCTIONS
   ******************/
-
-
   function onSubmit(event): void {
     if (showResult) {
       scrollToRef(itineraryRef);
