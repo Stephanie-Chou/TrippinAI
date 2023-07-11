@@ -30,15 +30,15 @@
 }
 
 .menu button:disabled {
-  cursor: none;
+  cursor: not-allowed;
 }
 
-.menu button:hover {
+.menu button:hover:enabled {
   cursor: pointer;
   color: gray;
 }
 
-.menu button:active {
+.menu button:active:enabled {
   color: #ffc285;
 }
 

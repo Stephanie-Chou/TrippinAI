@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Page from "./Page";
 import styles from "./day.module.css";
-import { DayTrip, Meta, Photo, Food } from "../utils/types";
+import { DayTrip, LoadingState, Meta, Photo, Food } from "../utils/types";
 import { DAY_TRIP_IDS } from "../utils/constants";
 import { getStreamResponse } from "../utils/getStreamResponse";
 import isJsonString from "../utils/isJsonString";
@@ -13,8 +13,8 @@ export default function DayTrips({
   meta,
   getInterestsString,
   setDayTrips,
+  setLoading,
   setMeta }) {
-
 
   useEffect(() => {
     fetchDayTripFoods();
@@ -91,10 +91,10 @@ export default function DayTrips({
       return updatedDayTrips;
     });
 
-    // setLoading((prev: LoadingState): LoadingState => ({
-    //   days: prev.dayTrips,
-    //   dayTrips: false,
-    // }));
+    setLoading((prev: LoadingState): LoadingState => ({
+      days: prev.dayTrips,
+      dayTrips: false,
+    }));
   }
 
   function fetchDayTripFoods(): void {
