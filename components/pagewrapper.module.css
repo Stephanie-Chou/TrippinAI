@@ -100,16 +100,23 @@
   background: rgb(38, 163, 145);
   background: linear-gradient(0deg, rgba(38, 163, 145, 1) 0%, rgba(249, 245, 240, 0) 80%);
   color: #142639;
-  display: block;
   font-family: 'Space Grotesk', sans-serif;
   font-size: 12px;
-  height: 44px;
+  min-height: 44px;
   width: 100%;
-  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .footer div {
   width: inherit;
   display: flex;
   justify-content: center;
+  padding: 14px;
+}
+
+.footer .linkList {
+  display: flex;
+  justify-content: space-around;
 }

@@ -20,6 +20,11 @@ export default function PageWrapper({ children }): ReactElement {
       </main>
       <footer className={styles.footer}>
         <div>Trippin Created by SugarJie Studios</div>
+        <div className={styles.linkList}>
+          <a href="https://github.com/Stephanie-Chou/TrippinAI" target="_blank">The Project</a>
+          <a href="https://account.venmo.com/u/choustephanie" target="_blank">Buy me a Tea</a>
+          <a href="/about">About</a>
+        </div>
       </footer>
     </div>
   );
