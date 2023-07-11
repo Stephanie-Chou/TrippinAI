@@ -11,6 +11,8 @@
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   overflow-x: scroll;
   max-width: 100%;
+  width: fit-content;
+  margin: auto;
 }
 
 .menu::-webkit-scrollbar {
