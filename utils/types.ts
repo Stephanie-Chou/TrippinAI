@@ -27,8 +27,8 @@ export interface Neighborhood {
 }
 
 export interface Food {
-  lunch: {name: string, desc: string},
-  dinner: {name: string, desc: string},
+  lunch: { name: string, desc: string },
+  dinner: { name: string, desc: string },
 }
 
 export interface Meta {
@@ -54,3 +54,9 @@ export interface RetryDay {
   activity: string,
   neighborhood: string,
 }
+
+// Loading States
+export interface LoadingState {
+  days: boolean,
+  dayTrips: boolean,
+};
