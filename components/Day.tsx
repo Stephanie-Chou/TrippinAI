@@ -20,6 +20,7 @@ export default function Day({
   index,
   city,
   retry }): ReactElement {
+  if (!neighborhood) return;
   const { walking_tour, image } = neighborhood;
   let urls = !image ? { regular: '' } : image.urls;
   let user = !image ? { username: '', name: '' } : image.user;
