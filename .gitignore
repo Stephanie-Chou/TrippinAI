@@ -9,12 +9,11 @@
 /coverage
 
 # files for development only
-/pages/api/generateTest.js
 /pages/test.js
 /pages/api/generate.js
 /pages/cache.js
 /pages/pdf_test.js
-/utils/stubData.js
+/utils/stubData.ts
 
 # next.js
 /.next/
