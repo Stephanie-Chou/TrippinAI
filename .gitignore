@@ -15,7 +15,6 @@
 /pages/cache.js
 /pages/pdf_test.js
 /utils/stubData.js
-api/redis.js
 
 # next.js
 /.next/

@@ -26,26 +26,49 @@ import PageWrapper from "../components/PageWrapper";
 import styles from "./index.module.css";
 import isJsonString from "../utils/isJsonString";
 import fetchImage from "../utils/fetchImage";
+import { Redis } from '@upstash/redis'
+export async function getServerSideProps() {
+  console.log('getServerSideProps called')
+  // Fetch data from external API
+  const client = new Redis({
+    url: process.env.UPSTASH_REDIS_REST_URL,
+    token: process.env.UPSTASH_REDIS_REST_TOKEN,
+  })
 
-export default function Trips() {
+  const res = await import('../pages/api/redis');
+  console.log('response', res);
+  res.default
+
+  const data = await res.json();
+  if (!res) {
+    throw new Error(`Trips Request failed. bad key?`);
+  }
+
+  // set the interests?
+  // fetch the rest of the things
+  // Pass data to the page via props
+  return { props: { data } }
+}
+export default function Trips({ data }) {
+
   // Modal State
   const [isOpen, setIsOpen] = useState(false);
   const [isStickyHeader, setIsStickyHeader] = useState(false);
 
   //Form State
-  const [city, setCity] = useState("");
+  const [city, setCity] = useState(data.tripLocation);
   const [checkedState, setCheckedState] = useState(
     DEFAULT_INTERESTS.map((interest) => ({ name: interest, isChecked: false }))
   );
-  const [tripLength, setTripLength] = useState(INIT_TRIP_LENGTH);
-  const [placeholderDays, setPlaceholderDays] = useState(new Array(INIT_TRIP_LENGTH).fill(0));
+  const [tripLength, setTripLength] = useState(data.tripLength);
+  const [placeholderDays, setPlaceholderDays] = useState(new Array(data.tripLength).fill(0));
 
   // Itinerary Model State
   const [travelTips, setTravelTips] = useState("");
   const [whereToStay, setWhereToStay] = useState("");
   const [whatToEat, setWhatToEat] = useState("");
   const [meta, setMeta] = useState({
-    dayTrips: [] as DayTrip[],
+    dayTrips: data.dayTrips || [] as DayTrip[],
     foods: [] as Food[],
     activities: [] as Activity[],
     neighborhoods: [] as Neighborhood[],
@@ -54,7 +77,7 @@ export default function Trips() {
   const [neighborhoods, setNeighborhoods] = useState([] as Neighborhood[]);
   const [foods, setFood] = useState([] as Food[]);
   const [dayTrips, setDayTrips] = useState([] as DayTrip[]);
-  const [showResult, setShowResult] = useState(false);
+  const [showResult, setShowResult] = useState(true);
 
   const [loading, setLoading] = useState({
     days: false,
@@ -128,39 +151,6 @@ export default function Trips() {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
-  }
-
-  async function fetchData() {
-    const response = await fetch("/api/redis", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      }
-    });
-    const responseData = await response.json();
-    if (response.status !== 200) {
-      throw responseData.error || new Error(`Request failed with status ${response.status}`);
-    }
-    const {
-      tripLocation,
-      tripLength,
-      interests,
-      activities,
-      neighborhoods,
-      dayTrips,
-      day_lunches,
-      day_dinners,
-      day_trip_foods,
-    } = responseData;
-    setTripLength(tripLength);
-    setCity(tripLocation);
-    setMeta((prev) => {
-      let nextState = prev;
-      nextState.dayTrips = dayTrips;
-      return nextState;
-    })
-    // set the interests?
-    // fetch the rest of the things
   }
 
 
@@ -357,7 +347,6 @@ export default function Trips() {
   // const id = router.query.id;
 
 
-  fetchData();
 
   const dayUnit = tripLength === 1 ? "day" : "days";
   const capitalizedCity = city ? city.split(' ').map((word: string) => word ? word[0].toUpperCase() + word.slice(1).toLowerCase() : '').join(' ') : "";
