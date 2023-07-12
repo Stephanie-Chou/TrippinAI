@@ -1,44 +1,38 @@
-import { useState, useEffect, useRef, useLayoutEffect, ReactElement, RefObject } from "react";
+import { useRouter } from 'next/router'
+import { useState, useRef, useEffect, useLayoutEffect, RefObject } from 'react';
 
-import styles from "./index.module.css";
-import { getStreamResponse } from "../utils/getStreamResponse";
-import isJsonString from "../utils/isJsonString";
-import fetchImage from "../utils/fetchImage";
-import * as stub from "../utils/stubData"
-import { DAY_IDS, DEFAULT_INTERESTS, INIT_TRIP_LENGTH, TRAVEL_DAY_ID } from "../utils/constants";
 import {
   Activity,
   DayTrip,
   Food,
-  LoadingState,
   Meta,
   Neighborhood,
   Photo,
-  RetryDay,
+  LoadingState,
   WalkingTourStep
 } from "../utils/types";
-import Form from "../components/Form";
+import { DAY_IDS, DEFAULT_INTERESTS, INIT_TRIP_LENGTH, TRAVEL_DAY_ID } from "../utils/constants";
+
 import Day from "../components/Day";
 import DayTrips from "../components/DayTrips";
-import TipJarModal from "../components/TipJarModal";
 import TravelDay from "../components/TravelDay";
 import WhereToStay from "../components/WhereToStay";
 import CalendarButton from "../components/CalendarButton";
 import TravelDayButton from "../components/TravelDayButton";
 import SplitPillMenu from "../components/SplitPillMenu";
 import WhatToEat from "../components/WhatToEat";
-import CanvasBackground from "../components/CanvasBackground";
-import Loader from "../components/Loader";
 import PageWrapper from "../components/PageWrapper";
 
-export default function Home(): ReactElement {
+import styles from "./index.module.css";
+import isJsonString from "../utils/isJsonString";
+import fetchImage from "../utils/fetchImage";
 
+export default function Trips() {
   // Modal State
   const [isOpen, setIsOpen] = useState(false);
   const [isStickyHeader, setIsStickyHeader] = useState(false);
 
   //Form State
-  const [cityInput, setCityInput] = useState("");
   const [city, setCity] = useState("");
   const [checkedState, setCheckedState] = useState(
     DEFAULT_INTERESTS.map((interest) => ({ name: interest, isChecked: false }))
@@ -50,23 +44,17 @@ export default function Home(): ReactElement {
   const [travelTips, setTravelTips] = useState("");
   const [whereToStay, setWhereToStay] = useState("");
   const [whatToEat, setWhatToEat] = useState("");
-  const [meta, setMeta] = useState({} as Meta);
+  const [meta, setMeta] = useState({
+    dayTrips: [] as DayTrip[],
+    foods: [] as Food[],
+    activities: [] as Activity[],
+    neighborhoods: [] as Neighborhood[],
+  });
   const [activities, setActivities] = useState([] as Activity[]);
   const [neighborhoods, setNeighborhoods] = useState([] as Neighborhood[]);
   const [foods, setFood] = useState([] as Food[]);
   const [dayTrips, setDayTrips] = useState([] as DayTrip[]);
   const [showResult, setShowResult] = useState(false);
-
-  /** STUB DATA */
-  // const [travelTips, setTravelTips] = useState(stub.mock_travelDay);
-  // const [whereToStay, setWhereToStay] = useState(stub.mock_neighborhood_recs);
-  // const [whatToEat, setWhatToEat] = useState("");
-  // const [dayTrips, setDayTrips] = useState(stub.mock_dayTrips);
-  // const [meta, setMeta] = useState(stub.mock_meta);
-  // const [activities, setActivities] = useState(stub.mock_activities);
-  // const [neighborhoods, setNeighborhoods] = useState(stub.mock_neighborhoods);
-  // const [foods, setFood] = useState(stub.mock_foods);
-  // const [showResult, setShowResult] = useState(true);
 
   const [loading, setLoading] = useState({
     days: false,
@@ -77,23 +65,15 @@ export default function Home(): ReactElement {
   const itineraryRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    fetchActivityDescriptions();
-    fetchActivityLists();
-    fetchFoods();
-  }, [meta]);
+    initializeItineraryStates();
+  }, [tripLength])
 
-  useEffect(() => {
-    renderDays();
-    setLoading((prev: LoadingState): LoadingState => ({
-      days: false,
-      dayTrips: prev.dayTrips,
-    }));
-  }, [activities, neighborhoods, foods, tripLength])
-
+  /***********************
+  * WINDOW FUNCTIONS
+  ************************/
   useEffect(() => {
     scrollToRef(itineraryRef);
   }, [showResult])
-
 
   function scrollToRef(ref: RefObject<HTMLDivElement>) {
     if (!ref.current) return;
@@ -121,219 +101,88 @@ export default function Home(): ReactElement {
     }
     return selectedInterests;
   }
+
   /***********************
-  * RENDER FUNCTIONS
+  * HANDLER FUNCTIONS
   ************************/
-  function renderDays(): ReactElement[] {
-    if (activities.length === 0) return;
-    return placeholderDays.map((day, i: number) => {
-      return (
-        <Day
-          activity={activities[i]}
-          neighborhood={neighborhoods[i]}
-          food={foods[i]}
-          index={i}
-          city={city}
-          key={i}
-          retry={retryDay}
-        />
-      )
-    })
+
+  const handleOnChange = (position) => {
+    const updatedCheckedState = checkedState.map((item, index) =>
+      index === position ? { name: item.name, isChecked: !item.isChecked } : item
+    );
+    setCheckedState(updatedCheckedState)
   }
 
-  async function retryDay(index: number): Promise<string> {
-    const response = await fetch("/api/generateRetryActivity", {
+  function onModalOpenClick(event) {
+    event.preventDefault();
+    setIsOpen(true);
+  }
+
+  function onModalCloseClick(event) {
+    event.preventDefault();
+    setIsOpen(false);
+  }
+
+  function handleScrollToSection(id: string) {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  async function fetchData() {
+    const response = await fetch("/api/redis", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ city: city, interests: getInterestsString(), currentActivities: meta.activities }),
+      }
     });
-    if (!response.ok) {
-      throw new Error(`Request failed with status ${response.statusText}`);
+    const responseData = await response.json();
+    if (response.status !== 200) {
+      throw responseData.error || new Error(`Request failed with status ${response.status}`);
     }
-
-    const data = response.body;
-    if (!data) {
-      return;
-    }
-
-    getStreamResponse(data).then((streamResponse: string) => {
-      if (!isJsonString(streamResponse)) return;
-      const json: RetryDay = JSON.parse(streamResponse);
-
-      setMeta((prevState: Meta): Meta => {
-        const nextState: Meta = { ...prevState };
-        nextState.activities[index] = json.activity;
-        nextState.neighborhoods[index] = json.neighborhood;
-        return nextState;
-      })
-
-      setActivities((prevState: Activity[]): Activity[] => {
-        const nextState = [...prevState];
-        nextState[index] = {
-          name: json.activity,
-          short_desc: "",
-          long_desc: "",
-        };
-        return nextState;
-      });
-
-      setNeighborhoods((prevState: Neighborhood[]): Neighborhood[] => {
-        const nextState: Neighborhood[] = [...prevState];
-        nextState[index] = {
-          name: json.neighborhood,
-          walking_tour: [{} as WalkingTourStep],
-          image: {} as Photo
-        }
-        return nextState;
-      });
-    });
+    const {
+      tripLocation,
+      tripLength,
+      interests,
+      activities,
+      neighborhoods,
+      dayTrips,
+      day_lunches,
+      day_dinners,
+      day_trip_foods,
+    } = responseData;
+    setTripLength(tripLength);
+    setCity(tripLocation);
+    setMeta((prev) => {
+      let nextState = prev;
+      nextState.dayTrips = dayTrips;
+      return nextState;
+    })
+    // set the interests?
+    // fetch the rest of the things
   }
+
 
   /***********************
   * DATA FETCH FUNCTIONS
   ************************/
-  /**
-   * 
-   * @returns Activities and Neighborhoods list.
-   * {
-      "activities": ["La Jolla Kayak Tour", "San Diego Zoo Safari Park", "USS Midway Museum"],
-      "neighborhoods": ["La Jolla", "San Pasqual Valley", "Downtown San Diego"]
-      "dayTrips": ["Mt. Rainier", "Snoqualmie Falls"]
-    }
-   */
-  async function fetchMeta(): Promise<string> {
-    if (!cityInput) return;
-
-    console.log(`fetching with inputs  ${cityInput} days: ${tripLength}`)
-
-    const response = await fetch("/api/generateMeta", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ city: cityInput, interests: getInterestsString(), tripLength: tripLength }),
-    });
-    if (!response.ok) {
-      throw new Error(`Request failed with status ${response.statusText}`);
-    }
-
-    const data = response.body;
-    if (!data) {
-      return;
-    }
-    getStreamResponse(data).then((streamResponse: string) => {
-      if (!isJsonString(streamResponse)) return;
-      const json: Meta = JSON.parse(streamResponse);
-
-      setMeta(json);
-      setActivities(json.activities.map((activity: string): Activity => {
-        return {
-          name: activity,
-          short_desc: "",
-          long_desc: "",
-        }
-      }));
-
-      setNeighborhoods(json.neighborhoods.map((neighborhood: string): Neighborhood => {
-        return {
-          name: neighborhood,
-          walking_tour: [{} as WalkingTourStep],
-          image: {} as Photo
-        }
-      }));
-
-      setDayTrips(json.dayTrips.map((dayTrip: string): DayTrip => {
-        return {
-          name: dayTrip,
-          short_desc: "",
-          long_desc: "",
-          food: { name: "", desc: "" },
-          image: {} as Photo
-        }
-      }))
-
-      setCityInput(""); // clear it so it rerenders don't refetch activities.
-    });
-  }
-
-  async function fetchWhereToStay(): Promise<string> {
-    if (!cityInput) return;
-    const response = await fetch("/api/generateWhereToStay", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ city: cityInput }),
-    });
-    if (!response.ok) {
-      throw new Error(`Request failed with status ${response.statusText}`);
-    }
-
-    const data = response.body;
-    if (!data) {
-      return;
-    }
-    getStreamResponse(data, setWhereToStay);
-  }
-
-  async function fetchWhatToEat(): Promise<string> {
-    if (!cityInput) return;
-    const response = await fetch("/api/generateWhatToEat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ city: cityInput }),
-    });
-    if (!response.ok) {
-      throw new Error(`Request failed with status ${response.statusText}`);
-    }
-
-    const data = response.body;
-    if (!data) {
-      return;
-    }
-    getStreamResponse(data, setWhatToEat);
-  }
-
-  async function fetchTravelDay(): Promise<string> {
-    if (!cityInput) return;
-    const response = await fetch("/api/generateTravelDay", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ city: cityInput }),
-    });
-    if (!response.ok) {
-      throw new Error(`Request failed with status ${response.statusText}`);
-    }
-
-    const data = response.body;
-    if (!data) {
-      return;
-    }
-    getStreamResponse(data, setTravelTips);
-  }
 
   function fetchFoods(): void {
     for (let i: number = 0; i < neighborhoods.length; i++) {
       fetchFood(neighborhoods[i], i)
     }
   }
-
   /**
-   * 
-   * @param {*} neighborhood 
-   * @param {*} index 
-   * @returns 
-   *   food: {
-      "lunch": {"name": "Pike Place Chowder", "desc": "Indulge in delicious and hearty chowders featuring fresh local ingredients."},
-      "dinner": {"name": "Matt's in the Market", "desc": "Enjoy seasonal and locally sourced dishes in a cozy setting above Pike Place Market."}
-  }
-   */
+ * 
+ * @param {*} neighborhood 
+ * @param {*} index 
+ * @returns 
+ *   food: {
+    "lunch": {"name": "Pike Place Chowder", "desc": "Indulge in delicious and hearty chowders featuring fresh local ingredients."},
+    "dinner": {"name": "Matt's in the Market", "desc": "Enjoy seasonal and locally sourced dishes in a cozy setting above Pike Place Market."}
+}
+ */
 
   async function fetchFood(location: Neighborhood, index: number): Promise<string> {
     setLoading((prev: LoadingState): LoadingState => ({
@@ -469,6 +318,9 @@ export default function Home(): ReactElement {
     });
   }
 
+  /***********************
+  * Initialization
+  ************************/
   function initializeItineraryStates(): void {
     const initActivities: Activity[] = Array.from({ length: tripLength }, () => ({
       name: "",
@@ -500,55 +352,12 @@ export default function Home(): ReactElement {
     setFood(initFood);
   }
 
-  /*****************
-  * FORM FUNCTIONS
-  ******************/
-  function onSubmit(event): void {
-    if (showResult) {
-      scrollToRef(itineraryRef);
-    }
-    event.preventDefault();
-    setLoading({
-      days: true,
-      dayTrips: true,
-    });
-    setShowResult(true);
+  // HANDLE THE ROUTER
+  // const router = useRouter()
+  // const id = router.query.id;
 
-    initializeItineraryStates();
-    fetchMeta();
-    fetchTravelDay();
-    fetchWhereToStay();
-    fetchWhatToEat();
-  }
 
-  const handleOnChange = (position) => {
-    const updatedCheckedState = checkedState.map((item, index) =>
-      index === position ? { name: item.name, isChecked: !item.isChecked } : item
-    );
-    setCheckedState(updatedCheckedState)
-  }
-
-  function onModalOpenClick(event) {
-    event.preventDefault();
-    setIsOpen(true);
-  }
-
-  function onModalCloseClick(event) {
-    event.preventDefault();
-    setIsOpen(false);
-  }
-
-  function handleTripLengthChange(event) {
-    const length = parseInt(event.target.value)
-    setTripLength(length);
-    setPlaceholderDays(new Array(length).fill(0))
-  }
-  function handleScrollToSection(id: string) {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  }
+  fetchData();
 
   const dayUnit = tripLength === 1 ? "day" : "days";
   const capitalizedCity = city ? city.split(' ').map((word: string) => word ? word[0].toUpperCase() + word.slice(1).toLowerCase() : '').join(' ') : "";
@@ -556,27 +365,6 @@ export default function Home(): ReactElement {
   return (
     <PageWrapper>
       <div className={styles.index}>
-        <div className={styles.hero}>
-          <CanvasBackground>
-            <div className={styles.form_container}>
-              <img src="/JourneyGenieLogo_thick.png" className={styles.icon} alt={"Trippinspo Logo: dotted line to location marker"} />
-              <h1>Trippin</h1>
-              <h2> The AI Powered Travel Planner </h2>
-              <Form
-                cityInput={cityInput}
-                checkedState={checkedState}
-                interests={DEFAULT_INTERESTS}
-                tripLength={tripLength}
-                onSubmit={onSubmit}
-                handleOnChange={handleOnChange}
-                setCity={setCity}
-                setCityInput={setCityInput}
-                handleTripLengthChange={handleTripLengthChange}
-              />
-            </div>
-          </CanvasBackground>
-        </div>
-
         <div className={isStickyHeader ? (styles.fixedTop) : styles.mainHeader} ref={stickyHeader} id="mainHeader">
           <h4>Trippin</h4>
           <div className={styles.calendar_button_container}>
@@ -603,13 +391,11 @@ export default function Home(): ReactElement {
             {city ? <h3>{tripLength} {dayUnit} in {capitalizedCity}</h3> : ""}
           </div>
 
-          {/* <Loader loading={loading} /> */}
-
           {/* Travel Day */}
-          {showResult && <TravelDay locationName={city} travelTips={travelTips} />}
+          {/* {showResult && <TravelDay locationName={city} travelTips={travelTips} />} */}
 
           {/* TRIP DAYS */}
-          {renderDays()}
+          {/* {renderDays()} */}
 
           {/* DAY TRIPS */}
           <DayTrips
@@ -618,28 +404,26 @@ export default function Home(): ReactElement {
             getInterestsString={getInterestsString}
             setMeta={setMeta}
             setDayTrips={setDayTrips}
-            setLoading={setLoading}
+            setLoading={false}
             meta={meta}
           />
-          {/* WHERE TO STAY */}
-          {showResult && <WhereToStay locationName={city} whereToStay={whereToStay} />}
-
-          {/* WHAT TO EAT*/}
-          {showResult && <WhatToEat locationName={city} whatToEat={whatToEat} />}
 
           {/* SPACER */}
           <div className={styles.bottom_spacer}></div>
 
-          {/* WHAT TO EAT */}
+          {/* MENU */}
           {showResult && <SplitPillMenu
             isButtonDisabled={!showResult}
-            isLoading={loading.dayTrips || loading.days}
+            isLoading={false}
             itineraryData={itineraryData}
             onClick={handleScrollToSection}
           />}
         </div>
-        {isOpen && <TipJarModal onClose={onModalCloseClick} />}
       </div>
     </PageWrapper >
+
   );
+
+
+
 }

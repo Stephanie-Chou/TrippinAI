@@ -1,6 +1,6 @@
 import { Configuration } from "openai";
 import { NextApiRequest, NextApiResponse } from "next";
-import { OpenAIStream, OpenAIStreamPayload} from "./OpenAIStream";
+import { OpenAIStream, OpenAIStreamPayload } from "./OpenAIStream";
 import { Redis } from '@upstash/redis'
 import { getStreamResponse } from "../../utils/getStreamResponse";
 import isJsonString from "../../utils/isJsonString";
@@ -13,14 +13,14 @@ export default async function (req: NextApiRequest, res: NextApiResponse): Promi
   const { location, city } = req.body
   console.log("generate food for ", location);
 
-  
+
   /** Check cache */
   const client = new Redis({
-      url: process.env.UPSTASH_REDIS_REST_URL,
-      token: process.env.UPSTASH_REDIS_REST_TOKEN,
+    url: process.env.UPSTASH_REDIS_REST_URL,
+    token: process.env.UPSTASH_REDIS_REST_TOKEN,
   })
 
-  const key: string = `food:location:city:${city.toLowerCase()}:${location.toLowerCase()}`;  
+  const key: string = `food:location:${location.toLowerCase()}:city:${city.toLowerCase()}`;
   const cached = await client.get(key);
 
   if (cached) {
@@ -64,11 +64,11 @@ export default async function (req: NextApiRequest, res: NextApiResponse): Promi
   const stream = await OpenAIStream(payload);
   let response = new Response(
     stream, {
-      headers: new Headers({
-        // 'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache',
-      })
-    }
+    headers: new Headers({
+      // 'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+    })
+  }
   );
 
   const data = response.body;
@@ -78,19 +78,19 @@ export default async function (req: NextApiRequest, res: NextApiResponse): Promi
   }
 
   return getStreamResponse(data).then((streamResponse: string) => {
-    console.log('CACHE MISS', JSON.stringify({result: streamResponse}))
+    console.log('CACHE MISS', JSON.stringify({ result: streamResponse }))
 
     if (isJsonString(streamResponse)) {
-      client.set(key, JSON.stringify({result: streamResponse}));
-      return res.status(200).json(JSON.stringify({result: streamResponse}));
+      client.set(key, JSON.stringify({ result: streamResponse }));
+      return res.status(200).json(JSON.stringify({ result: streamResponse }));
     }
-    return res.status(500).json(JSON.stringify({error: "Invalid JSON returned"}));
+    return res.status(500).json(JSON.stringify({ error: "Invalid JSON returned" }));
   });
 }
 
 function generateFoodPrompt(location: string, city: string) {
 
-    return `Given a location, recommend a regional specialty or commonly found food with a description. pick a recommendation for lunch and one for dinner. Should return valid JSON.
+  return `Given a location, recommend a regional specialty or commonly found food with a description. pick a recommendation for lunch and one for dinner. Should return valid JSON.
 
     location: Pike Place Market Seattle
     food: {

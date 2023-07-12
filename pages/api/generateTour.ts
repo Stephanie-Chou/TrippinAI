@@ -22,6 +22,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse): Promi
   const key: string = `walkingTour:neighborhood:${neighborhood.toLowerCase()}:city:${city.toLowerCase()}:interests:${interests}`;
   const cached = await client.get(key);
 
+
   if (cached) {
     console.log('CACHE HIT', JSON.stringify(cached));
     res.status(200).json(JSON.stringify(cached));
