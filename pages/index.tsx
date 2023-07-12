@@ -254,7 +254,7 @@ export default function Home(): ReactElement {
         }
       }))
 
-      setCityInput(""); // clear it so it rerenders don't refetch activities.
+      setCityInput(""); // clear it so rerenders don't refetch activities.
     });
   }
 
@@ -470,6 +470,7 @@ export default function Home(): ReactElement {
   }
 
   function initializeItineraryStates(): void {
+    console.log("initialize itinerary states");
     const initActivities: Activity[] = Array.from({ length: tripLength }, () => ({
       name: "",
       short_desc: "",
@@ -539,6 +540,7 @@ export default function Home(): ReactElement {
   }
 
   function handleTripLengthChange(event) {
+    console.log('trip length change')
     const length = parseInt(event.target.value)
     setTripLength(length);
     setPlaceholderDays(new Array(length).fill(0))
