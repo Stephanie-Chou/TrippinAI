@@ -6,7 +6,6 @@ import styles from "./index.module.css";
 import { getStreamResponse } from "../utils/getStreamResponse";
 import isJsonString from "../utils/isJsonString";
 import fetchImage from "../utils/fetchImage";
-import * as stub from "../utils/stubData"
 import { DAY_IDS, DEFAULT_INTERESTS, INIT_TRIP_LENGTH, TRAVEL_DAY_ID } from "../utils/constants";
 import {
   Activity,
