@@ -150,7 +150,7 @@ export default function DayTrips({
         key={index}
         id={DAY_TRIP_IDS[index]}
       >
-        <h3>{trip.name}</h3>
+        <h3>{trip.name} <button className={styles.retryButton} onClick={() => retry(index)}><span className="material-symbols-outlined">autorenew</span></button></h3>
         <div>{trip.long_desc}</div>
         <table>
           <tbody>
@@ -172,8 +172,6 @@ export default function DayTrips({
             </tr>
           </tbody>
         </table>
-
-        <button className={styles.retryButton} onClick={() => retry(index)}>Regenerate</button>
 
         {urls ? <img className={styles.image} src={urls.regular} /> : null}
         <a
