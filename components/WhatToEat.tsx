@@ -5,7 +5,7 @@ import styles from "./day.module.css";
 import { ReactElement } from "react";
 
 export default function WhatToEat({ locationName, whatToEat }): ReactElement {
-  const subheader: string = "Where to Stay";
+  const subheader: string = "What to Eat";
 
   return (
     <>
