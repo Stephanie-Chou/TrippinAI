@@ -14,6 +14,7 @@
 /pages/cache.js
 /pages/pdf_test.js
 /utils/stubData.ts
+/api/redis_test.ts
 
 # next.js
 /.next/

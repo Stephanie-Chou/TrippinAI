@@ -5,11 +5,11 @@ import styles from "./day.module.css";
 import { ReactElement } from "react";
 
 export default function WhatToEat({ locationName, whatToEat }): ReactElement {
-  const subheader: string = "Where to Stay";
+  const subheader: string = "What to Eat";
 
   return (
     <>
-      <Page
+      {whatToEat && <Page
         header={locationName}
         subheader={subheader}
         id={WHAT_TO_EAT_ID}
@@ -19,7 +19,7 @@ export default function WhatToEat({ locationName, whatToEat }): ReactElement {
           className={styles.day_description}
           dangerouslySetInnerHTML={{ __html: whatToEat }}
         />
-      </Page>
+      </Page>}
     </>
   );
 }

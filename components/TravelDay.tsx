@@ -9,7 +9,7 @@ export default function TravelDay({ locationName, travelTips }): ReactElement {
   const markup = { __html: travelTips };
   return (
     <>
-      <Page
+      {travelTips && <Page
         header={locationName}
         subheader={subheader}
         id={TRAVEL_DAY_ID}
@@ -18,7 +18,7 @@ export default function TravelDay({ locationName, travelTips }): ReactElement {
           className={styles.day_description}
           dangerouslySetInnerHTML={markup}
         />
-      </Page>
+      </Page>}
     </>
   );
 }
