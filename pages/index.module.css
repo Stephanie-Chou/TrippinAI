@@ -154,3 +154,9 @@
 .bottom_spacer {
   height: 64px;
 }
+
+
+.stickyBottom {
+  position: sticky;
+  bottom: 24px;
+}

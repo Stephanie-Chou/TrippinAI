@@ -6,6 +6,12 @@ export enum DownloadButtonStatus {
   ERROR,
 }
 
+export enum SaveStatus {
+  READY,
+  IN_PROGRESS,
+  ERROR,
+}
+
 export const DAY_IDS: Array<string> = ["DayOne", "DayTwo", "DayThree", "DayFour", "DayFive"];
 export const DAY_TRIP_IDS: Array<string> = ["DayTripOne", "DayTripTwo"];
 export const TRAVEL_DAY_ID: string = "TravelDay";

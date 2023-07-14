@@ -15,6 +15,7 @@ import styles from "./index.module.css";
 import { Redis } from '@upstash/redis'
 import Days from '../components/Days';
 import TripsSplash from '../components/TripsSplash';
+import Loader from '../components/Loader';
 
 export async function getServerSideProps({ query }) {
   console.log('query', query);
@@ -86,6 +87,8 @@ export default function Trips({ data }) {
     days: false,
     dayTrips: false,
   });
+
+
 
   const stickyHeader: RefObject<HTMLInputElement> = useRef<HTMLInputElement>();
   const itineraryRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null)
@@ -217,13 +220,13 @@ export default function Trips({ data }) {
           {/* SPACER */}
           <div className={styles.bottom_spacer}></div>
 
-          {/* MENU */}
-          <SplitPillMenu
+          {showResult && <SplitPillMenu
             isButtonDisabled={!showResult}
-            isLoading={false}
+            isLoading={loading.dayTrips || loading.days}
             itineraryData={itineraryData}
             onClick={handleScrollToSection}
-          />
+            showShare={false}
+          />}
         </div>
       </div>}
     </PageWrapper >

@@ -1,10 +1,9 @@
 import { useState, useEffect, useRef, useLayoutEffect, ReactElement, RefObject } from "react";
-import { useRouter } from 'next/router';
 
 import styles from "./index.module.css";
 import { getStreamResponse } from "../utils/getStreamResponse";
 import isJsonString from "../utils/isJsonString";
-import { DAY_IDS, DEFAULT_INTERESTS, INIT_TRIP_LENGTH, TRAVEL_DAY_ID } from "../utils/constants";
+import { DAY_IDS, DEFAULT_INTERESTS, INIT_TRIP_LENGTH, SaveStatus, TRAVEL_DAY_ID } from "../utils/constants";
 import {
   Activity,
   DayTrip,
@@ -27,11 +26,8 @@ import WhatToEat from "../components/WhatToEat";
 import CanvasBackground from "../components/CanvasBackground";
 import PageWrapper from "../components/PageWrapper";
 import Days from "../components/Days";
-import { stringify } from "querystring";
 
 export default function Home(): ReactElement {
-  const router = useRouter();
-
   // Modal State
   const [isOpen, setIsOpen] = useState(false);
   const [isStickyHeader, setIsStickyHeader] = useState(false);
@@ -71,6 +67,7 @@ export default function Home(): ReactElement {
     days: false,
     dayTrips: false,
   });
+
 
   const stickyHeader: RefObject<HTMLInputElement> = useRef<HTMLInputElement>();
   const itineraryRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null)
@@ -324,40 +321,19 @@ export default function Home(): ReactElement {
     }
   }
 
-  async function handleOnShare(event) {
-    event.preventDefault();
-    // create the trip id
-    // save the trip data
-    const data = {
-      tripLocation: city,
-      tripLength: tripLength,
-      meta: meta,
-      travelTips: travelTips,
-      whereToStay: whereToStay,
-      whatToEat: whatToEat,
-      activities: activities,
-      foods: foods,
-      neighborhoods: neighborhoods,
-    };
-    const response = await fetch("/api/redis", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ data: JSON.stringify(data), city: city })
-    });
-
-    const dataResponse = await response.json();
-    const jsonResponse = JSON.parse(dataResponse);
-    const humanReadableDate = new Date(jsonResponse.expire_at)
-    console.log(humanReadableDate, jsonResponse.uuid);
-
-    router.push(`/trips?id=${jsonResponse.uuid}`);
-  }
-
   const dayUnit = tripLength === 1 ? "day" : "days";
   const capitalizedCity = city ? city.split(' ').map((word: string) => word ? word[0].toUpperCase() + word.slice(1).toLowerCase() : '').join(' ') : "";
-  const itineraryData = { city, neighborhoods, activities, foods, dayTrips };
+  const itineraryData = {
+    tripLocation: city,
+    tripLength: tripLength,
+    meta: meta,
+    travelTips: travelTips,
+    whereToStay: whereToStay,
+    whatToEat: whatToEat,
+    activities: activities,
+    foods: foods,
+    neighborhoods: neighborhoods,
+  }
   return (
     <PageWrapper>
       <div className={styles.index}>
@@ -407,10 +383,7 @@ export default function Home(): ReactElement {
           <div className={styles.plan_title}>
             {city ? <h3>{tripLength} {dayUnit} in {capitalizedCity}</h3> : ""}
           </div>
-          <button onClick={handleOnShare}>Share</button>
 
-
-          {/* <Loader loading={loading} /> */}
 
           {/* Travel Day */}
           {showResult && <TravelDay locationName={city} travelTips={travelTips} />}
@@ -449,12 +422,14 @@ export default function Home(): ReactElement {
 
           {/* SPACER */}
           <div className={styles.bottom_spacer}></div>
-          {/* WHAT TO EAT */}
+
+          {/* MENU */}
           {showResult && <SplitPillMenu
             isButtonDisabled={!showResult}
             isLoading={loading.dayTrips || loading.days}
             itineraryData={itineraryData}
             onClick={handleScrollToSection}
+            showShare={false}
           />}
         </div>
         {isOpen && <TipJarModal onClose={onModalCloseClick} />}

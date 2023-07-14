@@ -3,7 +3,7 @@ import { DownloadButtonStatus } from "../utils/constants";
 import styles from "./splitpillmenu.module.css";
 
 export default function DownloadButton({ itineraryData, isLoading }) {
-  const { city, neighborhoods, activities, foods, dayTrips } = itineraryData;
+  const { tripLocation, neighborhoods, activities, foods, dayTrips } = itineraryData;
   const [downloadButtonState, setDownloadButtonState] = useState(DownloadButtonStatus.READY);
   const [isDownloadButtonDisabled, setIsDownloadButtonDisabled] = useState(false);
 
@@ -12,7 +12,7 @@ export default function DownloadButton({ itineraryData, isLoading }) {
   function getDownloadButtonContent(downloadState): ReactElement {
     switch (downloadState) {
       case DownloadButtonStatus.READY:
-        return <div><span className="material-symbols-outlined ">download</span><span className="material-symbols-outlined">picture_as_pdf</span></div>
+        return <div><span className="material-symbols-outlined">picture_as_pdf</span></div>
       case DownloadButtonStatus.IN_PROGRESS:
         return <div className={styles.downloading}><span className="material-symbols-outlined">downloading</span></div>;
       case DownloadButtonStatus.ERROR:
@@ -26,7 +26,7 @@ export default function DownloadButton({ itineraryData, isLoading }) {
     setIsDownloadButtonDisabled(true)
     event.preventDefault();
 
-    if (!city) {
+    if (!tripLocation) {
       return;
     };
 
@@ -38,7 +38,7 @@ export default function DownloadButton({ itineraryData, isLoading }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          city: '',
+          city: tripLocation,
           neighborhoods: neighborhoods,
           activities: activities,
           foods: foods,
