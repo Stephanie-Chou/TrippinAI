@@ -173,7 +173,7 @@ export default function DayTrips({
           </tbody>
         </table>
 
-        <button className={styles.retryButton} onClick={() => retry(index)}>Regenerate</button>
+        <button className={styles.retryButton} onClick={() => retry(index)}><span className="material-symbols-outlined">autorenew</span></button>
 
         {urls ? <img className={styles.image} src={urls.regular} /> : null}
         <a

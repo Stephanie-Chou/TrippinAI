@@ -36,7 +36,7 @@ export default function Day({
         id={DAY_IDS[index]}
       >
         <h3>{activity.name}</h3>
-        <h4>In the {neighborhood.name} Neighborhood</h4>
+        <h4>{neighborhood.name}</h4>
         <div className={styles.day_description}>{activity.long_desc}</div>
         <Itinerary
           activity={activity}
@@ -44,7 +44,7 @@ export default function Day({
           neighborhood={neighborhood}
         />
 
-        <button className={styles.retryButton} onClick={() => retry(index)}>Regenerate</button>
+        <button className={styles.retryButton} onClick={() => retry(index)}><span className="material-symbols-outlined">autorenew</span></button>
 
         <h3>Where to go in {neighborhood.name}</h3>
         {renderWalkingTourLong(walking_tour)}
