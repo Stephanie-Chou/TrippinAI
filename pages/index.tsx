@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useLayoutEffect, ReactElement, RefObject } from "react";
+import { useRouter } from 'next/router';
 
 import styles from "./index.module.css";
 import { getStreamResponse } from "../utils/getStreamResponse";
@@ -29,6 +30,7 @@ import Days from "../components/Days";
 import { stringify } from "querystring";
 
 export default function Home(): ReactElement {
+  const router = useRouter();
 
   // Modal State
   const [isOpen, setIsOpen] = useState(false);
@@ -346,9 +348,11 @@ export default function Home(): ReactElement {
     });
 
     const dataResponse = await response.json();
-    const humanReadableDate = new Date(dataResponse.expire_at).getDate()
-    console.log(humanReadableDate, dataResponse.uuid);
+    const jsonResponse = JSON.parse(dataResponse);
+    const humanReadableDate = new Date(jsonResponse.expire_at)
+    console.log(humanReadableDate, jsonResponse.uuid);
 
+    router.push(`/trips?id=${jsonResponse.uuid}`);
   }
 
   const dayUnit = tripLength === 1 ? "day" : "days";
@@ -403,6 +407,8 @@ export default function Home(): ReactElement {
           <div className={styles.plan_title}>
             {city ? <h3>{tripLength} {dayUnit} in {capitalizedCity}</h3> : ""}
           </div>
+          <button onClick={handleOnShare}>Share</button>
+
 
           {/* <Loader loading={loading} /> */}
 
@@ -443,7 +449,6 @@ export default function Home(): ReactElement {
 
           {/* SPACER */}
           <div className={styles.bottom_spacer}></div>
-          <button onClick={handleOnShare}>Share</button>
           {/* WHAT TO EAT */}
           {showResult && <SplitPillMenu
             isButtonDisabled={!showResult}
