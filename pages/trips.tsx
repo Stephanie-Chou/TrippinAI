@@ -170,7 +170,7 @@ export default function Trips({ data }) {
       {!showResult && <TripsSplash />}
       {showResult && <div className={styles.index}>
         {!pageLoading && <div className={isStickyHeader ? (styles.fixedTop) : styles.mainHeader} ref={stickyHeader} id="mainHeader">
-          <h4>Trippin</h4>
+          <a href="/"><h4>Trippin</h4></a>
           <div className={styles.calendar_button_container}>
             <TravelDayButton onClick={(e) => {
               e.preventDefault();
