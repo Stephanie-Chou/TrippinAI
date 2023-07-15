@@ -4,7 +4,7 @@ import { ReactElement } from "react";
 export default function CalendarButton({ index, onClick }): ReactElement {
 
   return (
-    <div>
+    <div key={index}>
       <button className={styles.button_container} onClick={onClick}>
         <div className={styles.calendar_button}>
           <div className={styles.day_tag}>DAY</div>

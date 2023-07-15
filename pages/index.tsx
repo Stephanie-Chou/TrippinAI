@@ -68,6 +68,8 @@ export default function Home(): ReactElement {
     dayTrips: false,
   });
 
+  const [pageLoading, setPageLoading] = useState(false);
+  const [pageLoadingText, setPageLoadingText] = useState('');
 
   const stickyHeader: RefObject<HTMLInputElement> = useRef<HTMLInputElement>();
   const itineraryRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null)
@@ -333,9 +335,12 @@ export default function Home(): ReactElement {
     activities: activities,
     foods: foods,
     neighborhoods: neighborhoods,
+    dayTrips: dayTrips
   }
   return (
-    <PageWrapper>
+    <PageWrapper
+      isPageLoading={pageLoading}
+      pageLoadingText={pageLoadingText}>
       <div className={styles.index}>
         <div className={styles.hero}>
           <CanvasBackground>
@@ -426,7 +431,8 @@ export default function Home(): ReactElement {
           {/* MENU */}
           {showResult && <SplitPillMenu
             isButtonDisabled={!showResult}
-            isLoading={loading.dayTrips || loading.days}
+            setPageLoading={setPageLoading}
+            setPageLoadingText={setPageLoadingText}
             itineraryData={itineraryData}
             onClick={handleScrollToSection}
             showShare={false}

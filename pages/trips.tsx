@@ -15,7 +15,7 @@ import styles from "./index.module.css";
 import { Redis } from '@upstash/redis'
 import Days from '../components/Days';
 import TripsSplash from '../components/TripsSplash';
-import Loader from '../components/Loader';
+import TipJarModal from '../components/TipJarModal';
 
 export async function getServerSideProps({ query }) {
   console.log('query', query);
@@ -88,7 +88,8 @@ export default function Trips({ data }) {
     dayTrips: false,
   });
 
-
+  const [pageLoading, setPageLoading] = useState(false);
+  const [pageLoadingText, setPageLoadingText] = useState('Please Wait ..');
 
   const stickyHeader: RefObject<HTMLInputElement> = useRef<HTMLInputElement>();
   const itineraryRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null)
@@ -150,12 +151,25 @@ export default function Trips({ data }) {
 
   const dayUnit = tripLength === 1 ? "day" : "days";
   const capitalizedCity = city ? city.split(' ').map((word: string) => word ? word[0].toUpperCase() + word.slice(1).toLowerCase() : '').join(' ') : "";
-  const itineraryData = { city, neighborhoods, activities, foods, dayTrips };
+  const itineraryData = {
+    tripLocation: city,
+    tripLength: tripLength,
+    meta: meta,
+    travelTips: travelTips,
+    whereToStay: whereToStay,
+    whatToEat: whatToEat,
+    activities: activities,
+    foods: foods,
+    neighborhoods: neighborhoods,
+    dayTrips: dayTrips
+  }
   return (
-    <PageWrapper>
+    <PageWrapper
+      isPageLoading={pageLoading}
+      pageLoadingText={pageLoadingText}>
       {!showResult && <TripsSplash />}
       {showResult && <div className={styles.index}>
-        <div className={isStickyHeader ? (styles.fixedTop) : styles.mainHeader} ref={stickyHeader} id="mainHeader">
+        {!pageLoading && <div className={isStickyHeader ? (styles.fixedTop) : styles.mainHeader} ref={stickyHeader} id="mainHeader">
           <h4>Trippin</h4>
           <div className={styles.calendar_button_container}>
             <TravelDayButton onClick={(e) => {
@@ -175,7 +189,7 @@ export default function Trips({ data }) {
               <img src="/tipjar.png" />
             </button>
           </div>
-        </div>
+        </div>}
         <div className={styles.result} ref={itineraryRef}>
           <div className={styles.plan_title}>
             {city ? <h3>{tripLength} {dayUnit} in {capitalizedCity}</h3> : ""}
@@ -222,14 +236,15 @@ export default function Trips({ data }) {
 
           {showResult && <SplitPillMenu
             isButtonDisabled={!showResult}
-            isLoading={loading.dayTrips || loading.days}
+            setPageLoading={setPageLoading}
+            setPageLoadingText={setPageLoadingText}
             itineraryData={itineraryData}
             onClick={handleScrollToSection}
             showShare={false}
           />}
         </div>
+        {isOpen && <TipJarModal onClose={onModalCloseClick} />}
       </div>}
     </PageWrapper >
-
   );
 }

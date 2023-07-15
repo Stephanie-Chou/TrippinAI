@@ -2,8 +2,9 @@ import Head from "next/head";
 
 import { ReactElement } from "react";
 import styles from "./pagewrapper.module.css";
+import Loader from "./Loader";
 
-export default function PageWrapper({ children }): ReactElement {
+export default function PageWrapper({ children, isPageLoading, pageLoadingText }): ReactElement {
   return (
     <div>
       <Head>
@@ -15,8 +16,12 @@ export default function PageWrapper({ children }): ReactElement {
         <meta name="_foundr" content="f785866cc563749ca77fcae47d19fb96"></meta>
       </Head>
       <main className={styles.main}>
+        {isPageLoading && <div className={styles.overlay}>
+          <Loader
+            isLoading={isPageLoading}
+            text={pageLoadingText} />
+        </div>}
         {children}
-
       </main>
       <footer className={styles.footer}>
         <div>Trippin Created by SugarJie Studios</div>

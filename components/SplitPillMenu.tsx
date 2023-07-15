@@ -6,7 +6,8 @@ import { ReactElement } from "react";
 
 export default function SplitPillMenu({
   isButtonDisabled,
-  isLoading,
+  setPageLoading,
+  setPageLoadingText,
   itineraryData,
   onClick,
   showShare }): ReactElement {
@@ -21,9 +22,9 @@ export default function SplitPillMenu({
       <div className={styles.divider}></div>
       <button disabled={isButtonDisabled} onClick={() => onClick(WHAT_TO_EAT_ID)}><span className="material-symbols-outlined">restaurant</span></button>
       <div className={styles.divider}></div>
-      <DownloadButton itineraryData={itineraryData} isLoading={isLoading} />
+      <DownloadButton data={itineraryData} setPageLoading={setPageLoading} setPageLoadingText={setPageLoadingText} />
       {showShare && <div className={styles.divider}></div>}
-      {showShare && <SaveButton data={itineraryData} />}
+      {showShare && <SaveButton data={itineraryData} setPageLoading={setPageLoading} setPageLoadingText={setPageLoadingText} />}
     </div>
   );
 }
