@@ -1,10 +1,9 @@
 import Head from "next/head";
-
 import { ReactElement } from "react";
 import styles from "./pagewrapper.module.css";
 import Loader from "./Loader";
 
-export default function PageWrapper({ children, isPageLoading, pageLoadingText }): ReactElement {
+export default function PageWrapper({ isPageLoading = false, pageLoadingText = "", children }): ReactElement {
   return (
     <div>
       <Head>
