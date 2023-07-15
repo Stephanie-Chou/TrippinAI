@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect, useLayoutEffect, RefObject, ReactElement } from 'react';
+import { useState, useRef, useEffect, RefObject } from 'react';
 import { Photo } from "../utils/types";
-import { DAY_IDS, DEFAULT_INTERESTS, INIT_TRIP_LENGTH, TRAVEL_DAY_ID } from "../utils/constants";
+import { DAY_IDS, DEFAULT_INTERESTS, TRAVEL_DAY_ID } from "../utils/constants";
 
 import DayTrips from "../components/DayTrips";
 import TravelDay from "../components/TravelDay";
@@ -18,7 +18,6 @@ import TripsSplash from '../components/TripsSplash';
 import TipJarModal from '../components/TipJarModal';
 
 export async function getServerSideProps({ query }) {
-  console.log('query', query);
   // Fetch data from external API
   const client = new Redis({
     url: process.env.UPSTASH_REDIS_REST_URL,
@@ -48,6 +47,8 @@ export async function getServerSideProps({ query }) {
   if (cache_res) {
     data = cache_res;
   }
+
+  console.log(data);
   return { props: { data } }
 }
 
@@ -225,7 +226,8 @@ export default function Trips({ data }) {
             setPageLoadingText={setPageLoadingText}
             itineraryData={itineraryData}
             onClick={handleScrollToSection}
-            showShare={false}
+            showSave={false}
+            showShare={true}
           />}
         </div>
         {isOpen && <TipJarModal onClose={onModalCloseClick} />}

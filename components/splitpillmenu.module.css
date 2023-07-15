@@ -1,6 +1,10 @@
-.menu {
+.menu_container {
   position: sticky;
   bottom: 24px;
+  text-align: center;
+}
+
+.menu {
   background: #fff;
   display: flex;
   flex-direction: row;
@@ -13,6 +17,26 @@
   max-width: 100%;
   width: fit-content;
   margin: auto;
+}
+
+.alert {
+  background: #D99146;
+  opacity: .9;
+  color: white;
+  padding: 12px;
+  animation: fadeInAnimation ease 1s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeInAnimation {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: .9;
+  }
 }
 
 .menu::-webkit-scrollbar {
@@ -41,7 +65,7 @@
 }
 
 .menu button:active:enabled {
-  color: #ffc285;
+  color: #D99146;
 }
 
 .menu .downloading {

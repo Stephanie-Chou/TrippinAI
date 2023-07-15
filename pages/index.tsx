@@ -429,12 +429,13 @@ export default function Home(): ReactElement {
           <div className={styles.bottom_spacer}></div>
 
           {/* MENU */}
-          {showResult && <SplitPillMenu
+          {showResult && < SplitPillMenu
             isButtonDisabled={!showResult}
             setPageLoading={setPageLoading}
             setPageLoadingText={setPageLoadingText}
             itineraryData={itineraryData}
             onClick={handleScrollToSection}
+            showSave={true}
             showShare={false}
           />}
         </div>
