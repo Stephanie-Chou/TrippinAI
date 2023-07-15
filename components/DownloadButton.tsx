@@ -32,43 +32,42 @@ export default function DownloadButton({ data, setPageLoading, setPageLoadingTex
     setIsButtonDisabled(true)
     setDownloadButtonState(DownloadButtonStatus.IN_PROGRESS);
     try {
-      // const response = await fetch("/api/createPDF", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     city: tripLocation,
-      //     neighborhoods: neighborhoods,
-      //     activities: activities,
-      //     foods: foods,
-      //     dayTrips: dayTrips
-      //   })
-      // });
+      const response = await fetch("/api/createPDF", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          city: tripLocation,
+          neighborhoods: neighborhoods,
+          activities: activities,
+          foods: foods,
+          dayTrips: dayTrips
+        })
+      });
 
-      // const responseData = await response.json();
-      // if (response.status !== 200) {
-      //   throw responseData.error || new Error(`Request failed with status ${response.status}`);
-      // }
-      // let arr = new Uint8Array(responseData.result.data);
-      // let buffer = arr.buffer
+      const responseData = await response.json();
+      if (response.status !== 200) {
+        throw responseData.error || new Error(`Request failed with status ${response.status}`);
+      }
+      let arr = new Uint8Array(responseData.result.data);
+      let buffer = arr.buffer
 
-      // let blob = new Blob([buffer], { type: "application/pdf" });
-      // const href = URL.createObjectURL(blob);
+      let blob = new Blob([buffer], { type: "application/pdf" });
+      const href = URL.createObjectURL(blob);
 
-      // // Creating new object of PDF file
-      // // Setting various property values
-      // let alink = document.createElement('a');
-      // document.body.appendChild(alink); // Required for this to work in FireFox
-      // alink.href = href;
-      // alink.download = "Trippin_Itinerary.pdf"
-      // alink.target = "_blank";
-      // alink.click();
-      await delay(4000)
+      // Creating new object of PDF file
+      // Setting various property values
+      let alink = document.createElement('a');
+      document.body.appendChild(alink); // Required for this to work in FireFox
+      alink.href = href;
+      alink.download = "Trippin_Itinerary.pdf"
+      alink.target = "_blank";
+      alink.click();
       setPageLoadingText('PDF Downloaded Success');
       setDownloadButtonState(DownloadButtonStatus.READY);
 
-      await delay(2000)
+      await delay(1000)
       setIsButtonDisabled(false)
       setPageLoading(false);
     } catch (error) {

@@ -70,14 +70,15 @@
 }
 
 /* result  */
-.result {
+.index .result {
   font-weight: thin;
-  margin-top: 40px;
+  margin-top: 44px;
   margin: auto;
 }
 
 .result .plan_title {
   text-align: center;
+  margin-top: 120px;
 }
 
 .hero {

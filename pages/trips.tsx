@@ -54,7 +54,6 @@ export async function getServerSideProps({ query }) {
 export default function Trips({ data }) {
   // Modal State
   const [isOpen, setIsOpen] = useState(false);
-  const [isStickyHeader, setIsStickyHeader] = useState(false);
 
   //Form State
   const [city, setCity] = useState(data.tripLocation);
@@ -91,7 +90,7 @@ export default function Trips({ data }) {
   const [pageLoading, setPageLoading] = useState(false);
   const [pageLoadingText, setPageLoadingText] = useState('Please Wait ..');
 
-  const stickyHeader: RefObject<HTMLInputElement> = useRef<HTMLInputElement>();
+
   const itineraryRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null)
 
   /***********************
@@ -105,20 +104,6 @@ export default function Trips({ data }) {
     if (!ref.current) return;
     ref.current.scrollIntoView({ behavior: 'smooth' });
   }
-
-  useLayoutEffect(() => {
-    if (!stickyHeader.current) return;
-
-    let fixedTop = stickyHeader.current.offsetTop
-    const fixedHeader = () => {
-      if (window.pageYOffset > fixedTop) {
-        setIsStickyHeader(true);
-      } else {
-        setIsStickyHeader(false);
-      }
-    }
-    window.addEventListener('scroll', fixedHeader)
-  }, [])
 
   function getInterestsString(): string {
     const selectedInterests = checkedState.map((item) => item.isChecked ? item.name : "").filter((n) => n).join()
@@ -169,7 +154,7 @@ export default function Trips({ data }) {
       pageLoadingText={pageLoadingText}>
       {!showResult && <TripsSplash />}
       {showResult && <div className={styles.index}>
-        {!pageLoading && <div className={isStickyHeader ? (styles.fixedTop) : styles.mainHeader} ref={stickyHeader} id="mainHeader">
+        {!pageLoading && <div className={styles.fixedTop} id="mainHeader">
           <a href="/"><h4>Trippin</h4></a>
           <div className={styles.calendar_button_container}>
             <TravelDayButton onClick={(e) => {

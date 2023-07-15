@@ -36,25 +36,24 @@ export default function SaveButton({ data, setPageLoading, setPageLoadingText })
     setPageLoadingText('Saving your trip ... Get ready to share');
     try {
       event.preventDefault();
-      // const response = await fetch("/api/redis", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({ data: JSON.stringify(data), city: tripLocation })
-      // });
+      const response = await fetch("/api/redis", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ data: JSON.stringify(data), city: tripLocation })
+      });
 
-      // const dataResponse = await response.json();
-      // const jsonResponse = JSON.parse(dataResponse);
-      // const humanReadableDate = new Date(jsonResponse.expire_at)
+      const dataResponse = await response.json();
+      const jsonResponse = JSON.parse(dataResponse);
+      const humanReadableDate = new Date(jsonResponse.expire_at)
 
-      // router.push(`/trips?id=${jsonResponse.uuid}`);
+      router.push(`/trips?id=${jsonResponse.uuid}`);
 
-      await delay(4000)
       setPageLoadingText('Trip Saved Success');
       setSaveState(SaveStatus.READY);
 
-      await delay(2000)
+      await delay(1000)
       setIsButtondisabled(false)
       setPageLoading(false);
     } catch (error) {
