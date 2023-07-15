@@ -6,11 +6,21 @@
   line-height: 1.2;
 }
 
+.index .mainHeader a {
+  color: inherit;
+  text-decoration: none;
+}
+
 .index .fixedTop h4 {
   color: #F9F5F0;
   font-family: 'Unbounded', cursive;
   padding-left: 18px;
   line-height: 1.2;
+}
+
+.index .fixedTop a {
+  color: inherit;
+  text-decoration: none;
 }
 
 .index .fixedTop+.main {
@@ -153,4 +163,10 @@
 
 .bottom_spacer {
   height: 64px;
+}
+
+
+.stickyBottom {
+  position: sticky;
+  bottom: 24px;
 }

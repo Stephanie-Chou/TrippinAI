@@ -1,7 +1,11 @@
 /** loading spinner */
 .loader {
   text-align: center;
-  color: #26A391;
+  color: #f9f5f0;
+}
+
+.loader .icon {
+  width: 140px;
 }
 
 .ldsellipsis {
@@ -17,7 +21,7 @@
   width: 13px;
   height: 13px;
   border-radius: 50%;
-  background: #F74237;
+  background: #f9f5f0;
 
   animation-timing-function: cubic-bezier(0, 1, 1, 0);
 }

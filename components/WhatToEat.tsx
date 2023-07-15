@@ -9,7 +9,7 @@ export default function WhatToEat({ locationName, whatToEat }): ReactElement {
 
   return (
     <>
-      <Page
+      {whatToEat && <Page
         header={locationName}
         subheader={subheader}
         id={WHAT_TO_EAT_ID}
@@ -19,7 +19,7 @@ export default function WhatToEat({ locationName, whatToEat }): ReactElement {
           className={styles.day_description}
           dangerouslySetInnerHTML={{ __html: whatToEat }}
         />
-      </Page>
+      </Page>}
     </>
   );
 }

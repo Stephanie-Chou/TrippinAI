@@ -9,7 +9,7 @@ export default function WhereToStay({ locationName, whereToStay }): ReactElement
 
   return (
     <>
-      <Page
+      {whereToStay && <Page
         header={locationName}
         subheader={subheader}
         id={WHERE_TO_STAY_ID}
@@ -19,7 +19,7 @@ export default function WhereToStay({ locationName, whereToStay }): ReactElement
           className={styles.day_description}
           dangerouslySetInnerHTML={{ __html: whereToStay }}
         />
-      </Page>
+      </Page>}
     </>
   );
 }

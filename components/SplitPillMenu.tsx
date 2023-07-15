@@ -1,3 +1,4 @@
+import SaveButton from "./SaveButton";
 import { DAY_TRIP_IDS, WHERE_TO_STAY_ID, WHAT_TO_EAT_ID, DownloadButtonStatus } from "../utils/constants";
 import DownloadButton from "./DownloadButton";
 import styles from "./splitpillmenu.module.css";
@@ -5,9 +6,11 @@ import { ReactElement } from "react";
 
 export default function SplitPillMenu({
   isButtonDisabled,
-  isLoading,
+  setPageLoading,
+  setPageLoadingText,
   itineraryData,
-  onClick }): ReactElement {
+  onClick,
+  showShare }): ReactElement {
 
   return (
     <div className={styles.menu}>
@@ -19,7 +22,9 @@ export default function SplitPillMenu({
       <div className={styles.divider}></div>
       <button disabled={isButtonDisabled} onClick={() => onClick(WHAT_TO_EAT_ID)}><span className="material-symbols-outlined">restaurant</span></button>
       <div className={styles.divider}></div>
-      <DownloadButton itineraryData={itineraryData} isLoading={isLoading} />
+      <DownloadButton data={itineraryData} setPageLoading={setPageLoading} setPageLoadingText={setPageLoadingText} />
+      {showShare && <div className={styles.divider}></div>}
+      {showShare && <SaveButton data={itineraryData} setPageLoading={setPageLoading} setPageLoadingText={setPageLoadingText} />}
     </div>
   );
 }
