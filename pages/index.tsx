@@ -435,7 +435,7 @@ export default function Home(): ReactElement {
             setPageLoadingText={setPageLoadingText}
             itineraryData={itineraryData}
             onClick={handleScrollToSection}
-            showSave={true}
+            showSave={false}
             showShare={false}
           />}
         </div>
