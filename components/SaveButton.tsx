@@ -40,6 +40,7 @@ export default function SaveButton({ data, setPageLoading, setPageLoadingText, s
       });
 
       const dataResponse = await response.json();
+      console.log(dataResponse);
       return JSON.parse(dataResponse);
     } catch (error) {
       console.error(error);

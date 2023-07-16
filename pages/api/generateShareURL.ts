@@ -1,6 +1,6 @@
 import { Redis } from '@upstash/redis'
 import { NextApiRequest, NextApiResponse } from 'next';
-import { nanoid, customAlphabet } from 'nanoid'
+import { customAlphabet } from 'nanoid'
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   const { city } = req.body;
@@ -19,7 +19,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 
   // expire in a month
   const expire_at = Date.now() + 2592000000;
-  await client.json.set(uuid, '$', '')
+  await client.json.set(uuid, '$', '{}')
   await client.expireat(uuid, expire_at)
 
   res.status(200).json(JSON.stringify({ uuid }));
