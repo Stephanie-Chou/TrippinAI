@@ -9,7 +9,7 @@
 /coverage
 
 # files for development only
-/pages/api/generate.js
+/pages/api/generate.ts
 /pages/api/redis_test.ts
 /pages/test.js
 /pages/cache.js
