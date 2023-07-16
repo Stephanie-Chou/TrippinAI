@@ -435,8 +435,8 @@ export default function Home(): ReactElement {
             setPageLoadingText={setPageLoadingText}
             itineraryData={itineraryData}
             onClick={handleScrollToSection}
-            showSave={false}
-            showShare={true}
+            showSave={true}
+            showShare={false}
           />}
         </div>
         {isOpen && <TipJarModal onClose={onModalCloseClick} />}
