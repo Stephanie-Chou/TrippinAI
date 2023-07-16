@@ -42,6 +42,10 @@
   margin-bottom: 40px;
   margin-left: 32px;
   margin-right: 32px;
+  background-image: url("/coffee.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: inherit;
 }
 
 .divider {
@@ -72,4 +76,16 @@
   justify-content: center;
   margin-top: 0px;
   width: 164px;
+}
+
+.modal .container a {
+  color: #f2f2f2;
+  background-color: #26A391;
+  border: none;
+  border-radius: 54px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 8px;
 }

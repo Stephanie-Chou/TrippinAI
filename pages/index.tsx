@@ -380,7 +380,7 @@ export default function Home(): ReactElement {
 
           <div className={styles.modal}>
             <button onClick={onModalOpenClick}>
-              <img src="/tipjar.png" />
+              <img src="/coffee.svg" />
             </button>
           </div>
         </div>
