@@ -5,7 +5,7 @@
   border-radius: 10px;
   color: #202123;
   height: 50vh;
-  border: 2px solid #ffc285;
+  border: 2px solid #D99146;
   width: clamp(320px, 420px, 85%);
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   position: fixed;
@@ -19,7 +19,7 @@
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   text-align: center;
-  background-color: #ffc285;
+  background-color: #D99146;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -30,7 +30,7 @@
 }
 
 .heading button {
-  background-color: #ffc285;
+  background-color: #D99146;
   border: none;
   color: white;
   padding: 15px 15px;

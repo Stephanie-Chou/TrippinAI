@@ -3,7 +3,7 @@ import { SaveStatus } from "../utils/constants";
 import styles from "./splitpillmenu.module.css";
 import { useRouter } from 'next/router';
 
-export default function SaveButton({ data, setPageLoading, setPageLoadingText }) {
+export default function SaveButton({ data, setPageLoading, setPageLoadingText, setAlert }) {
   const router = useRouter();
 
   const { tripLocation } = data
@@ -26,29 +26,35 @@ export default function SaveButton({ data, setPageLoading, setPageLoadingText })
     }
   }
 
-  async function onSave(event) {
-    console.log('onsave');
-    setIsButtondisabled(true)
-    event.preventDefault();
-
-    setSaveState(SaveStatus.IN_PROGRESS);
-    setPageLoading(true);
-    setPageLoadingText('Saving your trip ... Get ready to share');
+  async function fetchUUID() {
+    if (!tripLocation) {
+      throw new Error('Error: Please Enter a City');
+    }
     try {
-      event.preventDefault();
-      const response = await fetch("/api/redis", {
+      const response = await fetch("/api/generateShareURL", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ data: JSON.stringify(data), city: tripLocation })
+        body: JSON.stringify({ city: tripLocation })
       });
 
       const dataResponse = await response.json();
-      const jsonResponse = JSON.parse(dataResponse);
-      const humanReadableDate = new Date(jsonResponse.expire_at)
+      return JSON.parse(dataResponse);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
-      router.push(`/trips?id=${jsonResponse.uuid}`);
+  async function createShareable(uuid: string) {
+    try {
+      await fetch("/api/redis", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ data: JSON.stringify(data), uuid })
+      });
 
       setPageLoadingText('Trip Saved Success');
       setSaveState(SaveStatus.READY);
@@ -68,9 +74,32 @@ export default function SaveButton({ data, setPageLoading, setPageLoadingText })
       setPageLoading(false);
     }
   }
+  async function onSave(event) {
+    setIsButtondisabled(true)
+    event.preventDefault();
+
+    setSaveState(SaveStatus.IN_PROGRESS);
+    setPageLoading(true);
+    setPageLoadingText('Saving your trip ... Get ready to share');
+    fetchUUID().then((res) => {
+      const humanReadableDate = new Date(res.expire_at)
+      setPageLoadingText(`Your trip will be available at https://www.trippinspo.ai/trips?=${res.uuid}`);
+      createShareable(res.uuid);
+      router.push(`/trips?id=${res.uuid}`);
+    }).catch((error: Error) => {
+      handleError(error.message)
+    })
+  }
+
+  async function handleError(error: string) {
+    setPageLoading(false);
+    setIsButtondisabled(true)
+    setAlert(error);
+    setSaveState(SaveStatus.READY);
+    await delay(3000);
+    setAlert(null);
+  }
 
   let saveButtonContent = getSaveButtonContent(saveState);
-  console.log('save state', saveState);
-
   return (<button onClick={onSave}>{saveButtonContent}</button>)
 }
