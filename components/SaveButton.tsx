@@ -40,6 +40,7 @@ export default function SaveButton({ data, setPageLoading, setPageLoadingText, s
       });
 
       const dataResponse = await response.json();
+      console.log(dataResponse);
       return JSON.parse(dataResponse);
     } catch (error) {
       console.error(error);
@@ -59,7 +60,7 @@ export default function SaveButton({ data, setPageLoading, setPageLoadingText, s
       setPageLoadingText('Trip Saved Success');
       setSaveState(SaveStatus.READY);
 
-      await delay(1000)
+      await delay(2000)
       setIsButtondisabled(false)
       setPageLoading(false);
     } catch (error) {
@@ -68,7 +69,7 @@ export default function SaveButton({ data, setPageLoading, setPageLoadingText, s
       setSaveState(SaveStatus.ERROR);
       setPageLoadingText('Error Saving Trip. Please Try Again');
 
-      await delay(2000)
+      await delay(4000)
       setSaveState(SaveStatus.READY);
       setIsButtondisabled(false)
       setPageLoading(false);

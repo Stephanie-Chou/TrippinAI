@@ -1,9 +1,10 @@
 import { Redis } from '@upstash/redis'
 import { NextApiRequest, NextApiResponse } from 'next';
-import { nanoid, customAlphabet } from 'nanoid'
+import { customAlphabet } from 'nanoid'
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   const { city } = req.body;
+  console.log('generate share url for', city)
   const client = new Redis({
     url: process.env.UPSTASH_REDIS_REST_URL,
     token: process.env.UPSTASH_REDIS_REST_TOKEN,
@@ -18,8 +19,8 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 
   // expire in a month
   const expire_at = Date.now() + 2592000000;
-  client.json.set(uuid, '$', '')
-  client.expireat(uuid, expire_at)
+  await client.json.set(uuid, '$', '{}')
+  await client.expireat(uuid, expire_at)
 
   res.status(200).json(JSON.stringify({ uuid }));
 }
