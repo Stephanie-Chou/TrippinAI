@@ -9,7 +9,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     token: process.env.UPSTASH_REDIS_REST_TOKEN,
   })
 
-  client.json.set(uuid, '$', data)
+  await client.json.set(uuid, '$', data)
 
   res.status(200);
 }
