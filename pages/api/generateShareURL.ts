@@ -9,7 +9,6 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     token: process.env.UPSTASH_REDIS_REST_TOKEN,
   })
 
-
   const capitalizedCity = city ? city.split(' ').map((word: string) => word ? word[0].toUpperCase() + word.slice(1).toLowerCase() : '').join('') : "";
 
   const nanoid = customAlphabet('1234567890abcdefghijklmnopqrztuvwxyzABCDEFGHIJKLMNOPQRZTUVWXYZ', 10)

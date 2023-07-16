@@ -26,7 +26,6 @@ export default function SaveButton({ data, setPageLoading, setPageLoadingText, s
     }
   }
 
-
   async function fetchUUID() {
     if (!tripLocation) {
       throw new Error('Error: Please Enter a City');
@@ -49,7 +48,7 @@ export default function SaveButton({ data, setPageLoading, setPageLoadingText, s
 
   async function createShareable(uuid: string) {
     try {
-      const response = await fetch("/api/redis", {
+      await fetch("/api/redis", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -84,9 +83,9 @@ export default function SaveButton({ data, setPageLoading, setPageLoadingText, s
     setPageLoadingText('Saving your trip ... Get ready to share');
     fetchUUID().then((res) => {
       const humanReadableDate = new Date(res.expire_at)
-      router.push(`/trips?id=${res.uuid}`);
       setPageLoadingText(`Your trip will be available at https://www.trippinspo.ai/trips?=${res.uuid}`);
       createShareable(res.uuid);
+      router.push(`/trips?id=${res.uuid}`);
     }).catch((error: Error) => {
       handleError(error.message)
     })
