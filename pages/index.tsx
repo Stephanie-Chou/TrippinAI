@@ -26,6 +26,7 @@ import WhatToEat from "../components/WhatToEat";
 import CanvasBackground from "../components/CanvasBackground";
 import PageWrapper from "../components/PageWrapper";
 import Days from "../components/Days";
+import fetchImage from "../utils/fetchImage";
 
 export default function Home(): ReactElement {
   // Modal State
@@ -51,6 +52,8 @@ export default function Home(): ReactElement {
   const [foods, setFood] = useState([] as Food[]);
   const [dayTrips, setDayTrips] = useState([] as DayTrip[]);
   const [showResult, setShowResult] = useState(false);
+
+  const [destinationImage, setDestinationImage] = useState({} as Photo);
 
   /** STUB DATA */
   // const [travelTips, setTravelTips] = useState(stub.mock_travelDay);
@@ -281,6 +284,9 @@ export default function Home(): ReactElement {
       scrollToRef(itineraryRef);
     }
     event.preventDefault();
+    fetchImage('', 0, city).then((image: Photo) => {
+      setDestinationImage(image);
+    });
     setLoading({
       days: true,
       dayTrips: true,
@@ -335,7 +341,8 @@ export default function Home(): ReactElement {
     activities: activities,
     foods: foods,
     neighborhoods: neighborhoods,
-    dayTrips: dayTrips
+    dayTrips: dayTrips,
+    destinationImage: destinationImage,
   }
   return (
     <PageWrapper
@@ -391,7 +398,7 @@ export default function Home(): ReactElement {
 
 
           {/* Travel Day */}
-          {showResult && <TravelDay locationName={city} travelTips={travelTips} />}
+          {showResult && <TravelDay locationName={city} travelTips={travelTips} image={destinationImage} />}
 
           {/* TRIP DAYS */}
           {<Days

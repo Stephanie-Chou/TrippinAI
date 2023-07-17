@@ -230,14 +230,14 @@ export default function Days({ placeholderDays,
 
     const site: string = json[0].name;
 
-    fetchImage(site, index, city).then((image: Photo) => {
-      setNeighborhoods((prevState: Neighborhood[]): Neighborhood[] => {
-        let updatedNeighborhoods = [...prevState];
-        updatedNeighborhoods[index].image = image;
-        updatedNeighborhoods[index].walking_tour = json;
-        return updatedNeighborhoods;
-      });
+    // fetchImage(site, index, city).then((image: Photo) => {
+    setNeighborhoods((prevState: Neighborhood[]): Neighborhood[] => {
+      let updatedNeighborhoods = [...prevState];
+      //     updatedNeighborhoods[index].image = image;
+      updatedNeighborhoods[index].walking_tour = json;
+      return updatedNeighborhoods;
     });
+    // });
   }
   return (
     <div>

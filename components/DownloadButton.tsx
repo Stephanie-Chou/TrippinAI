@@ -23,7 +23,6 @@ export default function DownloadButton({ data, setPageLoading, setPageLoadingTex
   }
 
   async function onDownload(event): Promise<string> {
-    console.log('clicked on download', tripLocation, data)
     event.preventDefault();
 
     if (!tripLocation) {

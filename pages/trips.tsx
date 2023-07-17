@@ -16,6 +16,7 @@ import { Redis } from '@upstash/redis'
 import Days from '../components/Days';
 import TripsSplash from '../components/TripsSplash';
 import TipJarModal from '../components/TipJarModal';
+import fetchImage from '../utils/fetchImage';
 
 export async function getServerSideProps({ query }) {
   // Fetch data from external API
@@ -36,19 +37,19 @@ export async function getServerSideProps({ query }) {
     neighborhoods: [],
   }
 
+
   if (!query.id) {
     return { props: { data } }
   }
 
   const cache_res = await client.json.get(query.id);
   // const data = mock_full_page_cache_response;
-
   // cache returns null if no id.
   if (cache_res) {
     data = cache_res;
   }
 
-  console.log(data);
+  console.log('saved data', data);
   return { props: { data } }
 }
 
@@ -62,6 +63,7 @@ export default function Trips({ data }) {
     DEFAULT_INTERESTS.map((interest) => ({ name: interest, isChecked: false }))
   );
   const [tripLength, setTripLength] = useState(data.tripLength);
+  const [destinationImage, setDestinationImage] = useState(data.destinationImage);
   const [placeholderDays, setPlaceholderDays] = useState(new Array(data.tripLength).fill(0));
 
   // Itinerary Model State
@@ -147,8 +149,10 @@ export default function Trips({ data }) {
     activities: activities,
     foods: foods,
     neighborhoods: neighborhoods,
-    dayTrips: dayTrips
+    dayTrips: dayTrips,
+    destinationImage: destinationImage,
   }
+
   return (
     <PageWrapper
       isPageLoading={pageLoading}
@@ -182,7 +186,7 @@ export default function Trips({ data }) {
           </div>
 
           {/* Travel Day */}
-          <TravelDay locationName={city} travelTips={travelTips} />
+          <TravelDay locationName={city} travelTips={travelTips} image={destinationImage} />
 
           {/* TRIP DAYS */}
           <Days

@@ -269,7 +269,7 @@ function generateHtml(city, neighborhoods, activities, foods, dayTrips) {
 
   let walkingTourHtml = neighborhoods.map((neighborhood, index) => {
     let subheader = index + 1;
-    const image = getImg(neighborhood.image);
+    // const image = getImg(neighborhood.image);
     const walking_tour = getWalkingTour(neighborhood.walking_tour)
 
     return `<section class="page"><div class="header"><div class="tag">` +
@@ -283,7 +283,6 @@ function generateHtml(city, neighborhoods, activities, foods, dayTrips) {
       `<li>${walking_tour[1].name} ${walking_tour[1].desc}</li>` +
       `<li>${walking_tour[2].name} ${walking_tour[2].desc}</li>` +
       `</ol>` +
-      `${image}` +
       `</div>` +
       `</section>`;
   })

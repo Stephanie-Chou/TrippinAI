@@ -49,16 +49,17 @@ export default function SaveButton({ data, setPageLoading, setPageLoadingText, s
 
   async function createShareable(uuid: string) {
     try {
-      await fetch("/api/redis", {
+      const response = await fetch("/api/redis", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ data: JSON.stringify(data), uuid })
       });
-
+      console.log(response);
       setPageLoadingText('Trip Saved Success');
       setSaveState(SaveStatus.READY);
+      router.push(`/trips?id=${uuid}`);
 
       await delay(2000)
       setIsButtondisabled(false)
@@ -86,7 +87,6 @@ export default function SaveButton({ data, setPageLoading, setPageLoadingText, s
       const humanReadableDate = new Date(res.expire_at)
       setPageLoadingText(`Your trip will be available at https://www.trippinspo.ai/trips?=${res.uuid}`);
       createShareable(res.uuid);
-      router.push(`/trips?id=${res.uuid}`);
     }).catch((error: Error) => {
       handleError(error.message)
     })

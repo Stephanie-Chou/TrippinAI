@@ -22,9 +22,7 @@ export default function Day({
   retry }): ReactElement {
   if (!neighborhood) return;
   const { walking_tour, image } = neighborhood;
-  let urls = !image ? { regular: '' } : image.urls;
-  let user = !image ? { username: '', name: '' } : image.user;
-  let username: string = !user ? '' : user.username
+
 
   const subheader: string = "Day " + (index + 1);
 
@@ -46,15 +44,6 @@ export default function Day({
 
         <h4>Where to go in {neighborhood.name}</h4>
         {renderWalkingTourLong(walking_tour)}
-
-        {urls ? <img className={styles.image} src={urls.regular} /> : null}
-        <a
-          className={styles.credit}
-          target="_blank"
-          href={`https://unsplash.com/@${username}?utm_source=TrippinAI&utm_medium=referral`}
-        >
-          {user ? user.name : ''}
-        </a> on <a className={styles.credit} href="https://unsplash.com?utm_source=TrippinAI&utm_medium=referral">Unsplash</a>
       </Page>
     </>
   );

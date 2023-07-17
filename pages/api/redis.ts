@@ -11,5 +11,5 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 
   await client.json.set(uuid, '$', data)
 
-  res.status(200);
+  res.status(200).json({ uuid });
 }
