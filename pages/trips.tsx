@@ -16,7 +16,6 @@ import { Redis } from '@upstash/redis'
 import Days from '../components/Days';
 import TripsSplash from '../components/TripsSplash';
 import TipJarModal from '../components/TipJarModal';
-import fetchImage from '../utils/fetchImage';
 
 export async function getServerSideProps({ query }) {
   // Fetch data from external API
@@ -35,6 +34,7 @@ export async function getServerSideProps({ query }) {
     activities: [],
     foods: [],
     neighborhoods: [],
+    destinationImage: {} as Photo,
   }
 
 
