@@ -76,7 +76,6 @@ export default function DayTrips({
 
     const responseData = await response.json();
     if (response.status !== 200) {
-      console.log(response);
       throw responseData.error || new Error(`Request failed with status ${response.status}`);
     }
     const jsonStr: string = JSON.parse(responseData).result;

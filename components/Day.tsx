@@ -22,10 +22,10 @@ export default function Day({
   retry }): ReactElement {
   if (!neighborhood) return;
   const { walking_tour, image } = neighborhood;
-
-
   const subheader: string = "Day " + (index + 1);
-
+  let urls = !image ? { regular: '' } : image.urls;
+  let user = !image ? { username: '', name: '' } : image.user;
+  let username: string = !user ? '' : user.username
   return (
     <>
       <Page

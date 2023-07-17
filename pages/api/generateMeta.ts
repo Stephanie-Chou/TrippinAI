@@ -44,7 +44,7 @@ export default async function (req: Request): Promise<Response> {
 
 // generate a list of activities in a city
 function generateActivityPrompt(city: string, interests: string, tripLength: number): string {
-  return `I am a tourist visiting a ${city}. Provide a list of ${tripLength} activities to do in that location that are relevant to my interests and reason for travel. provide recommendations that are seasonally relevant. I am travelling in Autumn. My interests are ${interests}. each activity should include the neighborhood where it is located. In addition, return 2 day trip location suggestions. Return valid JSON containing the activities and the neighborhoods and day trips. number of activities should equal the trip length ${tripLength}
+  return `I am a tourist visiting a ${city}. Provide a list of ${tripLength} activities to do in that location that are relevant to my interests and reason for travel. provide recommendations that are seasonally relevant. My interests are ${interests}. each activity should include the neighborhood where it is located. In addition, return 2 day trip location suggestions. Return valid JSON containing the activities and the neighborhoods and day trips. number of activities should equal the trip length ${tripLength}
 
     City: Seattle
     interests: Off the Beaten Path

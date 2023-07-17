@@ -1,7 +1,7 @@
 import { TRAVEL_DAY_ID } from "../utils/constants";
 import Page from "./Page";
 import styles from "./day.module.css";
-import { ReactElement, useState } from "react";
+import { ReactElement } from "react";
 
 export default function TravelDay({ locationName, travelTips, image }): ReactElement {
 
@@ -27,9 +27,7 @@ export default function TravelDay({ locationName, travelTips, image }): ReactEle
           className={styles.credit}
           target="_blank"
           href={`https://unsplash.com/@${username}?utm_source=TrippinAI&utm_medium=referral`}
-        >
-          {user ? user.name : ''}
-        </a> on <a className={styles.credit} href="https://unsplash.com?utm_source=TrippinAI&utm_medium=referral">Unsplash</a>
+        >{user ? user.name : ''}</a> on <a className={styles.credit} href="https://unsplash.com?utm_source=TrippinAI&utm_medium=referral">Unsplash</a>
       </Page>}
     </>
   );

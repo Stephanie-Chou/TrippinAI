@@ -56,7 +56,6 @@ export default function SaveButton({ data, setPageLoading, setPageLoadingText, s
         },
         body: JSON.stringify({ data: JSON.stringify(data), uuid })
       });
-      console.log(response);
       setPageLoadingText('Trip Saved Success');
       setSaveState(SaveStatus.READY);
       router.push(`/trips?id=${uuid}`);
