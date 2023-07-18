@@ -1,35 +1,50 @@
-import axios from "axios";
 
 export default async function (req, res) {
   const { city, neighborhoods, activities, foods, dayTrips } = req.body;
 
   const html = generateHtml(city, neighborhoods, activities, foods, dayTrips);
-  const config = {
-    url: "https://api.docraptor.com/docs",
-    method: "post",
-    responseType: "arraybuffer", //IMPORTANT! Required to fetch the binary PDF
-    headers: {
-      "Content-Type": "application/json"
-    },
-    data: {
-      user_credentials: "YOUR_API_KEY_HERE", // this key works in test mode!
-      doc: {
-        test: true, // test documents are free but watermarked
-        document_type: "pdf",
-        document_content: html,
-      }
-    }
-  };
-  return axios(config)
-    .then(function (response) {
-      res.status(200).json({ result: response.data });
+  // const config = {
+  //   url: "https://api.docraptor.com/docs",
+  //   method: "post",
+  //   responseType: "arraybuffer", //IMPORTANT! Required to fetch the binary PDF
+  //   headers: {
+  //     "Content-Type": "application/json"
+  //   },
+  //   data: {
+  //     user_credentials: "YOUR_API_KEY_HERE", // this key works in test mode!
+  //     doc: {
+  //       test: true, // test documents are free but watermarked
+  //       document_type: "pdf",
+  //       document_content: html,
+  //     }
+  //   }
+  // };
+
+  try {
+    const response = await fetch("https://api.docraptor.com/docs", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_credentials: "YOUR_API_KEY_HERE", // this key works in test mode!
+        doc: {
+          test: true, // test documents are free but watermarked
+          document_type: "pdf",
+          document_content: html,
+        }
+      }),
     })
-    .catch(function (error) {
-      // DocRaptor error messages are contained in the response body
-      // Since the response is binary encoded, let's decode
-      var decoder = new TextDecoder("utf-8");
-      console.log(decoder.decode(error.response.data));
-    });
+    const data = await response.json();
+
+    res.status(200).json({ result: data });
+
+  } catch (error) {
+    // DocRaptor error messages are contained in the response body
+    // Since the response is binary encoded, let's decode
+    var decoder = new TextDecoder("utf-8");
+    console.log(decoder.decode(error.response.data));
+  };
 };
 
 function generateStyles() {
