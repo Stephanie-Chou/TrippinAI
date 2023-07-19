@@ -1,4 +1,16 @@
-export const DEFAULT_INTERESTS: Array<string> = ["Food", "Off the Beaten Path", "Adventure", "History", "Culture", "Family Friendly Fun", "Party Time"];
+export const DEFAULT_INTERESTS: Array<string> = [
+  "Adventure",
+  "Nature",
+  "History and Culture",
+  "Food",
+  "Relaxation",
+  "Arts and Entertainment",
+  "Shopping",
+  "Wellness",
+  "Family Fun",
+  "Sports and Recreation",
+  "Sightseeing",
+];
 
 export enum DownloadButtonStatus {
   READY,
@@ -19,3 +31,4 @@ export const WHERE_TO_STAY_ID: string = "WhereToStay";
 export const WHAT_TO_EAT_ID: string = "WhatToEat";
 
 export const INIT_TRIP_LENGTH: number = 3;
+
