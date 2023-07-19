@@ -11,6 +11,7 @@
 # files for development only
 /pages/api/generate.ts
 /pages/api/redis_test.ts
+/pages/test.module.css
 /pages/test.js
 /pages/cache.js
 /pages/pdf_test.js
