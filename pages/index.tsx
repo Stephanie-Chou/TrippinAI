@@ -152,7 +152,6 @@ export default function Home(): ReactElement {
     getStreamResponse(data).then((streamResponse: string) => {
       if (!isJsonString(streamResponse)) return;
       const json: Meta = JSON.parse(streamResponse);
-
       setMeta(json);
       setActivities(json.activities.map((activity: string): Activity => {
         return {
@@ -169,7 +168,6 @@ export default function Home(): ReactElement {
           image: {} as Photo
         }
       }));
-
       setDayTrips(json.dayTrips.map((dayTrip: string): DayTrip => {
         return {
           name: dayTrip,

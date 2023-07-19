@@ -21,7 +21,7 @@ export default async function (req: Request): Promise<Response> {
   const payload: OpenAIStreamPayload = {
     model: "text-davinci-003",
     prompt: prompt,
-    temperature: 0.7,
+    temperature: .8,
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0,
@@ -44,109 +44,20 @@ export default async function (req: Request): Promise<Response> {
 
 // generate a list of activities in a city
 function generateActivityPrompt(city: string, interests: string, tripLength: number): string {
-  return `I am a tourist visiting a ${city}. Provide a list of ${tripLength} activities to do in that location that are relevant to my interests and reason for travel. provide recommendations that are seasonally relevant. My interests are ${interests}. each activity should include the neighborhood where it is located. In addition, return 2 day trip location suggestions. Return valid JSON containing the activities and the neighborhoods and day trips. number of activities should equal the trip length ${tripLength}
+  return `You are a helpful travel assistant.  I am a tourist visiting ${city}. My interests are ${interests}. Provide an array of ${tripLength} activity names to do and/or attraction names to visit in ${city}. These activities and or attractions should be relevant to my interests. Provide recommendations that are seasonally relevant. Do NOT provide descriptions.
+  Also, provide an array of length ${tripLength} which corresponds to the neighborhood where the activity or attraction can be found.
+  In addition, return 2 dayTrip location name suggestions which are within a day's journey of the ${city}. Return valid JSON containing the activities and the neighborhoods and dayTrips. number of activities should equal the trip length ${tripLength}
 
-    City: Seattle
-    interests: Off the Beaten Path
-    tripLength: 1
+    destination: Destination such as Seattle
+    interests: List of interests such as Adventure, Food, Relaxation
+    tripLength: ${tripLength}
     return: {
-      "activities": ["Waterfall Garden Park"],
-      "neighborhoods": ["Pioneer Square"],
-      "dayTrips": ["Bainbridge Island", "Snoqualmie Falls"]
-    }
-    City: Seattle
-    interests: Off the Beaten Path
-    tripLength: 1
-    return: {
-      "activities": ["Waterfall Garden Park"],
-      "neighborhoods": ["Pioneer Square"],
-      "dayTrips": ["Bainbridge Island", "Snoqualmie Falls"]
+      "activities": ["Activity or Attraction 1", "Activity or Attraction 2", "Activity or Attraction 3", ... "Activity or Attraction ${tripLength}"],
+      "neighborhoods": ["neighborhood 1", "neighborhood 2", "neighborhood 3", ... "neighborhood ${tripLength}"],
+      "dayTrips": ["Day Trip name 1", "Day Trip name 2"]
     }
 
-    City: Seattle
-    interests: Adventure
-    tripLength: 1
-    return: {
-      "activities": ["San Juan Island Whale Watching"],
-      "neighborhoods": ["San Juan Island"],
-      "dayTrips": ["Snoqualmie Peak", "Olympic National Park"]
-    }
-
-    City: Seattle
-    interests: Party Time
-    tripLength: 2
-    return: {
-      "activities": ["Ballard Brewery District", "Nightlife in Capitol Hill"],
-      "neighborhoods": ["Ballard", "Capitol Hill"],
-      "dayTrips": ["Portland, Oregon", "Vancouver, Canada"]
-    }
-
-    City: San Francisco
-    interests: Family Friendly Fun
-    tripLength: 2
-    return: {
-      "activities": ["Exploratorium in the Embarcadero", "Pier 39 at Fisherman's Wharf"],
-      "neighborhoods": ["Embarcadero", "Fisherman' Wharf"],
-      "dayTrips": ["Muir Beach Overlook", "Bay Area Discovery Museum"]
-    }
-
-
-    City: Rome
-    interests: Off the Beaten Path
-    tripLength: 1
-    return: {
-      "activities": ["The Oltrarno District"],
-      "neighborhoods": ["Oltrarno"],
-      "dayTrips": ["Ostia Antica", "Tivoli"]
-    }
-  
-    City: Seattle
-    interests: Off the Beaten Path
-    tripLength: 2
-    return: {
-      "activities": ["Georgetown Art Attack", "Fremont Sunday Market"],
-      "neighborhoods": ["Georgetown", "Fremont"],
-      "dayTrips": ["Boeing Factory, Everett", "Hoh Rainforest, Olympic National Park"]
-    }
-
-    City: Seattle
-    interests: History
-    tripLength: 3
-    return: {
-      "activities": ["Underground Tour", "Museum of History & Industry (MOHAI)", "Klondike Gold Rush National Historical Park"],
-      "neighborhoods": ["Pioneer Square", "South Lake Union (SLU)", "Downtown Seattle"],
-      "dayTrips": ["Port Townsend", "Poulsbo"]
-
-    }
-
-    City: Seattle
-    interests: culture
-    tripLength: 3
-    return: {
-      "activities": ["Seattle Art Museum (SAM)", "Chihuly Garden and Glass", "Wing Luke Museum of the Asian Pacific American Experience"],
-      "neighborhoods": ["Downtown Seattle", "Seattle Center", "Industrial District"],
-      "dayTrips": ["Leavenworth" , "Bainbridge Island"]
-    }
-
-    City: Seattle
-    interests: food
-    tripLength: 4
-    return: {
-      "activities": ["Pike Place Market", "Food tour on Capitol Hill", "Ballard Farmers Market", "Fremont Brewery Tour"],
-      "neighborhoods": ["Pike Place Market", "Capitol Hill", "Ballard", "Fremont"],
-      "dayTrips": ["Leavenworth", "Woodinville Wine Country"]
-    }
-  
-    City: Seattle
-    interests: general
-    tripLength: 5
-    return: {
-      "activities": ["Pike Place Market", "Underground Tour", "Chihuly Garden and Glass", "Seattle Art Museum (SAM)", "Golden Gardens Park"],
-      "neighborhoods": ["Pike Place Market", "Pioneer Square", "Seattle Center", "Downtown Seattle", "Ballard"],
-      "dayTrips": ["Mt. Rainier National Park", "San Juan Islands"]
-    }
-  
-    City: ${city}
+    destination: ${city}
     interests: ${interests}
     tripLength: ${tripLength}
     return:
