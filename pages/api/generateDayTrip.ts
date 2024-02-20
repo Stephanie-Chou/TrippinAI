@@ -1,6 +1,6 @@
 import { Configuration } from "openai";
 import { NextApiRequest, NextApiResponse } from "next";
-import { OpenAIStream, OpenAIStreamPayload} from "./OpenAIStream";
+import { OpenAIStream, OpenAIStreamPayload } from "./OpenAIStream";
 import { Redis } from '@upstash/redis'
 import { getStreamResponse } from "../../utils/getStreamResponse";
 import isJsonString from "../../utils/isJsonString";
@@ -18,33 +18,33 @@ export default async function (req: NextApiRequest, res: NextApiResponse): Promi
   const client = new Redis({
     url: process.env.UPSTASH_REDIS_REST_URL,
     token: process.env.UPSTASH_REDIS_REST_TOKEN,
-})
+  })
 
-const key: string = `dayTrip:city:${city.toLowerCase()}:location:${location.toLowerCase()}`;  
-const cached = await client.get(key);
+  const key: string = `dayTrip:city:${city.toLowerCase()}:location:${location.toLowerCase()}`;
+  const cached = await client.get(key);
 
-if (cached) {
-  console.log('CACHE HIT', JSON.stringify(cached));
-  res.status(200).json(JSON.stringify(cached));
-  return;
-}
+  if (cached) {
+    console.log('CACHE HIT', JSON.stringify(cached));
+    res.status(200).json(JSON.stringify(cached));
+    return;
+  }
 
-/** Cache Miss */
-if (!configuration.apiKey) {
-  res.status(500).json({
-    error: {
-      message: "OpenAI API key not configured, please follow instructions in README.md",
-    }
-  });
-  return;
-}
+  /** Cache Miss */
+  if (!configuration.apiKey) {
+    res.status(500).json({
+      error: {
+        message: "OpenAI API key not configured, please follow instructions in README.md",
+      }
+    });
+    return;
+  }
   const prompt: string = generateDayTripPrompt(city, location);
 
   if (!prompt) {
-    res.status(400).json({message: "No prompt in the request"});
+    res.status(400).json({ message: "No prompt in the request" });
   }
   const payload: OpenAIStreamPayload = {
-    model: "text-davinci-003",
+    model: "gpt-3.5-turbo-1106",
     prompt: prompt,
     temperature: 0.7,
     top_p: 1,
@@ -56,37 +56,37 @@ if (!configuration.apiKey) {
   };
 
   const stream = await OpenAIStream(payload);
-    let response = new Response(
-      stream, {
-        headers: new Headers({
-          // 'Content-Type': 'text/event-stream',
-          'Cache-Control': 'no-cache',
-        })
-      }
-    );
+  let response = new Response(
+    stream, {
+    headers: new Headers({
+      // 'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+    })
+  }
+  );
 
-    const data = response.body;
-    if (!data) {
-      console.log('no data')
+  const data = response.body;
+  if (!data) {
+    console.log('no data')
+    return;
+  }
+
+  getStreamResponse(data).then((streamResponse: string) => {
+    console.log('CACHE MISS', JSON.stringify({ result: streamResponse }))
+    if (isJsonString(streamResponse)) {
+      client.set(key, JSON.stringify({ result: streamResponse }));
+      res.status(200).json(JSON.stringify({ result: streamResponse }));
       return;
     }
-
-    getStreamResponse(data).then((streamResponse: string) => {
-      console.log('CACHE MISS', JSON.stringify({result: streamResponse}))
-      if (isJsonString(streamResponse)) {
-        client.set(key, JSON.stringify({result: streamResponse}));
-        res.status(200).json(JSON.stringify({result: streamResponse}));
-      return;
-      }
-      res.status(500).json(JSON.stringify({error: "Invalid JSON returned"}));
-    });
+    res.status(500).json(JSON.stringify({ error: "Invalid JSON returned" }));
+  });
 };
 
 // generate a list of day trips from a city.
 function generateDayTripPrompt(city: string, location: string): string {
   const capitalizedCity =
     city[0].toUpperCase() + city.slice(1).toLowerCase();
-    return `A json string for a day trip to ${location} from ${city}
+  return `A json string for a day trip to ${location} from ${city}
 
     location: Rome Pompeii
     day_trip: {

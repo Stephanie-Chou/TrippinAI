@@ -19,9 +19,9 @@ export default async function (req: Request): Promise<Response> {
   }
 
   const payload: OpenAIStreamPayload = {
-    model: "text-davinci-003",
+    model: "gpt-3.5-turbo-1106",
     prompt: prompt,
-    temperature: .8,
+    temperature: 1,
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0,

@@ -1,4 +1,4 @@
-import { OpenAIStream, OpenAIStreamPayload} from "./OpenAIStream";
+import { OpenAIStream, OpenAIStreamPayload } from "./OpenAIStream";
 
 if (!process.env.OPENAI_API_KEY) {
   throw new Error("Missing env var from OpenAI");
@@ -17,7 +17,7 @@ export default async function (req: Request): Promise<Response> {
   }
 
   const payload: OpenAIStreamPayload = {
-    model: "text-davinci-003",
+    model: "gpt-3.5-turbo-1106",
     prompt: prompt,
     temperature: 0.7,
     top_p: 1,
@@ -32,15 +32,15 @@ export default async function (req: Request): Promise<Response> {
   // return stream response (SSE)
   return new Response(
     stream, {
-      headers: new Headers({
-        // since we don't use browser's EventSource interface, specifying content-type is optional.
-        // the eventsource-parser library can handle the stream response as SSE, as long as the data format complies with SSE:
-        // https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#sending_events_from_the_server
-        
-        // 'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache',
-      })
-    }
+    headers: new Headers({
+      // since we don't use browser's EventSource interface, specifying content-type is optional.
+      // the eventsource-parser library can handle the stream response as SSE, as long as the data format complies with SSE:
+      // https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#sending_events_from_the_server
+
+      // 'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+    })
+  }
   );
 };
 
@@ -49,7 +49,7 @@ function generateActivityPrompt(city: string, interests: string, currentActiviti
   if (!interests) {
     interests = "general"
   }
-    return `I am a tourist visiting a location. Want an alternative activity to the ${currentActivities}. the new activity should be relevant to my interests. My interests are ${interests}. each activity should include the neighborhood where it is located. Return valid JSON containing the activity and the neighborhood
+  return `I am a tourist visiting a location. Want an alternative activity to the ${currentActivities}. the new activity should be relevant to my interests. My interests are ${interests}. each activity should include the neighborhood where it is located. Return valid JSON containing the activity and the neighborhood
 
     City: Seattle
     interests: Off the Beaten Path

@@ -1,4 +1,4 @@
-import { OpenAIStream, OpenAIStreamPayload} from "./OpenAIStream";
+import { OpenAIStream, OpenAIStreamPayload } from "./OpenAIStream";
 
 if (!process.env.OPENAI_API_KEY) {
   throw new Error("Missing env var from OpenAI");
@@ -17,7 +17,7 @@ export default async function (req: Request): Promise<Response> {
   }
 
   const payload: OpenAIStreamPayload = {
-    model: "text-davinci-003",
+    model: "gpt-3.5-turbo-1106",
     prompt: prompt,
     temperature: 0.7,
     top_p: 1,
@@ -32,10 +32,10 @@ export default async function (req: Request): Promise<Response> {
   // return stream response (SSE)
   return new Response(
     stream, {
-      headers: new Headers({
-        'Cache-Control': 'no-cache',
-      })
-    }
+    headers: new Headers({
+      'Cache-Control': 'no-cache',
+    })
+  }
   );
 };
 
@@ -44,7 +44,7 @@ function generateDayTripPrompt(city: string, interests: string, currentTrips: st
   if (!interests) {
     interests = "general"
   }
-    return `I am a tourist visiting a location. Want an alternative Day Trip to the ${currentTrips}. the new Day Trip should be relevant to my interests. My interests are ${interests}.  Return the name of the day trip
+  return `I am a tourist visiting a location. Want an alternative Day Trip to the ${currentTrips}. the new Day Trip should be relevant to my interests. My interests are ${interests}.  Return the name of the day trip
 
     City: Rome
     interests: Off the Beaten Path

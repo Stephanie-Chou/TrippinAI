@@ -1,6 +1,6 @@
 import { Configuration } from "openai";
 import { NextApiRequest, NextApiResponse } from "next";
-import { OpenAIStream, OpenAIStreamPayload} from "./OpenAIStream";
+import { OpenAIStream, OpenAIStreamPayload } from "./OpenAIStream";
 import { getStreamResponse } from "../../utils/getStreamResponse";
 import { DEFAULT_INTERESTS } from "../../utils/constants";
 import isJsonString from "../../utils/isJsonString";
@@ -32,7 +32,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse): Promi
   }
 
   const payload: OpenAIStreamPayload = {
-    model: "text-davinci-003",
+    model: "gpt-3.5-turbo-1106",
     prompt: prompt,
     temperature: 0.7,
     top_p: 1,
@@ -46,11 +46,11 @@ export default async function (req: NextApiRequest, res: NextApiResponse): Promi
   const stream = await OpenAIStream(payload);
   let response = new Response(
     stream, {
-      headers: new Headers({
-        // 'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache',
-      })
-    }
+    headers: new Headers({
+      // 'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+    })
+  }
   );
 
   const data = response.body;
@@ -60,18 +60,18 @@ export default async function (req: NextApiRequest, res: NextApiResponse): Promi
   }
 
   return getStreamResponse(data).then((streamResponse: string) => {
-  
+
 
     if (isJsonString(streamResponse)) {
-      return res.status(200).json(JSON.stringify({result: streamResponse}));
+      return res.status(200).json(JSON.stringify({ result: streamResponse }));
     }
-    return res.status(200).json({results: 'general'});
+    return res.status(200).json({ results: 'general' });
   });
 }
 
 function generateCategorizationPrompt(reason: string) {
 
-    return `given a reason for travel, categorize it. The possible categories are ${DEFAULT_INTERESTS.join(' ')}
+  return `given a reason for travel, categorize it. The possible categories are ${DEFAULT_INTERESTS.join(' ')}
     
     reason: bachelorette party
     interests: party time
